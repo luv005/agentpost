@@ -135,9 +135,8 @@ export async function verifyCodeAndSignup(email: string, code: string) {
   // Code is valid — clean up
   verificationCodes.delete(email.toLowerCase());
 
-  // Create account + API key
+  // Create account and start a browser session. API keys are user-managed.
   const account = await findOrCreateAccount({ email: entry.email, name: entry.name });
-  const apiKey = await createApiKey(account.id, "Default API Key");
   const token = signJwt(account.id, account.email);
 
   return {
@@ -147,12 +146,11 @@ export async function verifyCodeAndSignup(email: string, code: string) {
       email: account.email,
       plan: account.plan,
     },
-    apiKey: apiKey.key,
     token,
   };
 }
 
-// Keep old publicSignup for auto-provision (agents don't need email verification)
+// Direct human signup creates the account and session only.
 export async function publicSignup(email: string, name: string) {
   const db = getDb();
   const normalizedEmail = email.toLowerCase();
@@ -171,7 +169,6 @@ export async function publicSignup(email: string, name: string) {
   }
 
   const account = await findOrCreateAccount({ email, name });
-  const apiKey = await createApiKey(account.id, "Default API Key");
   const token = signJwt(account.id, account.email);
 
   return {
@@ -181,7 +178,6 @@ export async function publicSignup(email: string, name: string) {
       email: account.email,
       plan: account.plan,
     },
-    apiKey: apiKey.key,
     token,
   };
 }

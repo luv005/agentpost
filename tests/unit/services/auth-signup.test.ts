@@ -19,10 +19,14 @@ const limitMock = vi.fn();
 const whereMock = vi.fn(() => ({ limit: limitMock }));
 const fromMock = vi.fn(() => ({ where: whereMock }));
 const selectMock = vi.fn(() => ({ from: fromMock }));
+const returningMock = vi.fn();
+const valuesMock = vi.fn(() => ({ returning: returningMock }));
+const insertMock = vi.fn(() => ({ values: valuesMock }));
 
 vi.mock("../../../src/db/client.js", () => ({
   getDb: () => ({
     select: selectMock,
+    insert: insertMock,
   }),
 }));
 
@@ -30,6 +34,7 @@ vi.mock("../../../src/services/api-key.service.js", () => ({
   createApiKey: vi.fn(),
 }));
 
+import { createApiKey } from "../../../src/services/api-key.service.js";
 import { publicSignup } from "../../../src/services/auth.service.js";
 
 describe("publicSignup", () => {
@@ -46,5 +51,33 @@ describe("publicSignup", () => {
       code: "ACCOUNT_EXISTS",
       statusCode: 409,
     });
+  });
+
+  it("creates an account and session without auto-issuing an API key", async () => {
+    limitMock
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+    returningMock.mockResolvedValueOnce([
+      {
+        id: "acct_new",
+        name: "New User",
+        email: "user@example.com",
+        plan: "free",
+      },
+    ]);
+
+    const result = await publicSignup("USER@example.com", "New User");
+
+    expect(result).toMatchObject({
+      account: {
+        id: "acct_new",
+        name: "New User",
+        email: "user@example.com",
+        plan: "free",
+      },
+      token: expect.any(String),
+    });
+    expect(result).not.toHaveProperty("apiKey");
+    expect(createApiKey).not.toHaveBeenCalled();
   });
 });

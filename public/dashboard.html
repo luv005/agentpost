@@ -332,6 +332,9 @@
   <script>
     let token = localStorage.getItem('agentsend_token');
     let apiKey = localStorage.getItem('agentsend_api_key');
+    const dashboardParams = new URLSearchParams(window.location.search);
+    const requestedPage = dashboardParams.get('page');
+    const skipOnboarding = dashboardParams.get('skipOnboarding') === '1';
     const auth = () => token ? { 'Authorization': 'Bearer ' + token } : apiKey ? { 'X-API-Key': apiKey } : {};
     if (!token && !apiKey) window.location.href = '/auth/signup';
 
@@ -374,6 +377,10 @@
         document.getElementById('res-keys').textContent = keys.length;
         document.getElementById('res-domains').textContent = '0';
 
+        if (requestedPage === 'apikeys') {
+          showPage('apikeys', document.querySelectorAll('.nav-item')[2]);
+        }
+
         // Recent messages
         if (allInboxes.length > 0) {
           const msgRes = await fetch('/inboxes/' + allInboxes[0].id + '/messages?limit=5', { headers: auth() });
@@ -390,7 +397,7 @@
           }
         }
 
-        if (allInboxes.length === 0) document.getElementById('onboarding').classList.add('show');
+        if (!skipOnboarding && allInboxes.length === 0) document.getElementById('onboarding').classList.add('show');
       } catch { window.location.href = '/auth/signup'; }
     }
     init();

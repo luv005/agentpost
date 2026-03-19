@@ -28,7 +28,7 @@ export async function signupPage(_request: FastifyRequest, reply: FastifyReply) 
 }
 
 /**
- * POST /auth/signup — Public signup, returns API key + JWT immediately
+ * POST /auth/signup — Public signup, returns account + session token
  */
 export async function signup(request: FastifyRequest, reply: FastifyReply) {
   const body = signupBody.parse(request.body);
@@ -59,7 +59,7 @@ export async function sendCode(request: FastifyRequest, reply: FastifyReply) {
 }
 
 /**
- * POST /auth/verify-code — Verify code and create account + API key
+ * POST /auth/verify-code — Verify code and create account + session token
  */
 export async function verifyCode(request: FastifyRequest, reply: FastifyReply) {
   const body = verifyCodeBody.parse(request.body);
@@ -104,9 +104,8 @@ const SIGNUP_PAGE = `<!DOCTYPE html>
     .code-sent strong { color: #e4e4e7; }
     .result { margin-top: 24px; background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.2); border-radius: 12px; padding: 20px; }
     .result h3 { color: #34d399; font-size: 15px; margin-bottom: 12px; }
-    .result .key-box { background: #09090b; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #34d399; word-break: break-all; margin-bottom: 8px; cursor: pointer; }
-    .result .key-box:hover { border-color: rgba(52,211,153,0.3); }
-    .result .hint { color: #52525b; font-size: 12px; }
+    .result .success-copy { color: #d4d4d8; font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
+    .result .hint { color: #52525b; font-size: 12px; margin-top: 12px; }
     .error { margin-top: 16px; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 10px; padding: 12px; color: #ef4444; font-size: 13px; }
     .footer { text-align: center; margin-top: 24px; font-size: 13px; color: #3f3f46; }
     .footer a { color: #818cf8; }
@@ -116,7 +115,7 @@ const SIGNUP_PAGE = `<!DOCTYPE html>
 <body>
   <div class="card">
     <div class="logo">Agent<span>Send</span></div>
-    <p class="subtitle" id="subtitle">Get your API key in seconds</p>
+    <p class="subtitle" id="subtitle">Create your AgentSend account</p>
 
     <!-- Step 1: Email + Name -->
     <div id="step1">
@@ -145,7 +144,7 @@ const SIGNUP_PAGE = `<!DOCTYPE html>
         <div class="field">
           <input type="text" id="code" class="code-input" placeholder="000000" maxlength="6" pattern="[0-9]{6}" required autocomplete="one-time-code">
         </div>
-        <button type="submit" class="submit-btn" id="verify-btn">Verify &amp; Get API Key</button>
+        <button type="submit" class="submit-btn" id="verify-btn">Verify &amp; Continue</button>
       </form>
       <p style="text-align:center;margin-top:12px;"><span class="back-link" onclick="showStep1()">Back</span></p>
     </div>
@@ -153,9 +152,10 @@ const SIGNUP_PAGE = `<!DOCTYPE html>
     <!-- Step 3: Result -->
     <div id="step3" class="hidden">
       <div class="result">
-        <h3>Your API Key</h3>
-        <div class="key-box" id="api-key" onclick="navigator.clipboard.writeText(this.textContent);this.style.borderColor='#34d399'"></div>
-        <p class="hint">Click to copy. Store it safely — it won't be shown again.</p>
+        <h3>You're signed in</h3>
+        <p class="success-copy">Your account is ready. You can create API keys later from the dashboard when you need them.</p>
+        <button type="button" class="submit-btn" onclick="goToDashboard()">Open Dashboard</button>
+        <p class="hint">Redirecting you to the dashboard now.</p>
       </div>
     </div>
 
@@ -178,8 +178,12 @@ const SIGNUP_PAGE = `<!DOCTYPE html>
       document.getElementById('step1').classList.remove('hidden');
       document.getElementById('step2').classList.add('hidden');
       document.getElementById('step3').classList.add('hidden');
-      document.getElementById('subtitle').textContent = 'Get your API key in seconds';
+      document.getElementById('subtitle').textContent = 'Create your AgentSend account';
       hideError();
+    }
+
+    function goToDashboard() {
+      window.location.href = '/dashboard?skipOnboarding=1';
     }
 
     async function handleSendCode(e) {
@@ -229,16 +233,14 @@ const SIGNUP_PAGE = `<!DOCTYPE html>
         if (!res.ok) throw new Error(data.error || 'Verification failed');
         // Save auth to localStorage
         if (data.token) localStorage.setItem('agentsend_token', data.token);
-        if (data.apiKey) localStorage.setItem('agentsend_api_key', data.apiKey);
-        document.getElementById('api-key').textContent = data.apiKey;
+        localStorage.removeItem('agentsend_api_key');
         document.getElementById('step2').classList.add('hidden');
         document.getElementById('step3').classList.remove('hidden');
         document.getElementById('subtitle').textContent = 'You\\u2019re in!';
-        // Redirect to dashboard after 2 seconds
-        setTimeout(() => window.location.href = '/dashboard', 2000);
+        setTimeout(goToDashboard, 1200);
       } catch (err) {
         showError(err.message);
-        btn.disabled = false; btn.textContent = 'Verify & Get API Key';
+        btn.disabled = false; btn.textContent = 'Verify & Continue';
       }
     }
   </script>
@@ -328,14 +330,12 @@ export async function googleCallback(
 }
 
 /**
- * GET /auth/success — Simple success page that displays the token
+ * GET /auth/success — Session handoff page for browser auth flows
  */
 export async function authSuccess(
-  request: FastifyRequest,
+  _request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const token = (request.query as Record<string, string>).token ?? "";
-
   return reply.type("text/html").send(`
     <!DOCTYPE html>
     <html>
@@ -347,7 +347,6 @@ export async function authSuccess(
         .card { background: #141414; border: 1px solid #222; border-radius: 12px; padding: 40px; max-width: 480px; text-align: center; }
         h1 { font-size: 24px; margin-bottom: 12px; }
         p { color: #888; margin-bottom: 24px; line-height: 1.6; }
-        .token-box { background: #0a0a0a; border: 1px solid #333; border-radius: 8px; padding: 16px; word-break: break-all; font-family: 'SF Mono', monospace; font-size: 12px; color: #10b981; margin-bottom: 16px; text-align: left; }
         button { background: #fff; color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; }
         button:hover { background: #e5e5e5; }
         .note { color: #666; font-size: 12px; margin-top: 16px; }
@@ -356,11 +355,31 @@ export async function authSuccess(
     <body>
       <div class="card">
         <h1>✓ Signed In</h1>
-        <p>You're authenticated. Use this JWT token for API requests:</p>
-        <div class="token-box" id="token">${token}</div>
-        <button onclick="navigator.clipboard.writeText(document.getElementById('token').textContent)">Copy Token</button>
-        <p class="note">Include as: Authorization: Bearer &lt;token&gt;</p>
+        <p>You're authenticated. We’re sending you to the dashboard now.</p>
+        <button id="continue-btn">Continue to Dashboard</button>
+        <p class="note">Create API keys later from the dashboard when you actually need one.</p>
       </div>
+      <script>
+        const token = new URLSearchParams(window.location.search).get('token');
+        const destination = '/dashboard?skipOnboarding=1';
+
+        if (token) {
+          localStorage.setItem('agentsend_token', token);
+          localStorage.removeItem('agentsend_api_key');
+        }
+
+        if (window.location.search) {
+          history.replaceState(null, '', '/auth/success');
+        }
+
+        document.getElementById('continue-btn').addEventListener('click', () => {
+          window.location.assign(destination);
+        });
+
+        setTimeout(() => {
+          window.location.assign(destination);
+        }, 1200);
+      </script>
     </body>
     </html>
   `);
