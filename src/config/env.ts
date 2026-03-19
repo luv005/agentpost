@@ -47,6 +47,16 @@ const envSchema = z.object({
   WEBHOOK_MAX_RETRIES: z.coerce.number().default(5),
   WEBHOOK_RETRY_DELAY_MS: z.coerce.number().default(10000),
   WEBHOOK_TIMEOUT_MS: z.coerce.number().default(30000),
+
+  JWT_SECRET: z.string().default("change-me-in-production-please"),
+  JWT_EXPIRES_IN: z.string().default("7d"),
+  MAGIC_LINK_EXPIRES_MINUTES: z.coerce.number().default(15),
+
+  GOOGLE_CLIENT_ID: z.string().default(""),
+  GOOGLE_CLIENT_SECRET: z.string().default(""),
+  GOOGLE_REDIRECT_URI: z.string().default("http://localhost:3000/auth/google/callback"),
+
+  APP_URL: z.string().default("http://localhost:3000"),
 });
 
 export type Env = z.infer<typeof envSchema>;

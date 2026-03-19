@@ -35,8 +35,10 @@
     "bullmq": "^5.30.0",
     "drizzle-orm": "^0.38.0",
     "fastify": "^5.2.0",
+    "google-auth-library": "^10.6.2",
     "ioredis": "^5.9.3",
     "js-yaml": "^4.1.1",
+    "jsonwebtoken": "^9.0.3",
     "mailparser": "^3.9.4",
     "nanoid": "^5.0.0",
     "pino": "^9.6.0",
@@ -47,6 +49,7 @@
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/mailparser": "^3.4.6",
     "@types/node": "^22.0.0",
     "@types/smtp-server": "^3.5.12",

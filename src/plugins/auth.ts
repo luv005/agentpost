@@ -1,5 +1,9 @@
 import type { FastifyInstance, FastifyRequest } from "fastify";
+import { eq } from "drizzle-orm";
 import { validateApiKey } from "../services/api-key.service.js";
+import { verifyJwt } from "../services/auth.service.js";
+import { getDb } from "../db/client.js";
+import { accounts } from "../db/schema.js";
 import { UnauthorizedError } from "../lib/errors.js";
 
 function extractKey(request: FastifyRequest): string | null {
@@ -16,21 +20,63 @@ function extractKey(request: FastifyRequest): string | null {
   return null;
 }
 
+function isPublicPath(url: string): boolean {
+  const publicPrefixes = [
+    "/health",
+    "/webhooks/sns",
+    "/docs",
+    "/public",
+    "/auth",
+  ];
+  if (url === "/") return true;
+  return publicPrefixes.some(
+    (p) => url === p || url.startsWith(p + "/") || url.startsWith(p + "?"),
+  );
+}
+
+async function resolveAccountFromJwt(
+  token: string,
+): Promise<Record<string, unknown> | null> {
+  const payload = verifyJwt(token);
+  if (!payload) return null;
+
+  const db = getDb();
+  const [account] = await db
+    .select({
+      id: accounts.id,
+      name: accounts.name,
+      email: accounts.email,
+      plan: accounts.plan,
+      dailySendLimit: accounts.dailySendLimit,
+      isVerified: accounts.isVerified,
+    })
+    .from(accounts)
+    .where(eq(accounts.id, payload.sub))
+    .limit(1);
+
+  return account ?? null;
+}
+
 export async function authPlugin(app: FastifyInstance) {
   app.decorateRequest("account", null as any);
 
   app.addHook("onRequest", async (request, _reply) => {
-    // Skip auth for health check
-    const publicPaths = ["/health", "/webhooks/sns", "/docs", "/public", "/"];
-    if (publicPaths.some((p) => request.url === p || request.url.startsWith(p + "/"))) return;
-    if (request.url.startsWith("/docs")) return;
+    if (isPublicPath(request.url)) return;
 
     const rawKey = extractKey(request);
     if (!rawKey) throw new UnauthorizedError();
 
-    const account = await validateApiKey(rawKey);
-    if (!account) throw new UnauthorizedError();
+    // Try API key first (starts with "as_")
+    if (rawKey.startsWith("as_")) {
+      const account = await validateApiKey(rawKey);
+      if (!account) throw new UnauthorizedError();
+      request.account = account;
+      return;
+    }
 
-    request.account = account;
+    // Try JWT
+    const account = await resolveAccountFromJwt(rawKey);
+    if (!account) throw new UnauthorizedError();
+    request.account = account as any;
   });
 }

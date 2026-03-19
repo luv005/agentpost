@@ -16,6 +16,8 @@ export const accounts = pgTable("accounts", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
+  googleId: varchar("google_id", { length: 255 }).unique(),
+  avatarUrl: varchar("avatar_url", { length: 512 }),
   plan: varchar("plan", { length: 50 }).notNull().default("free"),
   dailySendLimit: integer("daily_send_limit").notNull().default(100),
   isVerified: boolean("is_verified").notNull().default(false),
@@ -26,6 +28,26 @@ export const accounts = pgTable("accounts", {
     .notNull()
     .defaultNow(),
 });
+
+// ── Magic Links ─────────────────────────────────────────────────────────────
+
+export const magicLinks = pgTable(
+  "magic_links",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    email: varchar("email", { length: 255 }).notNull(),
+    token: varchar("token", { length: 128 }).notNull().unique(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    usedAt: timestamp("used_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    index("magic_links_token_idx").on(table.token),
+    index("magic_links_email_idx").on(table.email),
+  ],
+);
 
 // ── API Keys ────────────────────────────────────────────────────────────────
 

@@ -22,6 +22,13 @@
       "when": 1773892190268,
       "tag": "0002_cooing_thena",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1773905779785,
+      "tag": "0003_sloppy_hitman",
+      "breakpoints": true
     }
   ]
 }

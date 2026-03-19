@@ -1,0 +1,215 @@
+import { randomBytes } from "node:crypto";
+import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
+import { eq } from "drizzle-orm";
+import { getDb } from "../db/client.js";
+import { accounts, magicLinks } from "../db/schema.js";
+import { createApiKey } from "./api-key.service.js";
+import { sendEmail } from "./ses.service.js";
+import { env } from "../config/env.js";
+
+// ── JWT ─────────────────────────────────────────────────────────────────────
+
+export interface JwtPayload {
+  sub: string; // account ID
+  email: string;
+}
+
+export function signJwt(accountId: string, email: string): string {
+  const config = env();
+  const payload: JwtPayload = { sub: accountId, email };
+  return jwt.sign(payload as object, config.JWT_SECRET, {
+    expiresIn: config.JWT_EXPIRES_IN as string,
+  } as jwt.SignOptions);
+}
+
+export function verifyJwt(token: string): JwtPayload | null {
+  try {
+    const config = env();
+    return jwt.verify(token, config.JWT_SECRET) as JwtPayload;
+  } catch {
+    return null;
+  }
+}
+
+// ── Account creation / lookup ───────────────────────────────────────────────
+
+export async function findOrCreateAccount(data: {
+  email: string;
+  name: string;
+  googleId?: string;
+  avatarUrl?: string;
+}) {
+  const db = getDb();
+
+  // Try to find existing account by email
+  const [existing] = await db
+    .select()
+    .from(accounts)
+    .where(eq(accounts.email, data.email.toLowerCase()))
+    .limit(1);
+
+  if (existing) {
+    // If Google login and no googleId yet, link it
+    if (data.googleId && !existing.googleId) {
+      await db
+        .update(accounts)
+        .set({
+          googleId: data.googleId,
+          avatarUrl: data.avatarUrl,
+          updatedAt: new Date(),
+        })
+        .where(eq(accounts.id, existing.id));
+    }
+    return existing;
+  }
+
+  // Create new account
+  const [account] = await db
+    .insert(accounts)
+    .values({
+      name: data.name,
+      email: data.email.toLowerCase(),
+      googleId: data.googleId ?? null,
+      avatarUrl: data.avatarUrl ?? null,
+    })
+    .returning();
+
+  return account;
+}
+
+// ── Public Signup ────────────────────────────────────────────────────────────
+
+export async function publicSignup(email: string, name: string) {
+  const account = await findOrCreateAccount({ email, name });
+  const apiKey = await createApiKey(account.id, "Default API Key");
+  const token = signJwt(account.id, account.email);
+
+  return {
+    account: {
+      id: account.id,
+      name: account.name,
+      email: account.email,
+      plan: account.plan,
+    },
+    apiKey: apiKey.key,
+    token,
+  };
+}
+
+// ── Magic Link ──────────────────────────────────────────────────────────────
+
+export async function sendMagicLink(email: string) {
+  const db = getDb();
+  const config = env();
+
+  const token = randomBytes(48).toString("hex");
+  const expiresAt = new Date(
+    Date.now() + config.MAGIC_LINK_EXPIRES_MINUTES * 60 * 1000,
+  );
+
+  await db.insert(magicLinks).values({
+    email: email.toLowerCase(),
+    token,
+    expiresAt,
+  });
+
+  const verifyUrl = `${config.APP_URL}/auth/verify?token=${token}`;
+
+  // Send via SES
+  await sendEmail({
+    from: `AgentSend <noreply@${config.SES_FROM_DOMAIN}>`,
+    to: [email],
+    subject: "Sign in to AgentSend",
+    bodyText: `Click this link to sign in to AgentSend:\n\n${verifyUrl}\n\nThis link expires in ${config.MAGIC_LINK_EXPIRES_MINUTES} minutes.\n\nIf you didn't request this, you can safely ignore this email.`,
+    bodyHtml: `
+      <div style="font-family: -apple-system, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <h2 style="color: #111;">Sign in to AgentSend</h2>
+        <p style="color: #555; line-height: 1.6;">Click the button below to sign in to your account. This link expires in ${config.MAGIC_LINK_EXPIRES_MINUTES} minutes.</p>
+        <a href="${verifyUrl}" style="display: inline-block; padding: 12px 32px; background: #111; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; margin: 16px 0;">Sign In</a>
+        <p style="color: #999; font-size: 13px;">If you didn't request this, you can safely ignore this email.</p>
+      </div>
+    `,
+  });
+
+  return { sent: true };
+}
+
+export async function verifyMagicLink(token: string) {
+  const db = getDb();
+
+  const [link] = await db
+    .select()
+    .from(magicLinks)
+    .where(eq(magicLinks.token, token))
+    .limit(1);
+
+  if (!link) return null;
+  if (link.usedAt) return null;
+  if (link.expiresAt < new Date()) return null;
+
+  // Mark as used
+  await db
+    .update(magicLinks)
+    .set({ usedAt: new Date() })
+    .where(eq(magicLinks.id, link.id));
+
+  // Find or create account
+  const account = await findOrCreateAccount({
+    email: link.email,
+    name: link.email.split("@")[0],
+  });
+
+  const jwtToken = signJwt(account.id, account.email);
+
+  return { account, token: jwtToken };
+}
+
+// ── Google OAuth ────────────────────────────────────────────────────────────
+
+let _googleClient: OAuth2Client | null = null;
+
+function getGoogleClient(): OAuth2Client {
+  if (_googleClient) return _googleClient;
+  const config = env();
+  _googleClient = new OAuth2Client(
+    config.GOOGLE_CLIENT_ID,
+    config.GOOGLE_CLIENT_SECRET,
+    config.GOOGLE_REDIRECT_URI,
+  );
+  return _googleClient;
+}
+
+export function getGoogleAuthUrl(): string {
+  const client = getGoogleClient();
+  return client.generateAuthUrl({
+    access_type: "offline",
+    scope: ["openid", "email", "profile"],
+    prompt: "consent",
+  });
+}
+
+export async function handleGoogleCallback(code: string) {
+  const client = getGoogleClient();
+  const { tokens } = await client.getToken(code);
+  client.setCredentials(tokens);
+
+  const ticket = await client.verifyIdToken({
+    idToken: tokens.id_token!,
+    audience: env().GOOGLE_CLIENT_ID,
+  });
+
+  const payload = ticket.getPayload();
+  if (!payload?.email) throw new Error("Google auth: no email returned");
+
+  const account = await findOrCreateAccount({
+    email: payload.email,
+    name: payload.name ?? payload.email.split("@")[0],
+    googleId: payload.sub,
+    avatarUrl: payload.picture,
+  });
+
+  const jwtToken = signJwt(account.id, account.email);
+
+  return { account, token: jwtToken };
+}

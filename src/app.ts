@@ -22,6 +22,8 @@ import { snsRoutes } from "./routes/sns/index.js";
 import { domainRoutes } from "./routes/domains/index.js";
 import { attachmentRoutes } from "./routes/attachments/index.js";
 import { landingRoute } from "./routes/landing.js";
+import { authRoutes } from "./routes/auth/index.js";
+import { accountRoutes } from "./routes/account/index.js";
 
 export async function buildApp() {
   const config = env();
@@ -70,6 +72,7 @@ export async function buildApp() {
   await app.register(rateLimitPlugin);
   await app.register(authPlugin);
   await app.register(landingRoute);
+  await app.register(authRoutes, { prefix: "/auth" });
   await app.register(healthRoutes);
   await app.register(inboxRoutes, { prefix: "/inboxes" });
   await app.register(inboxMessageRoutes, { prefix: "/inboxes" });
@@ -80,6 +83,7 @@ export async function buildApp() {
   await app.register(snsRoutes, { prefix: "/webhooks/sns" });
   await app.register(domainRoutes, { prefix: "/domains" });
   await app.register(attachmentRoutes, { prefix: "/attachments" });
+  await app.register(accountRoutes, { prefix: "/account" });
 
   return app;
 }
