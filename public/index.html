@@ -13,71 +13,99 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #09090b; color: #a1a1aa; line-height: 1.6; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #09090b; color: #a1a1aa; line-height: 1.6; overflow-x: hidden; }
     a { color: #818cf8; text-decoration: none; }
     a:hover { color: #a5b4fc; }
-
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
+    /* ── Animations ────────────────────────────────── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes glow { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .fade-up { animation: fadeUp 0.7s ease-out both; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+
+    /* ── Grid background ──────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        linear-gradient(rgba(129,140,248,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(129,140,248,0.03) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body > * { position: relative; z-index: 1; }
+
     /* ── Nav ─────────────────────────────────────── */
-    nav { padding: 16px 0; position: sticky; top: 0; z-index: 100; background: rgba(9,9,11,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid #18181b; }
+    nav { padding: 16px 0; position: sticky; top: 0; z-index: 100; background: rgba(9,9,11,0.8); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.04); }
     nav .container { display: flex; justify-content: space-between; align-items: center; }
     .logo { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
     .logo span { background: linear-gradient(135deg, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .nav-links { display: flex; align-items: center; gap: 8px; }
-    .nav-links a { color: #71717a; font-size: 14px; font-weight: 500; padding: 8px 14px; border-radius: 8px; transition: all 0.15s; }
-    .nav-links a:hover { color: #fff; background: #18181b; text-decoration: none; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a { color: #71717a; font-size: 14px; font-weight: 500; padding: 8px 14px; border-radius: 8px; transition: all 0.2s; }
+    .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.05); text-decoration: none; }
     .nav-links .btn-sm { background: #818cf8; color: #fff; font-weight: 600; }
     .nav-links .btn-sm:hover { background: #6366f1; }
 
     /* ── Badge ────────────────────────────────────── */
-    .badge { display: inline-flex; align-items: center; gap: 8px; background: #18181b; border: 1px solid #27272a; padding: 6px 16px; border-radius: 100px; font-size: 13px; font-weight: 500; color: #a1a1aa; margin-bottom: 24px; }
+    .badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(129,140,248,0.08); border: 1px solid rgba(129,140,248,0.15); padding: 6px 16px; border-radius: 100px; font-size: 13px; font-weight: 500; color: #a5b4fc; margin-bottom: 24px; }
     .badge-dot { width: 7px; height: 7px; background: #34d399; border-radius: 50%; animation: pulse 2s infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
     /* ── Hero ─────────────────────────────────────── */
-    .hero { padding: 100px 0 60px; }
+    .hero { padding: 120px 0 80px; position: relative; }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -100px; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 600px;
+      background: radial-gradient(ellipse at center, rgba(129,140,248,0.1) 0%, transparent 70%);
+      pointer-events: none;
+      animation: glow 6s ease-in-out infinite;
+    }
     .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-    @media (max-width: 768px) { .hero-grid { grid-template-columns: 1fr; } }
-    .hero-left { }
-    .hero h1 { font-size: 52px; font-weight: 900; color: #fafafa; line-height: 1.05; letter-spacing: -2px; margin-bottom: 20px; }
+    .hero h1 { font-size: 54px; font-weight: 900; color: #fafafa; line-height: 1.08; letter-spacing: -2.5px; margin-bottom: 20px; }
     .hero h1 .gradient { background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f0abfc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .hero p { font-size: 18px; color: #71717a; max-width: 460px; margin-bottom: 32px; line-height: 1.6; }
+    .hero p { font-size: 18px; color: #71717a; max-width: 440px; margin-bottom: 36px; line-height: 1.7; }
     .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 600; transition: all 0.2s; cursor: pointer; border: none; }
-    .btn-primary { background: #818cf8; color: #fff; box-shadow: 0 0 24px rgba(129,140,248,0.25); }
-    .btn-primary:hover { background: #6366f1; box-shadow: 0 0 32px rgba(129,140,248,0.35); text-decoration: none; color: #fff; }
-    .btn-ghost { background: #18181b; border: 1px solid #27272a; color: #d4d4d8; }
-    .btn-ghost:hover { border-color: #3f3f46; background: #1c1c1f; text-decoration: none; color: #fff; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 600; transition: all 0.25s; cursor: pointer; border: none; }
+    .btn-primary { background: #818cf8; color: #fff; box-shadow: 0 0 32px rgba(129,140,248,0.3); }
+    .btn-primary:hover { background: #6366f1; box-shadow: 0 0 48px rgba(129,140,248,0.4); transform: translateY(-1px); text-decoration: none; color: #fff; }
+    .btn-ghost { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #d4d4d8; }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); transform: translateY(-1px); text-decoration: none; color: #fff; }
     .hero-note { margin-top: 16px; font-size: 13px; color: #52525b; }
 
     /* ── Chat Demo ─────────────────────────────────── */
-    .chat-demo { background: #0f0f11; border: 1px solid #27272a; border-radius: 20px; padding: 28px; box-shadow: 0 0 60px rgba(129,140,248,0.08), 0 0 120px rgba(129,140,248,0.04); }
+    .chat-demo { background: rgba(15,15,17,0.9); border: 1px solid rgba(129,140,248,0.12); border-radius: 20px; padding: 28px; box-shadow: 0 0 80px rgba(129,140,248,0.06), 0 0 160px rgba(129,140,248,0.03), inset 0 1px 0 rgba(255,255,255,0.04); backdrop-filter: blur(8px); animation: float 6s ease-in-out infinite; }
     .chat-msg { display: flex; gap: 12px; margin-bottom: 16px; align-items: flex-start; }
     .chat-msg:last-child { margin-bottom: 0; }
     .chat-msg.right { flex-direction: row-reverse; }
     .chat-avatar { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
-    .chat-avatar.agent { background: #818cf820; }
-    .chat-avatar.user { background: #27272a; }
+    .chat-avatar.agent { background: rgba(129,140,248,0.12); }
+    .chat-avatar.user { background: rgba(255,255,255,0.06); }
     .chat-label { font-size: 10px; color: #52525b; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-top: 4px; text-align: center; }
-    .chat-bubble { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 12px 16px; font-size: 13px; line-height: 1.5; color: #d4d4d8; max-width: 85%; }
-    .chat-msg.right .chat-bubble { background: #1e1b4b; border-color: #312e81; }
-    .chat-skill { background: #18181b; border: 2px solid #818cf8; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .chat-bubble { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 12px 16px; font-size: 13px; line-height: 1.5; color: #d4d4d8; max-width: 85%; }
+    .chat-msg.right .chat-bubble { background: rgba(129,140,248,0.08); border-color: rgba(129,140,248,0.15); }
+    .chat-skill { background: rgba(129,140,248,0.05); border: 1.5px solid rgba(129,140,248,0.3); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
     .chat-skill-url { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #c4b5fd; }
-    .chat-skill-btn { background: #818cf820; border: 1px solid #818cf8; color: #a5b4fc; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .chat-skill-btn { background: rgba(129,140,248,0.12); border: 1px solid rgba(129,140,248,0.3); color: #a5b4fc; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s; }
+    .chat-skill-btn:hover { background: rgba(129,140,248,0.2); }
     .chat-email { color: #818cf8; font-weight: 600; }
-    .chat-typing { display: inline-flex; gap: 4px; padding: 4px 0; }
-    .chat-typing span { width: 6px; height: 6px; background: #52525b; border-radius: 50%; animation: typing 1.4s infinite; }
-    .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
-    .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes typing { 0%, 60%, 100% { opacity: 0.3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-4px); } }
 
     /* ── Code ──────────────────────────────────────── */
-    .code-section { padding: 20px 0 80px; }
-    .code-tabs { display: flex; justify-content: center; gap: 4px; margin-bottom: 16px; }
-    .code-tab { padding: 8px 18px; font-size: 13px; font-weight: 600; color: #52525b; background: transparent; border: 1px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.15s; font-family: inherit; }
-    .code-tab.active { color: #e4e4e7; background: #18181b; border-color: #27272a; }
-    .code-block { background: #0f0f11; border: 1px solid #1e1e22; border-radius: 16px; padding: 32px; overflow-x: auto; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 13.5px; line-height: 1.8; max-width: 700px; margin: 0 auto; position: relative; }
+    .code-section { padding: 20px 0 100px; }
+    .code-tabs { display: flex; justify-content: center; gap: 4px; margin-bottom: 20px; }
+    .code-tab { padding: 8px 18px; font-size: 13px; font-weight: 600; color: #52525b; background: transparent; border: 1px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+    .code-tab:hover { color: #a1a1aa; }
+    .code-tab.active { color: #e4e4e7; background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+    .code-block { background: rgba(15,15,17,0.8); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 32px; overflow-x: auto; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 14px; line-height: 1.9; max-width: 640px; margin: 0 auto; position: relative; backdrop-filter: blur(8px); }
     .code-block::before { content: attr(data-lang); position: absolute; top: 12px; right: 16px; font-size: 11px; color: #3f3f46; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
     .code-block .cm { color: #3f3f46; }
     .code-block .kw { color: #c084fc; }
@@ -87,55 +115,54 @@
     .code-block .op { color: #71717a; }
     .code-hidden { display: none; }
 
+    /* ── Section headers ──────────────────────────── */
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header h2 { font-size: 40px; font-weight: 800; color: #fafafa; margin-bottom: 12px; letter-spacing: -1.5px; }
+    .section-header p { color: #52525b; font-size: 17px; max-width: 480px; margin: 0 auto; }
+
     /* ── How it works ──────────────────────────────── */
-    .how { padding: 80px 0; border-top: 1px solid #18181b; }
-    .how h2 { text-align: center; font-size: 36px; font-weight: 800; color: #fafafa; margin-bottom: 12px; letter-spacing: -1px; }
-    .how .subtitle { text-align: center; color: #52525b; font-size: 16px; margin-bottom: 56px; }
+    .how { padding: 100px 0; }
     .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .step { text-align: center; padding: 32px 24px; }
-    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #818cf8, #c084fc); color: #fff; font-size: 16px; font-weight: 800; margin-bottom: 16px; }
+    .step { text-align: center; padding: 36px 28px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 16px; transition: all 0.3s; }
+    .step:hover { border-color: rgba(129,140,248,0.2); transform: translateY(-4px); }
+    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #818cf8, #c084fc); color: #fff; font-size: 16px; font-weight: 800; margin-bottom: 20px; }
     .step h3 { color: #fafafa; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
     .step p { color: #71717a; font-size: 14px; line-height: 1.6; }
 
     /* ── Features ──────────────────────────────────── */
-    .features { padding: 80px 0; border-top: 1px solid #18181b; }
-    .features h2 { text-align: center; font-size: 36px; font-weight: 800; color: #fafafa; margin-bottom: 12px; letter-spacing: -1px; }
-    .features .subtitle { text-align: center; color: #52525b; font-size: 16px; margin-bottom: 56px; }
+    .features { padding: 100px 0; }
     .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .feature { background: #0f0f11; border: 1px solid #1e1e22; border-radius: 16px; padding: 28px; transition: border-color 0.2s; }
-    .feature:hover { border-color: #27272a; }
+    .feature { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 16px; padding: 28px; transition: all 0.3s; }
+    .feature:hover { border-color: rgba(129,140,248,0.2); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
     .feature-icon { font-size: 28px; margin-bottom: 14px; display: block; }
     .feature h3 { color: #e4e4e7; font-size: 16px; font-weight: 700; margin-bottom: 8px; }
     .feature p { color: #52525b; font-size: 14px; line-height: 1.5; }
 
     /* ── Comparison ────────────────────────────────── */
-    .comparison { padding: 80px 0; border-top: 1px solid #18181b; }
-    .comparison h2 { text-align: center; font-size: 36px; font-weight: 800; color: #fafafa; margin-bottom: 12px; letter-spacing: -1px; }
-    .comparison .subtitle { text-align: center; color: #52525b; font-size: 16px; margin-bottom: 48px; }
-    .comp-table { max-width: 700px; margin: 0 auto; border: 1px solid #1e1e22; border-radius: 16px; overflow: hidden; }
-    .comp-row { display: grid; grid-template-columns: 1fr 120px 120px; padding: 14px 24px; font-size: 14px; border-bottom: 1px solid #1e1e22; }
+    .comparison { padding: 100px 0; }
+    .comp-table { max-width: 700px; margin: 0 auto; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; overflow: hidden; background: rgba(255,255,255,0.02); }
+    .comp-row { display: grid; grid-template-columns: 1fr 120px 120px; padding: 14px 24px; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .comp-row:last-child { border-bottom: none; }
-    .comp-header { background: #0f0f11; font-weight: 700; color: #a1a1aa; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .comp-header { background: rgba(255,255,255,0.02); font-weight: 700; color: #a1a1aa; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
     .comp-row .label { color: #d4d4d8; font-weight: 500; }
     .comp-row .yes { color: #34d399; font-weight: 600; text-align: center; }
     .comp-row .no { color: #ef4444; font-weight: 500; text-align: center; }
     .comp-row .partial { color: #fbbf24; font-weight: 500; text-align: center; }
 
     /* ── Frameworks ────────────────────────────────── */
-    .frameworks { padding: 60px 0 80px; text-align: center; }
-    .frameworks h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; color: #3f3f46; font-weight: 600; margin-bottom: 28px; }
-    .framework-logos { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; align-items: center; }
-    .framework-logos span { color: #52525b; font-size: 15px; font-weight: 600; padding: 10px 20px; border: 1px solid #1e1e22; border-radius: 10px; transition: all 0.2s; }
-    .framework-logos span:hover { color: #a1a1aa; border-color: #27272a; }
+    .frameworks { padding: 60px 0 100px; text-align: center; }
+    .frameworks h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: #3f3f46; font-weight: 600; margin-bottom: 28px; }
+    .framework-logos { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .framework-logos span { color: #52525b; font-size: 14px; font-weight: 600; padding: 10px 20px; border: 1px solid rgba(255,255,255,0.04); border-radius: 10px; transition: all 0.3s; background: rgba(255,255,255,0.02); }
+    .framework-logos span:hover { color: #a1a1aa; border-color: rgba(129,140,248,0.2); transform: translateY(-2px); }
 
     /* ── Pricing ───────────────────────────────────── */
-    .pricing { padding: 80px 0; border-top: 1px solid #18181b; }
-    .pricing h2 { text-align: center; font-size: 36px; font-weight: 800; color: #fafafa; margin-bottom: 12px; letter-spacing: -1px; }
-    .pricing .subtitle { text-align: center; color: #52525b; font-size: 16px; margin-bottom: 56px; }
+    .pricing { padding: 100px 0; }
     .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 900px; margin: 0 auto; }
-    .price-card { background: #0f0f11; border: 1px solid #1e1e22; border-radius: 16px; padding: 32px; position: relative; }
-    .price-card.popular { border-color: #818cf8; box-shadow: 0 0 32px rgba(129,140,248,0.1); }
-    .price-card.popular::after { content: "Most Popular"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #818cf8; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .price-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 16px; padding: 32px; position: relative; transition: all 0.3s; }
+    .price-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.3); }
+    .price-card.popular { border-color: rgba(129,140,248,0.4); box-shadow: 0 0 48px rgba(129,140,248,0.08); }
+    .price-card.popular::after { content: "Most Popular"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #818cf8, #c084fc); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
     .price-name { font-size: 16px; font-weight: 700; color: #e4e4e7; margin-bottom: 4px; }
     .price-amount { font-size: 40px; font-weight: 900; color: #fafafa; margin-bottom: 4px; }
     .price-amount span { font-size: 16px; font-weight: 500; color: #52525b; }
@@ -143,33 +170,48 @@
     .price-features { list-style: none; margin-bottom: 28px; }
     .price-features li { font-size: 14px; color: #a1a1aa; padding: 6px 0; display: flex; align-items: center; gap: 10px; }
     .price-features li::before { content: "\2713"; color: #34d399; font-weight: 700; font-size: 13px; flex-shrink: 0; }
-    .price-btn { display: block; width: 100%; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600; text-align: center; transition: all 0.2s; border: none; cursor: pointer; }
+    .price-btn { display: block; width: 100%; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600; text-align: center; transition: all 0.25s; border: none; cursor: pointer; }
     .price-btn-primary { background: #818cf8; color: #fff; }
-    .price-btn-primary:hover { background: #6366f1; text-decoration: none; color: #fff; }
-    .price-btn-ghost { background: #18181b; border: 1px solid #27272a; color: #d4d4d8; }
-    .price-btn-ghost:hover { border-color: #3f3f46; text-decoration: none; color: #fff; }
+    .price-btn-primary:hover { background: #6366f1; transform: translateY(-1px); text-decoration: none; color: #fff; }
+    .price-btn-ghost { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #d4d4d8; }
+    .price-btn-ghost:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-1px); text-decoration: none; color: #fff; }
 
     /* ── CTA ───────────────────────────────────────── */
-    .cta { padding: 100px 0; text-align: center; }
-    .cta h2 { font-size: 44px; font-weight: 900; color: #fafafa; margin-bottom: 16px; letter-spacing: -1.5px; }
-    .cta p { font-size: 18px; color: #52525b; margin-bottom: 32px; }
+    .cta { padding: 120px 0; text-align: center; position: relative; }
+    .cta::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse at center, rgba(129,140,248,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta h2 { font-size: 48px; font-weight: 900; color: #fafafa; margin-bottom: 16px; letter-spacing: -2px; }
+    .cta p { font-size: 18px; color: #52525b; margin-bottom: 36px; }
 
     /* ── Footer ────────────────────────────────────── */
-    footer { padding: 40px 0; border-top: 1px solid #18181b; }
+    footer { padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.04); }
     footer .container { display: flex; justify-content: space-between; align-items: center; }
     footer .copy { color: #3f3f46; font-size: 13px; }
     footer .links { display: flex; gap: 20px; }
-    footer .links a { color: #3f3f46; font-size: 13px; }
+    footer .links a { color: #3f3f46; font-size: 13px; transition: color 0.2s; }
     footer .links a:hover { color: #71717a; }
 
+    /* ── Dividers ──────────────────────────────────── */
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(129,140,248,0.1), transparent); margin: 0 auto; max-width: 600px; }
+
     @media (max-width: 768px) {
-      .hero h1 { font-size: 36px; letter-spacing: -1px; }
-      .hero p { font-size: 17px; }
+      .hero { padding: 80px 0 60px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .hero h1 { font-size: 38px; letter-spacing: -1px; }
+      .hero p { font-size: 16px; }
+      .section-header h2 { font-size: 30px; }
       .feature-grid, .pricing-grid, .steps { grid-template-columns: 1fr; }
       .comp-row { grid-template-columns: 1fr 80px 80px; padding: 12px 16px; font-size: 13px; }
-      .cta h2 { font-size: 30px; }
+      .cta h2 { font-size: 32px; }
       footer .container { flex-direction: column; gap: 12px; }
       .nav-links a:not(.btn-sm) { display: none; }
+      .chat-demo { animation: none; }
     }
   </style>
 </head>
@@ -182,7 +224,7 @@
         <a href="#pricing">Pricing</a>
         <a href="/docs">Docs</a>
         <a href="https://github.com/luv005/agentpost">GitHub</a>
-        <a href="/skill" style="color:#818cf8;font-weight:600;">MCP Skill</a>
+        <a href="/skill" style="color:#a5b4fc;font-weight:600;">MCP Skill</a>
         <a href="/auth/signup" class="btn-sm">Start for Free</a>
       </div>
     </div>
@@ -193,16 +235,16 @@
     <div class="container">
       <div class="hero-grid">
         <div class="hero-left">
-          <div class="badge"><span class="badge-dot"></span> Now in public beta</div>
-          <h1>Instant email for<br><span class="gradient">your agent.</span></h1>
-          <p>No API keys. No human signup. Your agent gets its own email inbox in seconds.</p>
-          <div class="hero-ctas">
+          <div class="badge fade-up"><span class="badge-dot"></span> Now in public beta</div>
+          <h1 class="fade-up delay-1">Instant email for<br><span class="gradient">your agent.</span></h1>
+          <p class="fade-up delay-2">No API keys. No human signup. Your agent gets its own email inbox in seconds.</p>
+          <div class="hero-ctas fade-up delay-3">
             <a href="/auth/signup" class="btn btn-primary">Start for Free &rarr;</a>
             <a href="/skill" class="btn btn-ghost">MCP Skill</a>
           </div>
-          <p class="hero-note">No credit card required &middot; Free tier included</p>
+          <p class="hero-note fade-up delay-4">No credit card required &middot; Free tier included</p>
         </div>
-        <div class="chat-demo">
+        <div class="chat-demo fade-up delay-3">
           <div class="chat-msg">
             <div><div class="chat-avatar agent">🤖</div><div class="chat-label">Agent</div></div>
             <div class="chat-bubble">I need an email address to continue, but I don't have one.</div>
@@ -265,11 +307,15 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
     </div>
   </section>
 
+  <div class="divider"></div>
+
   <!-- How it Works -->
   <section class="how">
     <div class="container">
-      <h2>Up and running in 60 seconds</h2>
-      <p class="subtitle">Three steps. No config. No SMTP setup.</p>
+      <div class="section-header">
+        <h2>Up and running in 60 seconds</h2>
+        <p>Three steps. No config. No SMTP setup.</p>
+      </div>
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
@@ -290,107 +336,87 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
     </div>
   </section>
 
+  <div class="divider"></div>
+
   <!-- Features -->
   <section class="features">
     <div class="container">
-      <h2>Everything your agent needs</h2>
-      <p class="subtitle">It's not AI for your email. It's email for your AI.</p>
+      <div class="section-header">
+        <h2>Everything your agent needs</h2>
+        <p>It's not AI for your email. It's email for your AI.</p>
+      </div>
       <div class="feature-grid">
         <div class="feature">
-          <span class="feature-icon">&#9993;&#65039;</span>
+          <span class="feature-icon">📨</span>
           <h3>Send &amp; Receive</h3>
           <p>Full two-way email. AWS SES for outbound delivery, built-in SMTP server for inbound. Queue-based async processing.</p>
         </div>
         <div class="feature">
-          <span class="feature-icon">&#128172;</span>
+          <span class="feature-icon">💬</span>
           <h3>Auto-Threading</h3>
-          <p>RFC 5322 compliant conversation threading. Messages are auto-grouped via Message-ID, In-Reply-To, and References.</p>
+          <p>RFC 5322 compliant conversation threading. Messages auto-grouped via Message-ID, In-Reply-To, and References.</p>
         </div>
         <div class="feature">
-          <span class="feature-icon">&#9889;</span>
+          <span class="feature-icon">⚡</span>
           <h3>Realtime Webhooks</h3>
-          <p>Instant notifications when emails arrive. HMAC-SHA256 signed payloads with automatic retry and exponential backoff.</p>
+          <p>Instant notifications when emails arrive. HMAC-SHA256 signed payloads with automatic retry and backoff.</p>
         </div>
         <div class="feature">
-          <span class="feature-icon">&#127760;</span>
+          <span class="feature-icon">🌐</span>
           <h3>Custom Domains</h3>
           <p>Use your own domain with automated DKIM and SPF verification. Your agent sends from your-brand.com.</p>
         </div>
         <div class="feature">
-          <span class="feature-icon">&#128206;</span>
+          <span class="feature-icon">📎</span>
           <h3>Attachments</h3>
-          <p>Upload and attach files up to 10MB. S3-backed storage with presigned download URLs for inbound attachments.</p>
+          <p>Upload and attach files up to 10MB. S3-backed storage with presigned download URLs.</p>
         </div>
         <div class="feature">
-          <span class="feature-icon">&#128737;&#65039;</span>
-          <h3>Bounce &amp; Complaint Tracking</h3>
-          <p>Automatic SES event processing for bounces, complaints, and delivery confirmations. Protects your sender reputation.</p>
+          <span class="feature-icon">🛡️</span>
+          <h3>Bounce Tracking</h3>
+          <p>Automatic SES event processing for bounces, complaints, and delivery confirmations.</p>
         </div>
         <div class="feature">
-          <span class="feature-icon">&#128272;</span>
+          <span class="feature-icon">🔑</span>
           <h3>API Key Auth</h3>
-          <p>Simple bearer token and API key auth. SHA-256 hashed storage with per-account and per-inbox rate limiting.</p>
+          <p>Simple bearer token auth. SHA-256 hashed storage with per-account and per-inbox rate limiting.</p>
         </div>
         <div class="feature">
-          <span class="feature-icon">&#128230;</span>
-          <h3>TypeScript SDK</h3>
-          <p>First-class TypeScript SDK with full type safety. npm install @agentsend/sdk and start sending in minutes.</p>
+          <span class="feature-icon">🧩</span>
+          <h3>MCP Skill</h3>
+          <p>Drop-in MCP server for Claude, Cursor, and any MCP-compatible AI agent. npx @agentsend/mcp.</p>
         </div>
         <div class="feature">
-          <span class="feature-icon">&#128214;</span>
+          <span class="feature-icon">📖</span>
           <h3>OpenAPI Docs</h3>
-          <p>Interactive Swagger UI with complete API documentation. Try endpoints directly from your browser at /docs.</p>
+          <p>Interactive Swagger UI with complete API documentation. Try endpoints directly at /docs.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <div class="divider"></div>
+
   <!-- Comparison -->
   <section class="comparison">
     <div class="container">
-      <h2>Why not just use Gmail?</h2>
-      <p class="subtitle">Email services built for humans don't work for agents.</p>
+      <div class="section-header">
+        <h2>Why not just use Gmail?</h2>
+        <p>Email services built for humans don't work for agents.</p>
+      </div>
       <div class="comp-table">
         <div class="comp-row comp-header">
           <span></span>
           <span style="text-align:center">AgentSend</span>
           <span style="text-align:center">Gmail API</span>
         </div>
-        <div class="comp-row">
-          <span class="label">Programmatic inbox creation</span>
-          <span class="yes">&#10003;</span>
-          <span class="no">&#10007;</span>
-        </div>
-        <div class="comp-row">
-          <span class="label">No human signup required</span>
-          <span class="yes">&#10003;</span>
-          <span class="no">&#10007;</span>
-        </div>
-        <div class="comp-row">
-          <span class="label">Conversation threading API</span>
-          <span class="yes">&#10003;</span>
-          <span class="partial">Partial</span>
-        </div>
-        <div class="comp-row">
-          <span class="label">Realtime webhooks</span>
-          <span class="yes">&#10003;</span>
-          <span class="partial">Push only</span>
-        </div>
-        <div class="comp-row">
-          <span class="label">Custom domains</span>
-          <span class="yes">&#10003;</span>
-          <span class="no">&#10007;</span>
-        </div>
-        <div class="comp-row">
-          <span class="label">No OAuth dance</span>
-          <span class="yes">&#10003;</span>
-          <span class="no">&#10007;</span>
-        </div>
-        <div class="comp-row">
-          <span class="label">Built for AI agents</span>
-          <span class="yes">&#10003;</span>
-          <span class="no">&#10007;</span>
-        </div>
+        <div class="comp-row"><span class="label">Programmatic inbox creation</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">No human signup required</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">Conversation threading API</span><span class="yes">✓</span><span class="partial">Partial</span></div>
+        <div class="comp-row"><span class="label">Realtime webhooks</span><span class="yes">✓</span><span class="partial">Push only</span></div>
+        <div class="comp-row"><span class="label">Custom domains</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">No OAuth dance</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">Built for AI agents</span><span class="yes">✓</span><span class="no">✗</span></div>
       </div>
     </div>
   </section>
@@ -410,11 +436,15 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
     </div>
   </section>
 
+  <div class="divider"></div>
+
   <!-- Pricing -->
   <section class="pricing" id="pricing">
     <div class="container">
-      <h2>Simple, transparent pricing</h2>
-      <p class="subtitle">Start free. Scale when you need to.</p>
+      <div class="section-header">
+        <h2>Simple, transparent pricing</h2>
+        <p>Start free. Scale when you need to.</p>
+      </div>
       <div class="pricing-grid">
         <div class="price-card">
           <div class="price-name">Free</div>
@@ -428,7 +458,7 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
             <li>Threading</li>
             <li>Community support</li>
           </ul>
-          <a href="/docs" class="price-btn price-btn-ghost">Get Started</a>
+          <a href="/auth/signup" class="price-btn price-btn-ghost">Get Started</a>
         </div>
         <div class="price-card popular">
           <div class="price-name">Pro</div>
@@ -442,7 +472,7 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
             <li>Attachments up to 10MB</li>
             <li>Priority support</li>
           </ul>
-          <a href="/docs" class="price-btn price-btn-primary">Start Free Trial</a>
+          <a href="/auth/signup" class="price-btn price-btn-primary">Start Free Trial</a>
         </div>
         <div class="price-card">
           <div class="price-name">Enterprise</div>
@@ -467,7 +497,7 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
     <div class="container">
       <h2>Give your agent an email inbox</h2>
       <p>Free to start. No credit card required. Takes 60 seconds.</p>
-      <a href="/docs" class="btn btn-primary">Start Building &rarr;</a>
+      <a href="/auth/signup" class="btn btn-primary">Start Building &rarr;</a>
     </div>
   </section>
 
@@ -477,6 +507,7 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
       <span class="copy">&copy; 2025 AgentSend. Email infrastructure for AI agents.</span>
       <div class="links">
         <a href="/docs">Docs</a>
+        <a href="/skill">MCP Skill</a>
         <a href="https://github.com/luv005/agentpost">GitHub</a>
         <a href="mailto:hello@agentsend.io">Contact</a>
       </div>
