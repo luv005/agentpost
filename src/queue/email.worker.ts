@@ -1,7 +1,8 @@
 import { Worker, Job } from "bullmq";
 import { eq, sql } from "drizzle-orm";
 import { getRedisConnection } from "./connection.js";
-import { sendEmail } from "../services/ses.service.js";
+import { sendEmail, type EmailAttachment } from "../services/ses.service.js";
+import { downloadAttachment } from "../services/s3.service.js";
 import { getDb } from "../db/client.js";
 import { messages, inboxes } from "../db/schema.js";
 import { env } from "../config/env.js";
@@ -12,6 +13,7 @@ async function processEmailJob(job: Job<EmailJobData>) {
   const {
     messageId, messageIdHeader, inReplyTo, references,
     from, to, cc, bcc, subject, bodyText, bodyHtml, inboxId,
+    attachments: jobAttachments,
   } = job.data;
 
   // Update status to sending
@@ -21,6 +23,18 @@ async function processEmailJob(job: Job<EmailJobData>) {
     .where(eq(messages.id, messageId));
 
   try {
+    // Download attachments from S3 if any
+    let emailAttachments: EmailAttachment[] | undefined;
+    if (jobAttachments?.length) {
+      emailAttachments = await Promise.all(
+        jobAttachments.map(async (att) => ({
+          filename: att.filename,
+          contentType: att.contentType,
+          content: await downloadAttachment(att.key),
+        })),
+      );
+    }
+
     const sesMessageId = await sendEmail({
       from,
       to,
@@ -32,6 +46,7 @@ async function processEmailJob(job: Job<EmailJobData>) {
       messageIdHeader,
       inReplyTo,
       references,
+      attachments: emailAttachments,
     });
 
     // Update message to sent
@@ -49,6 +64,7 @@ async function processEmailJob(job: Job<EmailJobData>) {
       .update(inboxes)
       .set({
         sendsToday: sql`${inboxes.sendsToday} + 1`,
+        totalSent: sql`${inboxes.totalSent} + 1`,
         updatedAt: new Date(),
       })
       .where(eq(inboxes.id, inboxId));

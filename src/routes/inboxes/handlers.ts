@@ -7,6 +7,7 @@ export async function createInbox(request: FastifyRequest, reply: FastifyReply) 
   const inbox = await inboxService.createInbox(
     request.account.id,
     body.displayName,
+    body.domainId,
   );
   return reply.status(201).send(inbox);
 }

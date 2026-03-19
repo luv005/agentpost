@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const createInboxBody = z.object({
   displayName: z.string().max(255).optional(),
+  domainId: z.string().uuid().optional(),
 });
 
 export const listInboxesQuery = z.object({

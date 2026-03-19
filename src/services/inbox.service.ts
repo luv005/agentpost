@@ -1,20 +1,40 @@
 import { eq, and, isNull, sql, desc } from "drizzle-orm";
 import { getDb } from "../db/client.js";
-import { inboxes } from "../db/schema.js";
-import { generateEmailAddress } from "../lib/email-address.js";
-import { NotFoundError, InboxSuspendedError } from "../lib/errors.js";
+import { inboxes, domains } from "../db/schema.js";
+import { generateEmailAddress, generateEmailLocal } from "../lib/email-address.js";
+import { NotFoundError, InboxSuspendedError, AppError } from "../lib/errors.js";
 
 export async function createInbox(
   accountId: string,
   displayName?: string,
+  domainId?: string,
 ) {
   const db = getDb();
-  const address = generateEmailAddress();
+  let address: string;
+
+  if (domainId) {
+    // Use custom domain
+    const [domain] = await db
+      .select()
+      .from(domains)
+      .where(and(eq(domains.id, domainId), eq(domains.accountId, accountId)))
+      .limit(1);
+
+    if (!domain) throw new NotFoundError("Domain", domainId);
+    if (domain.verificationStatus !== "verified") {
+      throw new AppError("DOMAIN_NOT_VERIFIED", "Domain is not yet verified", 400);
+    }
+
+    address = `${generateEmailLocal()}@${domain.domain}`;
+  } else {
+    address = generateEmailAddress();
+  }
 
   const [inbox] = await db
     .insert(inboxes)
     .values({
       accountId,
+      domainId: domainId ?? null,
       address,
       displayName: displayName ?? null,
     })

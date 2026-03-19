@@ -56,3 +56,22 @@ export async function getAttachmentUrl(
 
   return url;
 }
+
+export async function downloadAttachment(key: string): Promise<Buffer> {
+  const client = getClient();
+  const config = env();
+
+  const response = await client.send(
+    new GetObjectCommand({ Bucket: config.S3_BUCKET, Key: key }),
+  );
+
+  const stream = response.Body;
+  if (!stream) throw new Error(`Empty S3 response for key: ${key}`);
+
+  // Convert stream to Buffer
+  const chunks: Uint8Array[] = [];
+  for await (const chunk of stream as AsyncIterable<Uint8Array>) {
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
+}

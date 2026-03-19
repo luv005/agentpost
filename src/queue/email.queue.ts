@@ -14,6 +14,7 @@ export interface EmailJobData {
   bodyText?: string;
   bodyHtml?: string;
   inboxId: string;
+  attachments?: { key: string; filename: string; contentType: string }[];
 }
 
 let _queue: Queue<EmailJobData> | null = null;

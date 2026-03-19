@@ -42,6 +42,8 @@ const envSchema = z.object({
   SMTP_HOST: z.string().default("0.0.0.0"),
   SMTP_MAX_SIZE: z.coerce.number().default(26214400),
 
+  SNS_TOPIC_ARN: z.string().optional(),
+
   WEBHOOK_MAX_RETRIES: z.coerce.number().default(5),
   WEBHOOK_RETRY_DELAY_MS: z.coerce.number().default(10000),
   WEBHOOK_TIMEOUT_MS: z.coerce.number().default(30000),

@@ -58,6 +58,7 @@ export const inboxes = pgTable(
     accountId: uuid("account_id")
       .notNull()
       .references(() => accounts.id, { onDelete: "cascade" }),
+    domainId: uuid("domain_id").references(() => domains.id),
     address: varchar("address", { length: 255 }).notNull().unique(),
     displayName: varchar("display_name", { length: 255 }),
     dailySendLimit: integer("daily_send_limit").notNull().default(10),
@@ -65,6 +66,7 @@ export const inboxes = pgTable(
     sendsToday: integer("sends_today").notNull().default(0),
     bounceCount: integer("bounce_count").notNull().default(0),
     complaintCount: integer("complaint_count").notNull().default(0),
+    totalSent: integer("total_sent").notNull().default(0),
     status: varchar("status", { length: 20 }).notNull().default("active"),
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true })
@@ -77,6 +79,35 @@ export const inboxes = pgTable(
   (table) => [
     index("inboxes_account_id_idx").on(table.accountId),
     index("inboxes_account_status_idx").on(table.accountId, table.status),
+  ],
+);
+
+// ── Domains ─────────────────────────────────────────────────────────────────
+
+export const domains = pgTable(
+  "domains",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    accountId: uuid("account_id")
+      .notNull()
+      .references(() => accounts.id, { onDelete: "cascade" }),
+    domain: varchar("domain", { length: 255 }).notNull(),
+    verificationStatus: varchar("verification_status", { length: 20 })
+      .notNull()
+      .default("pending"),
+    dkimTokens: jsonb("dkim_tokens").$type<string[]>().default([]),
+    verificationToken: varchar("verification_token", { length: 255 }),
+    verifiedAt: timestamp("verified_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    index("domains_account_id_idx").on(table.accountId),
+    index("domains_account_domain_idx").on(table.accountId, table.domain),
   ],
 );
 
@@ -134,6 +165,26 @@ export const webhooks = pgTable(
       .defaultNow(),
   },
   (table) => [index("webhooks_account_id_idx").on(table.accountId)],
+);
+
+// ── Attachments ─────────────────────────────────────────────────────────────
+
+export const attachments = pgTable(
+  "attachments",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    accountId: uuid("account_id")
+      .notNull()
+      .references(() => accounts.id, { onDelete: "cascade" }),
+    key: varchar("key", { length: 512 }).notNull(),
+    filename: varchar("filename", { length: 255 }).notNull(),
+    contentType: varchar("content_type", { length: 255 }).notNull(),
+    size: integer("size").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [index("attachments_account_id_idx").on(table.accountId)],
 );
 
 // ── Messages ────────────────────────────────────────────────────────────────

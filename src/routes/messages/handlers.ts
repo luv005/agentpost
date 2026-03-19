@@ -22,6 +22,7 @@ export async function sendMessage(request: FastifyRequest, reply: FastifyReply) 
     bodyText: body.bodyText,
     bodyHtml: body.bodyHtml,
     threadId: body.threadId,
+    attachmentIds: body.attachmentIds,
   });
 
   return reply.status(202).send(message);

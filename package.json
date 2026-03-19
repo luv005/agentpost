@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Email infrastructure API for AI agents",
   "type": "module",
+  "workspaces": ["packages/*"],
   "engines": {
     "node": ">=20.0.0"
   },
@@ -23,6 +24,7 @@
     "@aws-sdk/client-ses": "^3.750.0",
     "@aws-sdk/s3-request-presigner": "^3.750.0",
     "@fastify/cors": "^10.0.0",
+    "@fastify/multipart": "^9.4.0",
     "@fastify/rate-limit": "^10.0.0",
     "@fastify/sensible": "^6.0.0",
     "bullmq": "^5.30.0",

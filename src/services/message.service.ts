@@ -5,7 +5,9 @@ import { getActiveInbox } from "./inbox.service.js";
 import { enqueueEmail } from "../queue/email.queue.js";
 import { resolveThread, updateThreadOnNewMessage } from "./thread.service.js";
 import { generateMessageId } from "../lib/message-id.js";
-import { RateLimitError, NotFoundError } from "../lib/errors.js";
+import { getAttachmentsByIds } from "./attachment.service.js";
+import { RateLimitError, NotFoundError, AppError } from "../lib/errors.js";
+import type { MessageAttachment } from "../db/schema.js";
 
 export interface SendMessageInput {
   inboxId: string;
@@ -17,6 +19,7 @@ export interface SendMessageInput {
   bodyText?: string;
   bodyHtml?: string;
   threadId?: string;
+  attachmentIds?: string[];
 }
 
 export async function sendMessage(input: SendMessageInput) {
@@ -75,6 +78,39 @@ export async function sendMessage(input: SendMessageInput) {
     ? `${inbox.displayName} <${inbox.address}>`
     : inbox.address;
 
+  // Fetch and validate attachments if provided
+  let storedAttachments: MessageAttachment[] = [];
+  let queueAttachments: { key: string; filename: string; contentType: string }[] = [];
+
+  if (input.attachmentIds?.length) {
+    const attachmentRecords = await getAttachmentsByIds(
+      input.attachmentIds,
+      input.accountId,
+    );
+
+    const totalSize = attachmentRecords.reduce((sum, a) => sum + a.size, 0);
+    if (totalSize > 25 * 1024 * 1024) {
+      throw new AppError(
+        "ATTACHMENTS_TOO_LARGE",
+        "Total attachment size exceeds 25MB limit",
+        400,
+      );
+    }
+
+    storedAttachments = attachmentRecords.map((a) => ({
+      key: a.key,
+      filename: a.filename,
+      contentType: a.contentType,
+      size: a.size,
+    }));
+
+    queueAttachments = attachmentRecords.map((a) => ({
+      key: a.key,
+      filename: a.filename,
+      contentType: a.contentType,
+    }));
+  }
+
   // Insert message with status 'queued'
   const [message] = await db
     .insert(messages)
@@ -90,6 +126,7 @@ export async function sendMessage(input: SendMessageInput) {
       subject: input.subject,
       bodyText: input.bodyText ?? null,
       bodyHtml: input.bodyHtml ?? null,
+      attachments: storedAttachments.length > 0 ? storedAttachments : [],
       status: "queued",
       messageIdHeader,
       inReplyTo,
@@ -114,6 +151,7 @@ export async function sendMessage(input: SendMessageInput) {
     bodyText: input.bodyText,
     bodyHtml: input.bodyHtml,
     inboxId: inbox.id,
+    attachments: queueAttachments.length > 0 ? queueAttachments : undefined,
   });
 
   return message;
