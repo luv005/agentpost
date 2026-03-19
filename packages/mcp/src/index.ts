@@ -6,12 +6,13 @@ import {
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import { ApiClient } from "./api-client.js";
+import { ensureApiKey } from "./credentials.js";
 
-const API_KEY = process.env.AGENTSEND_API_KEY ?? "";
 const BASE_URL =
   process.env.AGENTSEND_BASE_URL ?? "https://agentsend.io";
 
-const api = new ApiClient(API_KEY, BASE_URL);
+// Will be initialized in main() after auto-provision
+let api: ApiClient;
 
 const server = new Server(
   {
@@ -327,6 +328,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 // ── Start ───────────────────────────────────────────────────────────────────
 
 async function main() {
+  // Auto-provision: get or create API key (zero config)
+  const apiKey = await ensureApiKey(BASE_URL);
+  api = new ApiClient(apiKey, BASE_URL);
+
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error("AgentSend MCP server running on stdio");

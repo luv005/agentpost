@@ -16,3 +16,7 @@ export const verifyQuery = z.object({
 export const googleCallbackQuery = z.object({
   code: z.string().min(1),
 });
+
+export const autoProvisionBody = z.object({
+  deviceId: z.string().min(8).max(128),
+});

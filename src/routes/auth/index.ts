@@ -4,6 +4,7 @@ import * as handlers from "./handlers.js";
 export async function authRoutes(app: FastifyInstance) {
   app.get("/signup", handlers.signupPage);
   app.post("/signup", handlers.signup);
+  app.post("/auto-provision", handlers.autoProvisionHandler);
   app.post("/magic-link", handlers.requestMagicLink);
   app.get("/verify", handlers.verify);
   app.get("/google", handlers.googleAuth);

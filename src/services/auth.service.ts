@@ -97,6 +97,57 @@ export async function publicSignup(email: string, name: string) {
   };
 }
 
+// ── Auto-Provision (zero-friction agent signup) ─────────────────────────────
+
+export async function autoProvision(deviceId: string) {
+  const db = getDb();
+
+  // Check if this device already has an account
+  const email = `agent-${deviceId.slice(0, 12)}@agentsend.io`;
+
+  const [existing] = await db
+    .select()
+    .from(accounts)
+    .where(eq(accounts.email, email))
+    .limit(1);
+
+  if (existing) {
+    // Return existing account — but we need to create a new API key
+    // since we can't retrieve the old one (it's hashed)
+    const apiKey = await createApiKey(existing.id, "Auto-provisioned");
+    return {
+      account: {
+        id: existing.id,
+        email: existing.email,
+        plan: existing.plan,
+      },
+      apiKey: apiKey.key,
+      isNew: false,
+    };
+  }
+
+  // Create new account
+  const [account] = await db
+    .insert(accounts)
+    .values({
+      name: `Agent ${deviceId.slice(0, 8)}`,
+      email,
+    })
+    .returning();
+
+  const apiKey = await createApiKey(account.id, "Auto-provisioned");
+
+  return {
+    account: {
+      id: account.id,
+      email: account.email,
+      plan: account.plan,
+    },
+    apiKey: apiKey.key,
+    isNew: true,
+  };
+}
+
 // ── Magic Link ──────────────────────────────────────────────────────────────
 
 export async function sendMagicLink(email: string) {

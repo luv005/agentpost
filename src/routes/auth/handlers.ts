@@ -5,12 +5,14 @@ import {
   verifyMagicLink,
   getGoogleAuthUrl,
   handleGoogleCallback,
+  autoProvision,
 } from "../../services/auth.service.js";
 import {
   signupBody,
   magicLinkBody,
   verifyQuery,
   googleCallbackQuery,
+  autoProvisionBody,
 } from "./schemas.js";
 import { env } from "../../config/env.js";
 
@@ -28,6 +30,19 @@ export async function signup(request: FastifyRequest, reply: FastifyReply) {
   const body = signupBody.parse(request.body);
   const result = await publicSignup(body.email, body.name);
   return reply.status(201).send(result);
+}
+
+/**
+ * POST /auth/auto-provision — Zero-friction agent signup
+ * No email, no name, just a device ID. Returns API key immediately.
+ */
+export async function autoProvisionHandler(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const body = autoProvisionBody.parse(request.body);
+  const result = await autoProvision(body.deviceId);
+  return reply.status(result.isNew ? 201 : 200).send(result);
 }
 
 const SIGNUP_PAGE = `<!DOCTYPE html>
