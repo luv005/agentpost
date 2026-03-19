@@ -1,6 +1,22 @@
 import { loadEnv } from "./config/env.js";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
+import postgres from "postgres";
 
 const config = loadEnv();
+
+// Run migrations before anything else
+try {
+  console.log("Running database migrations...");
+  const migrationSql = postgres(config.DATABASE_URL, { max: 1 });
+  const migrationDb = drizzle(migrationSql);
+  await migrate(migrationDb, { migrationsFolder: "./src/db/migrations" });
+  await migrationSql.end();
+  console.log("Migrations complete.");
+} catch (err) {
+  console.error("Migration failed:", err);
+  // Don't exit — tables might already exist
+}
 
 const { buildApp } = await import("./app.js");
 const { startEmailWorker } = await import("./queue/email.worker.js");
