@@ -70,9 +70,11 @@ export async function buildApp() {
     decorateReply: false,
   });
 
-  await app.register(errorHandler);
-  await app.register(rateLimitPlugin);
-  await app.register(authPlugin);
+  // These must run on the root instance so their hooks/decorators apply to
+  // every route instead of being trapped inside an encapsulated child scope.
+  await errorHandler(app);
+  await rateLimitPlugin(app);
+  await authPlugin(app);
   await app.register(landingRoute);
   await app.register(skillRoute);
   await app.register(dashboardRoute);

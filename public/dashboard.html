@@ -3,739 +3,3249 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — AgentSend</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>Dashboard - AgentSend</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #060708;
+      --bg-muted: #0b0d0f;
+      --panel: rgba(18, 21, 24, 0.88);
+      --panel-strong: rgba(20, 24, 28, 0.98);
+      --panel-soft: rgba(255, 255, 255, 0.03);
+      --panel-soft-strong: rgba(255, 255, 255, 0.055);
+      --line: rgba(255, 255, 255, 0.07);
+      --line-strong: rgba(255, 255, 255, 0.12);
+      --text: #f4f5f7;
+      --text-strong: #ffffff;
+      --text-soft: #d2d6db;
+      --text-muted: #8f98a3;
+      --text-faint: #69727d;
+      --accent: #6ea8fe;
+      --accent-soft: rgba(110, 168, 254, 0.14);
+      --success: #49d68e;
+      --warning: #ffb04a;
+      --danger: #ff6f61;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', -apple-system, sans-serif; background: #09090b; color: #e5e5e5; min-height: 100vh; }
-    a { color: #818cf8; text-decoration: none; }
-    .mono { font-family: 'JetBrains Mono', monospace; }
 
-    /* Layout */
-    .app { display: flex; min-height: 100vh; }
-    .sidebar { width: 220px; background: #0c0c0e; border-right: 1px solid rgba(129,140,248,0.06); flex-shrink: 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 10; }
-    .main { flex: 1; margin-left: 220px; min-height: 100vh; }
-    .topbar { padding: 16px 32px; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: rgba(9,9,11,0.9); backdrop-filter: blur(12px); z-index: 5; }
-    .topbar-title { font-size: 14px; color: #52525b; }
-    .topbar-title strong { color: #fafafa; font-weight: 700; }
-    .content { padding: 28px 32px; }
+    html { color-scheme: dark; }
 
-    /* Sidebar */
-    .sidebar-header { padding: 20px 16px 20px; }
-    .sidebar-logo { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
-    .sidebar-logo span { background: linear-gradient(135deg, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .sidebar-section { padding: 0 8px; margin-bottom: 8px; }
-    .sidebar-label { font-size: 10px; font-weight: 700; color: #3f3f46; text-transform: uppercase; letter-spacing: 1.5px; padding: 8px 12px 4px; }
-    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; font-size: 13px; font-weight: 500; color: #71717a; cursor: pointer; transition: all 0.15s; border-radius: 8px; margin: 1px 0; }
-    .nav-item:hover { color: #d4d4d8; background: rgba(255,255,255,0.04); }
-    .nav-item.active { color: #fff; background: rgba(129,140,248,0.12); }
-    .nav-item .ico { width: 18px; text-align: center; font-size: 15px; }
-    .nav-item .count { margin-left: auto; font-size: 11px; background: rgba(255,255,255,0.06); color: #71717a; padding: 1px 7px; border-radius: 10px; font-weight: 600; }
-    .sidebar-bottom { margin-top: auto; padding: 12px 16px; border-top: 1px solid rgba(255,255,255,0.04); }
-    .sidebar-bottom a { display: block; font-size: 12px; color: #3f3f46; padding: 4px 0; transition: color 0.15s; }
-    .sidebar-bottom a:hover { color: #71717a; }
-    .user-pill { display: flex; align-items: center; gap: 8px; padding: 10px 12px; margin: 0 8px 8px; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); }
-    .user-avatar { width: 28px; height: 28px; border-radius: 6px; background: linear-gradient(135deg, #818cf8, #c084fc); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
-    .user-info { flex: 1; overflow: hidden; }
-    .user-name { font-size: 12px; font-weight: 600; color: #d4d4d8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .user-plan { font-size: 10px; color: #52525b; }
+    body {
+      min-height: 100vh;
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(110, 168, 254, 0.16), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(73, 214, 142, 0.1), transparent 24%),
+        linear-gradient(180deg, #050607 0%, #090b0d 100%);
+    }
 
-    /* Stat cards row */
-    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
-    .stat-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 16px 18px; }
-    .stat-value { font-size: 28px; font-weight: 800; color: #fafafa; letter-spacing: -1px; }
-    .stat-label { font-size: 12px; color: #52525b; margin-top: 2px; }
-    .stat-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; }
+    a { color: inherit; text-decoration: none; }
 
-    /* Two-column overview */
-    .overview-grid { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+    button, input, textarea, select { font: inherit; }
 
-    /* Recent messages */
-    .card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; }
-    .card-header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: space-between; }
-    .card-header h3 { font-size: 13px; font-weight: 700; color: #d4d4d8; text-transform: uppercase; letter-spacing: 0.5px; }
-    .card-header a { font-size: 12px; color: #818cf8; font-weight: 600; }
-    .card-body { padding: 0; }
-    .msg-row { display: flex; align-items: center; padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; transition: background 0.1s; gap: 12px; }
-    .msg-row:last-child { border-bottom: none; }
-    .msg-row:hover { background: rgba(129,140,248,0.04); }
-    .msg-dir { font-size: 14px; }
-    .msg-from { font-size: 13px; font-weight: 600; color: #d4d4d8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
-    .msg-subject { font-size: 13px; color: #52525b; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .msg-time { font-size: 11px; color: #3f3f46; white-space: nowrap; margin-left: auto; }
-    .msg-empty { padding: 40px 20px; text-align: center; color: #3f3f46; font-size: 13px; }
+    .mono { font-family: "IBM Plex Mono", monospace; }
 
-    /* Resource sidebar */
-    .res-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 20px; margin-bottom: 12px; }
-    .res-title { font-size: 12px; font-weight: 700; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; }
-    .res-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-    .res-row:last-child { margin-bottom: 0; }
-    .res-name { font-size: 13px; color: #d4d4d8; display: flex; align-items: center; gap: 8px; }
-    .res-name .ico { font-size: 15px; }
-    .res-val { font-size: 13px; color: #52525b; font-weight: 600; }
-    .res-bar { height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; margin-top: 4px; overflow: hidden; }
-    .res-bar-fill { height: 100%; background: linear-gradient(90deg, #818cf8, #c084fc); border-radius: 2px; transition: width 0.5s; }
-    .res-pct { font-size: 12px; font-weight: 700; }
-    .res-big { font-size: 24px; font-weight: 800; color: #fafafa; }
-    .res-sub { font-size: 11px; color: #3f3f46; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+    .hidden { display: none !important; }
 
-    /* Table */
-    .table { width: 100%; border-collapse: collapse; }
-    .table th { text-align: left; font-size: 11px; font-weight: 700; color: #3f3f46; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); }
-    .table td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.03); color: #a1a1aa; }
-    .table tr:hover td { background: rgba(129,140,248,0.03); }
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
-    .badge-active { background: rgba(52,211,153,0.1); color: #34d399; }
-    .badge-inactive { background: rgba(255,255,255,0.08); color: #a1a1aa; }
-    .app-error { display: none; margin-bottom: 16px; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(239,68,68,0.2); background: rgba(239,68,68,0.08); color: #fca5a5; font-size: 13px; }
-    .app-error.show { display: block; }
+    .dashboard-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(110, 168, 254, 0.07), transparent 22%),
+        radial-gradient(circle at 85% 85%, rgba(73, 214, 142, 0.05), transparent 20%);
+      opacity: 0.9;
+    }
 
-    /* Buttons */
-    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; font-family: inherit; }
-    .btn-primary { background: #818cf8; color: #fff; }
-    .btn-primary:hover { background: #6366f1; }
-    .btn-sm { padding: 5px 12px; font-size: 12px; }
-    .btn-ghost { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #d4d4d8; }
-    .btn-danger { background: rgba(239,68,68,0.08); color: #ef4444; border: 1px solid rgba(239,68,68,0.15); }
-    .btn-danger:hover { background: rgba(239,68,68,0.15); }
+    .app {
+      position: relative;
+      display: flex;
+      min-height: 100vh;
+    }
 
-    /* Empty */
-    .empty { text-align: center; padding: 48px 20px; }
-    .empty .ico { font-size: 40px; margin-bottom: 12px; }
-    .empty h3 { color: #52525b; font-size: 14px; margin-bottom: 6px; }
-    .empty p { color: #3f3f46; font-size: 13px; margin-bottom: 20px; }
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 248px;
+      padding: 22px 16px 18px;
+      background: rgba(8, 10, 12, 0.94);
+      border-right: 1px solid var(--line);
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+    }
 
-    /* Modal */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-    .modal-overlay.show { display: flex; }
-    .modal { background: #111113; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 28px; max-width: 440px; width: 90%; }
-    .modal h2 { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-    .modal p { font-size: 13px; color: #52525b; margin-bottom: 20px; }
-    .modal label { display: block; font-size: 12px; font-weight: 600; color: #71717a; margin-bottom: 5px; }
-    .modal input { width: 100%; padding: 9px 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; font-size: 13px; font-family: inherit; outline: none; margin-bottom: 14px; }
-    .modal input:focus { border-color: rgba(129,140,248,0.5); }
-    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
 
-    /* Wizard */
-    .wizard-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
-    .wizard-overlay.show { display: flex; }
-    .wizard { background: #111113; border: 1px solid rgba(129,140,248,0.1); border-radius: 20px; padding: 44px; max-width: 480px; width: 90%; text-align: center; box-shadow: 0 0 80px rgba(129,140,248,0.06); }
-    .wizard .wiz-icon { font-size: 44px; margin-bottom: 16px; }
-    .wizard h2 { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 6px; }
-    .wizard p { color: #71717a; font-size: 14px; margin-bottom: 28px; line-height: 1.5; }
-    .steps-bar { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 28px; }
-    .sdot { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
-    .sdot.on { background: #818cf8; color: #fff; }
-    .sdot.ok { background: #34d399; color: #fff; }
-    .sdot.off { background: rgba(255,255,255,0.06); color: #3f3f46; }
-    .sline { width: 32px; height: 1px; background: rgba(255,255,255,0.08); }
-    .slabels { display: flex; gap: 24px; justify-content: center; margin-top: 4px; font-size: 11px; color: #3f3f46; }
-    .wizard .rbox { background: rgba(129,140,248,0.06); border: 1px solid rgba(129,140,248,0.15); border-radius: 10px; padding: 14px; margin: 16px 0; text-align: left; }
-    .wizard .rbox .rlabel { font-size: 11px; color: #52525b; margin-bottom: 3px; }
-    .wizard .rbox .rval { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #a5b4fc; word-break: break-all; }
-    .wizard .try-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(129,140,248,0.2); border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-    .wizard .try-addr { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #818cf8; }
-    .hidden { display: none; }
-    .page { display: none; }
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background:
+        linear-gradient(145deg, rgba(110, 168, 254, 0.95), rgba(49, 118, 255, 0.74));
+      box-shadow: 0 18px 40px rgba(49, 118, 255, 0.24);
+    }
+
+    .brand-copy {
+      min-width: 0;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .brand-copy strong {
+      display: block;
+      margin-top: 3px;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-strong);
+    }
+
+    .workspace-card {
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    .workspace-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .workspace-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-faint);
+    }
+
+    .workspace-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(73, 214, 142, 0.1);
+      color: var(--success);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .workspace-status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .workspace-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .workspace-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .workspace-copy {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .workspace-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-strong);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .workspace-plan {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .sidebar-section-label {
+      margin: 22px 12px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .sidebar-nav {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid transparent;
+      border-radius: 16px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.035);
+      border-color: rgba(255, 255, 255, 0.04);
+      color: var(--text-soft);
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, 0.055);
+      border-color: rgba(255, 255, 255, 0.08);
+      color: var(--text-strong);
+    }
+
+    .nav-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: currentColor;
+      background: rgba(255, 255, 255, 0.03);
+      transition: 0.18s ease;
+      flex-shrink: 0;
+    }
+
+    .nav-item.active .nav-icon {
+      color: var(--accent);
+      background: rgba(110, 168, 254, 0.12);
+    }
+
+    .nav-copy {
+      font-size: 14px;
+      font-weight: 700;
+      flex: 1;
+      text-align: left;
+    }
+
+    .count {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 8px;
+    }
+
+    .footer-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      transition: 0.18s ease;
+      cursor: pointer;
+    }
+
+    .footer-link:hover {
+      color: var(--text-soft);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .footer-link.danger { color: var(--danger); }
+
+    .main {
+      flex: 1;
+      margin-left: 248px;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 24px 32px 18px;
+      background: linear-gradient(180deg, rgba(7, 8, 10, 0.94), rgba(7, 8, 10, 0.78));
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+
+    .topbar-path {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .topbar-path span {
+      color: rgba(255, 255, 255, 0.16);
+    }
+
+    .topbar-path strong {
+      color: var(--text-strong);
+      font-weight: 800;
+    }
+
+    .topbar-caption {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--text-faint);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--line);
+      color: var(--text-soft);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status-pill::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 16px rgba(73, 214, 142, 0.4);
+    }
+
+    .content {
+      padding: 28px 32px 40px;
+    }
+
+    .page { display: none; animation: fade-in 0.18s ease; }
     .page.active { display: block; }
 
-    @media (max-width: 900px) {
+    .page-hero {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      margin-top: 6px;
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--text-strong);
+    }
+
+    .page-description {
+      max-width: 640px;
+      margin-top: 12px;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .surface {
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+      box-shadow: var(--shadow);
+    }
+
+    .activity-panel {
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .panel-title {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+
+    .panel-copy h2 {
+      margin-top: 10px;
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      color: var(--text-strong);
+    }
+
+    .panel-copy p {
+      max-width: 620px;
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .activity-side {
+      display: flex;
+      align-items: stretch;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .range-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.035);
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 700;
+      min-width: 124px;
+      justify-content: space-between;
+    }
+
+    .insight-card {
+      min-width: 144px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .insight-card span {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .insight-card strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--text-strong);
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .metric-card {
+      padding: 18px 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .metric-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-soft);
+    }
+
+    .metric-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .metric-value {
+      margin-top: 14px;
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      color: var(--text-strong);
+    }
+
+    .metric-copy {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    .activity-chart-frame {
+      position: relative;
+      overflow: hidden;
+      padding: 20px 18px 16px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015));
+    }
+
+    .activity-gridlines {
+      position: absolute;
+      inset: 20px 18px 48px;
+      background-image:
+        linear-gradient(to top, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      background-size: 100% 25%;
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    .activity-bars {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(24, minmax(0, 1fr));
+      align-items: end;
+      gap: 8px;
+      height: 260px;
+      padding: 14px 0 0;
+    }
+
+    .activity-bar {
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .activity-bar span {
+      width: 100%;
+      min-height: 8px;
+      border-radius: 999px 999px 10px 10px;
+      background:
+        linear-gradient(180deg, rgba(73, 214, 142, 0.96), rgba(73, 214, 142, 0.38));
+      box-shadow: 0 16px 30px rgba(73, 214, 142, 0.18);
+      transition: height 0.22s ease;
+    }
+
+    .activity-bar.is-empty span {
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: none;
+      min-height: 6px;
+    }
+
+    .activity-axis {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 16px;
+      color: var(--text-faint);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .activity-axis span:last-child {
+      text-align: right;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(320px, 0.95fr);
+      gap: 20px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 20px;
+    }
+
+    .list-surface {
+      overflow: hidden;
+    }
+
+    .list-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 24px 26px 0;
+    }
+
+    .list-copy h3 {
+      margin-top: 10px;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text-strong);
+    }
+
+    .list-copy p {
+      margin-top: 8px;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .inline-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-soft);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .section-count {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--line);
+      color: var(--text-soft);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .message-list {
+      padding: 18px 12px 12px;
+    }
+
+    .message-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      margin: 0 10px;
+      border-radius: 18px;
+      border: 1px solid transparent;
+      transition: 0.18s ease;
+    }
+
+    .message-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .message-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(145deg, rgba(110, 168, 254, 0.9), rgba(72, 121, 255, 0.7));
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .message-copy {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .message-topline {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .message-sender {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-strong);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 280px;
+    }
+
+    .message-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .message-tag.inbound {
+      background: rgba(73, 214, 142, 0.1);
+      color: var(--success);
+    }
+
+    .message-tag.outbound {
+      background: rgba(110, 168, 254, 0.12);
+      color: var(--accent);
+    }
+
+    .message-subject {
+      font-size: 14px;
+      color: var(--text-soft);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .message-meta {
+      margin-top: 5px;
+      font-size: 12px;
+      color: var(--text-faint);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .message-time {
+      padding-left: 12px;
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-soft);
+    }
+
+    .resource-card {
+      padding: 24px;
+    }
+
+    .resource-row {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .resource-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .resource-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .resource-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .resource-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-soft);
+      flex-shrink: 0;
+    }
+
+    .resource-label strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-strong);
+    }
+
+    .resource-label span {
+      display: block;
+      margin-top: 3px;
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    .resource-value {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .resource-value strong {
+      display: block;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-strong);
+    }
+
+    .resource-value span {
+      display: block;
+      margin-top: 3px;
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    .progress {
+      height: 6px;
+      margin-top: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), #9bd1ff);
+      transition: width 0.25s ease;
+    }
+
+    .health-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .health-tile {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .health-value {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--text-strong);
+    }
+
+    .health-label {
+      margin-top: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .health-note {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .health-state {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .health-state.ok {
+      color: var(--success);
+      background: rgba(73, 214, 142, 0.1);
+      border-color: rgba(73, 214, 142, 0.16);
+    }
+
+    .health-state.warn {
+      color: var(--warning);
+      background: rgba(255, 176, 74, 0.1);
+      border-color: rgba(255, 176, 74, 0.18);
+    }
+
+    .health-state.danger {
+      color: var(--danger);
+      background: rgba(255, 111, 97, 0.1);
+      border-color: rgba(255, 111, 97, 0.18);
+    }
+
+    .health-state.neutral {
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--line);
+    }
+
+    .action-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .app-error {
+      display: none;
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 111, 97, 0.18);
+      background: rgba(255, 111, 97, 0.08);
+      color: #ffb0a8;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .app-error.show { display: block; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 16px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: 0.18s ease;
+      white-space: nowrap;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, #6ea8fe, #4d7dff);
+      box-shadow: 0 16px 32px rgba(77, 125, 255, 0.28);
+    }
+
+    .btn-primary:hover { filter: brightness(1.05); }
+
+    .btn-ghost {
+      color: var(--text-soft);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--line);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--line-strong);
+    }
+
+    .btn-danger {
+      color: var(--danger);
+      background: rgba(255, 111, 97, 0.08);
+      border-color: rgba(255, 111, 97, 0.16);
+    }
+
+    .btn-danger:hover {
+      background: rgba(255, 111, 97, 0.12);
+    }
+
+    .btn-sm {
+      min-height: 38px;
+      padding: 0 14px;
+      font-size: 12px;
+    }
+
+    .btn:disabled {
+      cursor: wait;
+      opacity: 0.7;
+      filter: none;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+      padding: 12px 18px 18px;
+    }
+
+    .table {
+      width: 100%;
+      min-width: 720px;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+    }
+
+    .table th {
+      padding: 0 14px 6px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      white-space: nowrap;
+    }
+
+    .table td {
+      padding: 18px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      color: var(--text-soft);
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    .table td:first-child {
+      border-left: 1px solid var(--line);
+      border-radius: 16px 0 0 16px;
+    }
+
+    .table td:last-child {
+      border-right: 1px solid var(--line);
+      border-radius: 0 16px 16px 0;
+      text-align: right;
+    }
+
+    .table tr:hover td {
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .table-primary {
+      color: var(--text-strong);
+      font-weight: 800;
+    }
+
+    .table-secondary {
+      display: block;
+      margin-top: 4px;
+      color: var(--text-faint);
+      font-size: 12px;
+    }
+
+    .table-actions {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+    }
+
+    .badge-active {
+      color: var(--success);
+      background: rgba(73, 214, 142, 0.1);
+      border-color: rgba(73, 214, 142, 0.16);
+    }
+
+    .badge-inactive {
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--line);
+    }
+
+    .empty-state {
+      padding: 54px 24px;
+      text-align: center;
+    }
+
+    .empty-icon {
+      width: 62px;
+      height: 62px;
+      margin: 0 auto 18px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      background: rgba(110, 168, 254, 0.1);
+      border: 1px solid rgba(110, 168, 254, 0.16);
+    }
+
+    .empty-state h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-strong);
+    }
+
+    .empty-state p {
+      max-width: 420px;
+      margin: 10px auto 22px;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .modal-overlay,
+    .wizard-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      padding: 16px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      z-index: 120;
+    }
+
+    .modal-overlay.show,
+    .wizard-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      width: min(520px, calc(100vw - 24px));
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line-strong);
+      background:
+        linear-gradient(180deg, rgba(24, 28, 32, 0.98), rgba(16, 19, 23, 0.98));
+      box-shadow: var(--shadow);
+    }
+
+    .modal.large {
+      width: min(640px, calc(100vw - 24px));
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .modal-kicker {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .modal h2 {
+      margin-top: 10px;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text-strong);
+    }
+
+    .modal p {
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+
+    .modal-close {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-soft);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      outline: none;
+      color: var(--text-strong);
+      background: rgba(255, 255, 255, 0.04);
+      transition: 0.18s ease;
+    }
+
+    .field textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: rgba(110, 168, 254, 0.4);
+      box-shadow: 0 0 0 4px rgba(110, 168, 254, 0.1);
+    }
+
+    .field-hint {
+      margin-top: 8px;
+      color: var(--text-faint);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .checkbox-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .check-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .check-option input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .result-box {
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .toast-stack {
+      position: fixed;
+      top: 22px;
+      right: 22px;
+      display: grid;
+      gap: 10px;
+      z-index: 150;
+    }
+
+    .toast {
+      min-width: 280px;
+      max-width: 360px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(18, 21, 24, 0.94);
+      color: var(--text-soft);
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      line-height: 1.55;
+      animation: fade-in 0.18s ease;
+    }
+
+    .toast.error {
+      border-color: rgba(255, 111, 97, 0.18);
+      color: #ffb0a8;
+    }
+
+    .toast.success {
+      border-color: rgba(73, 214, 142, 0.18);
+      color: #b8f3d3;
+    }
+
+    .wizard {
+      width: min(520px, calc(100vw - 24px));
+      padding: 40px;
+      text-align: center;
+      border-radius: 28px;
+      border: 1px solid var(--line-strong);
+      background:
+        linear-gradient(180deg, rgba(23, 27, 31, 0.98), rgba(15, 18, 22, 0.98));
+      box-shadow: var(--shadow);
+    }
+
+    .wizard .wiz-icon {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 18px;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      background: rgba(110, 168, 254, 0.1);
+      border: 1px solid rgba(110, 168, 254, 0.18);
+    }
+
+    .wizard h2 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text-strong);
+    }
+
+    .wizard p {
+      margin-top: 10px;
+      margin-bottom: 24px;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .steps-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .sdot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .sdot.on {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .sdot.ok {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .sdot.off {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-faint);
+    }
+
+    .sline {
+      width: 36px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .slabels {
+      display: flex;
+      justify-content: center;
+      gap: 22px;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    .rbox {
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(110, 168, 254, 0.16);
+      background: rgba(110, 168, 254, 0.08);
+      text-align: left;
+    }
+
+    .rlabel {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .rval {
+      margin-top: 8px;
+      font-family: "IBM Plex Mono", monospace;
+      color: #bcd8ff;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .try-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+      margin-bottom: 14px;
+    }
+
+    .try-addr {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 14px;
+      color: #bcd8ff;
+      word-break: break-all;
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 1280px) {
+      .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .overview-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 980px) {
       .sidebar { display: none; }
       .main { margin-left: 0; }
-      .stats-row { grid-template-columns: repeat(2, 1fr); }
-      .overview-grid { grid-template-columns: 1fr; }
+      .topbar,
+      .content { padding-left: 20px; padding-right: 20px; }
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .topbar-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .page-hero,
+      .panel-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .activity-side {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .content { padding-top: 20px; }
+      .page-title { font-size: 28px; }
+      .activity-panel,
+      .resource-card,
+      .modal,
+      .wizard { padding: 22px; }
+      .metric-grid { grid-template-columns: 1fr; }
+      .activity-bars { gap: 5px; height: 220px; }
+      .activity-axis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .message-item {
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+      .message-time {
+        padding-left: 58px;
+      }
+      .health-grid { grid-template-columns: 1fr; }
+      .topbar-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .status-pill,
+      .topbar-actions .btn { width: 100%; }
+      .toast-stack {
+        left: 16px;
+        right: 16px;
+        top: 16px;
+      }
+      .toast {
+        min-width: 0;
+        max-width: none;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="dashboard-glow"></div>
+  <div class="toast-stack" id="toast-stack"></div>
   <div class="app">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <div class="sidebar-logo">Agent<span>Send</span></div>
-      </div>
-      <div class="user-pill">
-        <div class="user-avatar" id="user-avatar">A</div>
-        <div class="user-info">
-          <div class="user-name" id="user-name">Loading...</div>
-          <div class="user-plan">Free plan</div>
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M4 10L12 4L20 10V19H4V10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M8 13H16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M8 16H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="brand-copy">
+          <span class="eyebrow">AgentSend</span>
+          <strong>Command Center</strong>
         </div>
       </div>
-      <div class="sidebar-section">
-        <div class="nav-item active" onclick="showPage('overview',this)"><span class="ico">📊</span> Overview</div>
-        <div class="nav-item" onclick="showPage('inboxes',this)"><span class="ico">📨</span> Inboxes <span class="count" id="nav-inbox-count">0</span></div>
-        <div class="nav-item" onclick="showPage('apikeys',this)"><span class="ico">🔑</span> API Keys</div>
-        <div class="nav-item" onclick="showPage('webhooks',this)"><span class="ico">⚡</span> Webhooks</div>
-        <div class="nav-item" onclick="showPage('domains',this)"><span class="ico">🌐</span> Domains</div>
-      </div>
-      <div class="sidebar-bottom">
-        <a href="/docs" target="_blank">📖 Documentation</a>
-        <a href="/skill">🧩 MCP Skill</a>
-        <a href="https://github.com/luv005/agentpost" target="_blank">⭐ GitHub</a>
-        <a onclick="logout()" style="cursor:pointer;color:#ef4444;margin-top:8px;">Sign out</a>
-      </div>
-    </div>
 
-    <!-- Main -->
-    <div class="main">
-      <div class="topbar">
-        <div class="topbar-title">Dashboard › <strong id="page-title">Overview</strong></div>
-        <button class="btn btn-primary btn-sm" onclick="showCreateInbox()">+ New Inbox</button>
+      <div class="workspace-card">
+        <div class="workspace-top">
+          <div class="workspace-label">Workspace</div>
+          <div class="workspace-status">Live</div>
+        </div>
+        <div class="workspace-row">
+          <div class="workspace-copy">
+            <div class="workspace-name" id="user-name">Loading...</div>
+            <div class="workspace-plan">Free plan</div>
+          </div>
+          <div class="workspace-avatar" id="user-avatar">A</div>
+        </div>
       </div>
+
+      <div class="sidebar-section-label">Navigation</div>
+      <nav class="sidebar-nav">
+        <button type="button" class="nav-item active" data-page="overview" onclick="showPage('overview', this)">
+          <span class="nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M4 12.5L12 5L20 12.5V19C20 19.5523 19.5523 20 19 20H5C4.44772 20 4 19.5523 4 19V12.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M9 20V13H15V20" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="nav-copy">Overview</span>
+        </button>
+        <button type="button" class="nav-item" data-page="inboxes" onclick="showPage('inboxes', this)">
+          <span class="nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M4 7C4 5.89543 4.89543 5 6 5H18C19.1046 5 20 5.89543 20 7V17C20 18.1046 19.1046 19 18 19H6C4.89543 19 4 18.1046 4 17V7Z" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M5 8L12 13L19 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="nav-copy">Inboxes</span>
+          <span class="count" id="nav-inbox-count">0</span>
+        </button>
+        <button type="button" class="nav-item" data-page="apikeys" onclick="showPage('apikeys', this)">
+          <span class="nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <circle cx="8.5" cy="12" r="3.5" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M12 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M16 8V12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M18 10V12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-copy">API Keys</span>
+        </button>
+        <button type="button" class="nav-item" data-page="webhooks" onclick="showPage('webhooks', this)">
+          <span class="nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M7 14C4.79086 14 3 12.2091 3 10C3 7.79086 4.79086 6 7 6C8.37019 6 9.57916 6.68835 10.301 7.73742" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M17 10C19.2091 10 21 11.7909 21 14C21 16.2091 19.2091 18 17 18C15.6298 18 14.4208 17.3117 13.699 16.2626" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M8 16L16 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-copy">Webhooks</span>
+        </button>
+        <button type="button" class="nav-item" data-page="domains" onclick="showPage('domains', this)">
+          <span class="nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M12 4C14.5 6.2 15.92 9.04 16 12C15.92 14.96 14.5 17.8 12 20C9.5 17.8 8.08 14.96 8 12C8.08 9.04 9.5 6.2 12 4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="nav-copy">Domains</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a class="footer-link" href="/docs" target="_blank" rel="noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M6 5.5C6 4.67157 6.67157 4 7.5 4H18V18.5C18 19.3284 17.3284 20 16.5 20H7.5C6.67157 20 6 19.3284 6 18.5V5.5Z" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M18 6H9.5C8.67157 6 8 6.67157 8 7.5V20" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+          Documentation
+        </a>
+        <a class="footer-link" href="/skill">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M9 3H5C3.89543 3 3 3.89543 3 5V9H9V3Z" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M21 9V5C21 3.89543 20.1046 3 19 3H15V9H21Z" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M9 15H3V19C3 20.1046 3.89543 21 5 21H9V15Z" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M15 21H19C20.1046 21 21 20.1046 21 19V15H15V21Z" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+          MCP Skill
+        </a>
+        <a class="footer-link" href="https://github.com/luv005/agentpost" target="_blank" rel="noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18C4.5 19.5 4.5 15.5 2.5 15L2 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M16 21V17.13C16.0375 16.6532 15.9731 16.1738 15.811 15.7238C15.6489 15.2738 15.3928 14.8634 15.06 14.52C18.2 14.17 21.5 12.98 21.5 7.52C21.4997 6.12383 20.9627 4.7812 20 3.77C20.4559 2.54851 20.4236 1.19835 19.91 0C19.91 0 18.73 -0.35 16 1.48C13.708 0.85882 11.292 0.85882 9 1.48C6.27 -0.35 5.09 0 5.09 0C4.57638 1.19835 4.54414 2.54851 5 3.77C4.03013 4.7887 3.49252 6.14346 3.5 7.55C3.5 12.97 6.8 14.16 9.94 14.55C9.6112 14.89 9.35726 15.2954 9.19483 15.7394C9.03241 16.1834 8.96529 16.6566 9 17.13V21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          GitHub
+        </a>
+        <button type="button" class="footer-link danger" onclick="logout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M15 17L20 12L15 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M20 12H8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M11 21H6C4.89543 21 4 20.1046 4 19V5C4 3.89543 4.89543 3 6 3H11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          Sign out
+        </button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="topbar-path">Dashboard <span>/</span> <strong id="page-title">Overview</strong></div>
+          <div class="topbar-caption" id="page-subtitle">Monitor delivery, inboxes, and account health from one clean workspace.</div>
+        </div>
+        <div class="topbar-actions">
+          <div class="status-pill" id="health-pill">Healthy workspace</div>
+          <button type="button" class="btn btn-primary" onclick="showCreateInbox()">New Inbox</button>
+        </div>
+      </header>
+
       <div class="content">
         <div class="app-error" id="app-error"></div>
-        <!-- Overview -->
-        <div class="page active" id="page-overview">
-          <div class="stats-row">
-            <div class="stat-card"><div class="stat-value" id="s-sent">0</div><div class="stat-label"><span class="stat-dot" style="background:#818cf8"></span>Sent</div></div>
-            <div class="stat-card"><div class="stat-value" id="s-received">0</div><div class="stat-label"><span class="stat-dot" style="background:#34d399"></span>Received</div></div>
-            <div class="stat-card"><div class="stat-value" id="s-bounced">0</div><div class="stat-label"><span class="stat-dot" style="background:#fbbf24"></span>Bounced</div></div>
-            <div class="stat-card"><div class="stat-value" id="s-inboxes">0</div><div class="stat-label"><span class="stat-dot" style="background:#c084fc"></span>Inboxes</div></div>
-          </div>
-          <div class="overview-grid">
+
+        <section class="page active" id="page-overview">
+          <div class="page-hero">
             <div>
-              <div class="card">
-                <div class="card-header"><h3>Recent Messages</h3><a onclick="showPage('inboxes',document.querySelectorAll('.nav-item')[1])" style="cursor:pointer">View all →</a></div>
-                <div class="card-body" id="recent-messages"><div class="msg-empty">No messages yet</div></div>
-              </div>
+              <span class="eyebrow">Control tower</span>
+              <h1 class="page-title">Overview</h1>
+              <p class="page-description">
+                Keep an eye on message flow, delivery quality, and account footprint across your inboxes without leaving this screen.
+              </p>
             </div>
-            <div>
-              <div class="res-card">
-                <div class="res-title">Resources</div>
-                <div class="res-row"><div class="res-name"><span class="ico">📨</span> Inboxes</div><div class="res-val" id="res-inboxes">0 / 5</div></div>
-                <div class="res-bar"><div class="res-bar-fill" id="res-inbox-bar" style="width:0%"></div></div>
-                <div style="height:14px"></div>
-                <div class="res-row"><div class="res-name"><span class="ico">🔑</span> API Keys</div><div class="res-val" id="res-keys">0</div></div>
-                <div style="height:14px"></div>
-                <div class="res-row"><div class="res-name"><span class="ico">🌐</span> Domains</div><div class="res-val" id="res-domains">0</div></div>
+          </div>
+
+          <div class="surface activity-panel">
+            <div class="panel-head">
+              <div class="panel-copy">
+                <div class="panel-title">Email activity</div>
+                <h2>Message volume at a glance</h2>
+                <p>
+                  Workspace totals stay pinned at the top, while the chart tracks the most recent 24 hours of inbox activity so spikes are obvious immediately.
+                </p>
               </div>
-              <div class="res-card">
-                <div class="res-title">Health</div>
-                <div style="display:flex;gap:16px;">
-                  <div><div class="res-big" id="res-bounce">0.0%</div><div class="res-sub">Bounce rate</div></div>
-                  <div><div class="res-big" id="res-complaint">0.0%</div><div class="res-sub">Complaint rate</div></div>
+              <div class="activity-side">
+                <div class="range-pill">
+                  <span>24 hours</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="insight-card">
+                  <span>Total events</span>
+                  <strong id="activity-total">0</strong>
+                </div>
+                <div class="insight-card">
+                  <span>Peak hour</span>
+                  <strong id="activity-peak">Quiet</strong>
                 </div>
               </div>
-              <div class="res-card">
-                <div class="res-title">Quick Actions</div>
-                <button class="btn btn-ghost btn-sm" onclick="showCreateInbox()" style="width:100%;margin-bottom:6px;">+ Create Inbox</button>
-                <button class="btn btn-ghost btn-sm" onclick="showPage('apikeys',document.querySelectorAll('.nav-item')[2])" style="width:100%;margin-bottom:6px;">🔑 Manage Keys</button>
-                <button class="btn btn-ghost btn-sm" onclick="window.open('/docs','_blank')" style="width:100%;">📖 API Docs</button>
+            </div>
+
+            <div class="metric-grid">
+              <div class="metric-card">
+                <div class="metric-head"><span class="metric-dot" style="background: var(--accent);"></span> Sent</div>
+                <div class="metric-value" id="s-sent">0</div>
+                <div class="metric-copy">Workspace total delivered from all inboxes</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-head"><span class="metric-dot" style="background: var(--success);"></span> Received</div>
+                <div class="metric-value" id="s-received">0</div>
+                <div class="metric-copy">Inbound messages accepted by active inboxes</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-head"><span class="metric-dot" style="background: var(--warning);"></span> Complaints</div>
+                <div class="metric-value" id="s-complaints">0</div>
+                <div class="metric-copy">Complaint events recorded across the workspace</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-head"><span class="metric-dot" style="background: var(--danger);"></span> Bounced</div>
+                <div class="metric-value" id="s-bounced">0</div>
+                <div class="metric-copy">Bounce events that may need follow-up</div>
+              </div>
+            </div>
+
+            <div class="activity-chart-frame">
+              <div class="activity-gridlines" aria-hidden="true"></div>
+              <div class="activity-bars" id="activity-bars"></div>
+              <div class="activity-axis" id="activity-axis"></div>
+            </div>
+          </div>
+
+          <div class="overview-grid">
+            <div class="surface list-surface">
+              <div class="list-head">
+                <div class="list-copy">
+                  <span class="panel-title">Unified inbox</span>
+                  <h3>Latest conversations</h3>
+                  <p>Recent inbound and outbound activity from your inboxes, sorted into one cleaner stream.</p>
+                </div>
+                <a class="inline-link" href="#" onclick="showPage('inboxes', document.querySelector('.nav-item[data-page=&quot;inboxes&quot;]')); return false;">View all</a>
+              </div>
+              <div class="message-list" id="recent-messages"></div>
+            </div>
+
+            <div class="stack">
+              <div class="surface resource-card">
+                <div class="panel-title">Resources</div>
+                <div class="resource-row">
+                  <div class="resource-main">
+                    <div class="resource-name">
+                      <div class="resource-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                          <path d="M4 7C4 5.89543 4.89543 5 6 5H18C19.1046 5 20 5.89543 20 7V17C20 18.1046 19.1046 19 18 19H6C4.89543 19 4 18.1046 4 17V7Z" stroke="currentColor" stroke-width="1.8"/>
+                          <path d="M5 8L12 13L19 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </div>
+                      <div class="resource-label">
+                        <strong>Inbox capacity</strong>
+                        <span>Free plan includes up to 5 inboxes</span>
+                      </div>
+                    </div>
+                    <div class="resource-value">
+                      <strong id="res-inboxes">0 / 5</strong>
+                      <span id="res-inboxes-note">0 active inboxes</span>
+                    </div>
+                  </div>
+                  <div class="progress"><span id="res-inbox-bar" style="width: 0%;"></span></div>
+                </div>
+
+                <div class="resource-row">
+                  <div class="resource-main">
+                    <div class="resource-name">
+                      <div class="resource-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                          <circle cx="8.5" cy="12" r="3.5" stroke="currentColor" stroke-width="1.8"/>
+                          <path d="M12 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                          <path d="M16 8V12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                          <path d="M18 10V12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                      </div>
+                      <div class="resource-label">
+                        <strong>API keys</strong>
+                        <span>Server access and automation credentials</span>
+                      </div>
+                    </div>
+                    <div class="resource-value">
+                      <strong id="res-keys">0</strong>
+                      <span>Active secrets</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="resource-row">
+                  <div class="resource-main">
+                    <div class="resource-name">
+                      <div class="resource-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/>
+                          <path d="M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                          <path d="M12 4C14.5 6.2 15.92 9.04 16 12C15.92 14.96 14.5 17.8 12 20C9.5 17.8 8.08 14.96 8 12C8.08 9.04 9.5 6.2 12 4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        </svg>
+                      </div>
+                      <div class="resource-label">
+                        <strong>Verified domains</strong>
+                        <span>Custom sending domains connected to this account</span>
+                      </div>
+                    </div>
+                    <div class="resource-value">
+                      <strong id="res-domains">0</strong>
+                      <span>Connected domains</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="surface resource-card">
+                <div class="panel-title">Deliverability</div>
+                <div class="health-grid">
+                  <div class="health-tile">
+                    <div class="health-value" id="res-bounce">0.0%</div>
+                    <div class="health-label">Bounce rate</div>
+                  </div>
+                  <div class="health-tile">
+                    <div class="health-value" id="res-complaint">0.0%</div>
+                    <div class="health-label">Complaint rate</div>
+                  </div>
+                </div>
+                <div class="health-note">
+                  <span id="health-summary">No sending activity yet.</span>
+                  <span class="health-state neutral" id="health-status">Idle</span>
+                </div>
+              </div>
+
+              <div class="surface resource-card">
+                <div class="panel-title">Quick actions</div>
+                <div class="action-grid">
+                  <button type="button" class="btn btn-ghost" onclick="showCreateInbox()">Create inbox</button>
+                  <button type="button" class="btn btn-ghost" onclick="showPage('apikeys', document.querySelector('.nav-item[data-page=&quot;apikeys&quot;]')); showCreateApiKey();">Generate API key</button>
+                  <button type="button" class="btn btn-ghost" onclick="showPage('domains', document.querySelector('.nav-item[data-page=&quot;domains&quot;]')); showCreateDomain();">Add sending domain</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        <!-- Inboxes -->
-        <div class="page" id="page-inboxes">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-            <div></div>
-            <button class="btn btn-primary" onclick="showCreateInbox()">+ Create Inbox</button>
+        <section class="page" id="page-inboxes">
+          <div class="page-hero">
+            <div>
+              <span class="eyebrow">Sending identities</span>
+              <h1 class="page-title">Inboxes</h1>
+              <p class="page-description">Provision agent mailboxes, check sender volume, and remove unused inboxes without digging through a cluttered table.</p>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="showCreateInbox()">Create Inbox</button>
           </div>
-          <div class="card"><div class="card-body" id="inboxes-list"></div></div>
-        </div>
 
-        <!-- API Keys -->
-        <div class="page" id="page-apikeys">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-            <div></div>
-            <button class="btn btn-primary" onclick="createApiKey()">+ Create Key</button>
+          <div class="surface list-surface">
+            <div class="list-head">
+              <div class="list-copy">
+                <span class="panel-title">Roster</span>
+                <h3>Workspace inboxes</h3>
+                <p>Every mailbox attached to this workspace with its current send state.</p>
+              </div>
+              <div class="section-count" id="inboxes-count">0 inboxes</div>
+            </div>
+            <div class="table-scroll" id="inboxes-list"></div>
           </div>
-          <div class="card"><div class="card-body" id="apikeys-list"></div></div>
-        </div>
+        </section>
 
-        <!-- Webhooks -->
-        <div class="page" id="page-webhooks">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-            <div></div>
-            <button class="btn btn-primary" onclick="createWebhook()">+ Create Webhook</button>
+        <section class="page" id="page-apikeys">
+          <div class="page-hero">
+            <div>
+              <span class="eyebrow">Security</span>
+              <h1 class="page-title">API Keys</h1>
+              <p class="page-description">Issue scoped credentials for scripts, agents, and backends. New keys are shown once and then kept out of sight.</p>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="showCreateApiKey()">Create Key</button>
           </div>
-          <div class="card"><div class="card-body" id="webhooks-list"><div class="empty"><div class="ico">⚡</div><h3>No webhooks yet</h3><p>Create a webhook to receive notifications</p><button class="btn btn-primary btn-sm" onclick="createWebhook()">+ Create</button></div></div></div>
-        </div>
 
-        <!-- Domains -->
-        <div class="page" id="page-domains">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-            <div></div>
-            <button class="btn btn-primary" onclick="createDomain()">+ Add Domain</button>
+          <div class="surface list-surface">
+            <div class="list-head">
+              <div class="list-copy">
+                <span class="panel-title">Credentials</span>
+                <h3>Issued secrets</h3>
+                <p>Active workspace keys with usage and creation timestamps.</p>
+              </div>
+              <div class="section-count" id="apikeys-count">0 keys</div>
+            </div>
+            <div class="table-scroll" id="apikeys-list"></div>
           </div>
-          <div class="card"><div class="card-body" id="domains-list"><div class="empty"><div class="ico">🌐</div><h3>No custom domains</h3><p>Add a domain to send from your own address</p><button class="btn btn-primary btn-sm" onclick="createDomain()">+ Add</button></div></div></div>
-        </div>
+        </section>
+
+        <section class="page" id="page-webhooks">
+          <div class="page-hero">
+            <div>
+              <span class="eyebrow">Integrations</span>
+              <h1 class="page-title">Webhooks</h1>
+              <p class="page-description">Send delivery and message events into your own systems with clean endpoint and status management.</p>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="showCreateWebhook()">Create Webhook</button>
+          </div>
+
+          <div class="surface list-surface">
+            <div class="list-head">
+              <div class="list-copy">
+                <span class="panel-title">Event delivery</span>
+                <h3>Connected destinations</h3>
+                <p>Endpoints receiving events from AgentSend, with their current activity status.</p>
+              </div>
+              <div class="section-count" id="webhooks-count">0 webhooks</div>
+            </div>
+            <div class="table-scroll" id="webhooks-list"></div>
+          </div>
+        </section>
+
+        <section class="page" id="page-domains">
+          <div class="page-hero">
+            <div>
+              <span class="eyebrow">Brand sending</span>
+              <h1 class="page-title">Domains</h1>
+              <p class="page-description">Attach custom domains, inspect DNS records, and verify ownership from a single, less noisy surface.</p>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="showCreateDomain()">Add Domain</button>
+          </div>
+
+          <div class="surface list-surface">
+            <div class="list-head">
+              <div class="list-copy">
+                <span class="panel-title">Domain setup</span>
+                <h3>Connected senders</h3>
+                <p>Custom domains and their verification state, ready for DNS review when needed.</p>
+              </div>
+              <div class="section-count" id="domains-count">0 domains</div>
+            </div>
+            <div class="table-scroll" id="domains-list"></div>
+          </div>
+        </section>
       </div>
-    </div>
+    </main>
   </div>
 
-  <!-- Create Inbox Modal -->
   <div class="modal-overlay" id="create-inbox-modal">
     <div class="modal">
-      <h2>Create Inbox</h2>
-      <p>Create a new email inbox for your agents</p>
+      <div class="modal-head">
+        <div>
+          <div class="modal-kicker">Mailbox setup</div>
+          <h2>Create inbox</h2>
+          <p>Provision a fresh agent mailbox with a predictable <span class="mono">@agentsend.io</span> address.</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('create-inbox-modal')">x</button>
+      </div>
       <form onsubmit="handleCreateInbox(event)">
-        <label>Username</label>
-        <input type="text" id="inbox-username" placeholder="e.g. support" required>
-        <label>Display Name (optional)</label>
-        <input type="text" id="inbox-display" placeholder="e.g. Sales Team">
-        <p style="color:#3f3f46;font-size:11px;margin:-8px 0 14px;">Inbox address will be <span class="mono">username@agentsend.io</span></p>
+        <div class="form-grid">
+          <div class="field">
+            <label for="inbox-username">Username</label>
+            <input type="text" id="inbox-username" placeholder="support" required>
+            <div class="field-hint">Inbox address will be <span class="mono">username@agentsend.io</span>.</div>
+          </div>
+          <div class="field">
+            <label for="inbox-display">Display name</label>
+            <input type="text" id="inbox-display" placeholder="Support Team">
+            <div class="field-hint">Optional label shown when the inbox sends mail.</div>
+          </div>
+        </div>
         <div class="modal-actions">
           <button type="button" class="btn btn-ghost btn-sm" onclick="closeModal('create-inbox-modal')">Cancel</button>
-          <button type="submit" class="btn btn-primary btn-sm" id="create-inbox-btn">+ Create</button>
+          <button type="submit" class="btn btn-primary btn-sm" id="create-inbox-btn">Create inbox</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Onboarding Wizard -->
+  <div class="modal-overlay" id="create-api-key-modal">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <div class="modal-kicker">Security</div>
+          <h2>Create API key</h2>
+          <p>Generate a new secret for scripts or backend services. The full value is only shown once after creation.</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('create-api-key-modal')">x</button>
+      </div>
+      <form onsubmit="handleCreateApiKey(event)">
+        <div class="form-grid">
+          <div class="field">
+            <label for="api-key-name">Key name</label>
+            <input type="text" id="api-key-name" placeholder="Production worker">
+            <div class="field-hint">Optional, but useful if you rotate several keys over time.</div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="closeModal('create-api-key-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" id="create-api-key-btn">Create key</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="create-webhook-modal">
+    <div class="modal large">
+      <div class="modal-head">
+        <div>
+          <div class="modal-kicker">Integrations</div>
+          <h2>Create webhook</h2>
+          <p>Push message and delivery events into your own app with a dedicated signing secret.</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('create-webhook-modal')">x</button>
+      </div>
+      <form onsubmit="handleCreateWebhook(event)">
+        <div class="form-grid">
+          <div class="field">
+            <label for="webhook-url">Destination URL</label>
+            <input type="url" id="webhook-url" placeholder="https://example.com/webhooks/agentsend" required>
+            <div class="field-hint">A valid HTTPS endpoint is recommended for receiving signed events.</div>
+          </div>
+          <div class="field">
+            <label>Subscribed events</label>
+            <div class="checkbox-grid">
+              <label class="check-option"><input type="checkbox" name="webhook-event" value="message.received" checked>Message received</label>
+              <label class="check-option"><input type="checkbox" name="webhook-event" value="message.sent" checked>Message sent</label>
+              <label class="check-option"><input type="checkbox" name="webhook-event" value="message.delivered">Message delivered</label>
+              <label class="check-option"><input type="checkbox" name="webhook-event" value="message.bounced">Message bounced</label>
+              <label class="check-option"><input type="checkbox" name="webhook-event" value="message.complained">Message complained</label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="closeModal('create-webhook-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" id="create-webhook-btn">Create webhook</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="create-domain-modal">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <div class="modal-kicker">Domain setup</div>
+          <h2>Add sending domain</h2>
+          <p>Connect a branded sending domain and fetch the DNS records you need to verify it.</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('create-domain-modal')">x</button>
+      </div>
+      <form onsubmit="handleCreateDomain(event)">
+        <div class="form-grid">
+          <div class="field">
+            <label for="domain-name">Domain</label>
+            <input type="text" id="domain-name" placeholder="mail.yourdomain.com" required>
+            <div class="field-hint">Use a dedicated subdomain for sending mail whenever possible.</div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="closeModal('create-domain-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" id="create-domain-btn">Add domain</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="result-modal">
+    <div class="modal large">
+      <div class="modal-head">
+        <div>
+          <div class="modal-kicker">Result</div>
+          <h2 id="result-title">Ready</h2>
+          <p id="result-description">The requested value is ready.</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('result-modal')">x</button>
+      </div>
+      <pre class="result-box mono" id="result-value"></pre>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost btn-sm" id="result-copy-btn" onclick="copyResultValue()">Copy</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="closeModal('result-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
   <div class="wizard-overlay" id="onboarding">
     <div class="wizard">
       <div id="wiz-1">
-        <div class="wiz-icon">📨</div>
-        <h2>Welcome to AgentSend!</h2>
-        <p>Let's create your first inbox.<br>This takes less than a minute.</p>
-        <button class="btn btn-primary" onclick="wizardNext(2)" style="width:100%;padding:12px;">NEXT</button>
+        <div class="wiz-icon">1</div>
+        <h2>Welcome to AgentSend</h2>
+        <p>Create your first inbox, send one test message, and you will be ready to automate email flows in a few minutes.</p>
+        <button type="button" class="btn btn-primary" onclick="wizardNext(2)" style="width: 100%;">Next</button>
         <div class="steps-bar"><div class="sdot on">1</div><div class="sline"></div><div class="sdot off">2</div><div class="sline"></div><div class="sdot off">3</div></div>
         <div class="slabels"><span>Setup</span><span>Send</span><span>Done</span></div>
       </div>
       <div id="wiz-2" class="hidden">
-        <div class="wiz-icon">📮</div>
-        <h2>Create Your First Inbox</h2>
-        <p>Choose a username for your email address.</p>
-        <input type="text" id="wiz-username" placeholder="e.g. hello" required style="width:100%;padding:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;font-size:15px;text-align:center;margin-bottom:6px;outline:none;">
-        <p style="color:#52525b;font-size:12px;margin-bottom:18px;">Your email: <strong style="color:#818cf8" id="wiz-preview">hello@agentsend.io</strong></p>
-        <button class="btn btn-primary" onclick="wizardCreateInbox()" style="width:100%;padding:12px;" id="wiz-create-btn">Create Inbox</button>
-        <div class="steps-bar"><div class="sdot ok">✓</div><div class="sline"></div><div class="sdot on">2</div><div class="sline"></div><div class="sdot off">3</div></div>
+        <div class="wiz-icon">2</div>
+        <h2>Create your first inbox</h2>
+        <p>Pick a short username for the mailbox your agent will own.</p>
+        <input type="text" id="wiz-username" placeholder="hello" style="width: 100%; padding: 14px 16px; border-radius: 16px; border: 1px solid var(--line); background: rgba(255,255,255,0.04); color: var(--text-strong); text-align: center;">
+        <p style="margin-top: 10px; margin-bottom: 20px;">Your email will be <strong class="mono" id="wiz-preview" style="color: #bcd8ff;">hello@agentsend.io</strong></p>
+        <button type="button" class="btn btn-primary" onclick="wizardCreateInbox()" style="width: 100%;" id="wiz-create-btn">Create inbox</button>
+        <div class="steps-bar"><div class="sdot ok">x</div><div class="sline"></div><div class="sdot on">2</div><div class="sline"></div><div class="sdot off">3</div></div>
       </div>
       <div id="wiz-3" class="hidden">
-        <div class="wiz-icon">✉️</div>
-        <h2>Try It Out!</h2>
-        <p>Open your email and send a message to:</p>
+        <div class="wiz-icon">3</div>
+        <h2>Send a test email</h2>
+        <p>Send any message to the new inbox below. This confirms inbound email is flowing into your account.</p>
         <div class="try-box">
           <span class="try-addr" id="wiz-try-address"></span>
-          <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('wiz-try-address').textContent);this.textContent='Copied!'">📋 Copy</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="copyText(document.getElementById('wiz-try-address').textContent, 'Inbox address copied.')">Copy</button>
         </div>
-        <p style="color:#3f3f46;font-size:12px;margin-bottom:18px;">It may take a moment to appear.</p>
-        <button class="btn btn-primary" onclick="wizardCheckEmail()" style="width:100%;padding:12px;" id="wiz-refresh-btn">🔄 Check for emails</button>
-        <div id="wiz-received" class="hidden" style="margin-top:14px;">
-          <div class="rbox"><div class="rlabel">Email received!</div><div class="rval" id="wiz-received-from"></div></div>
-          <button class="btn btn-primary" onclick="wizardNext(4)" style="width:100%;padding:12px;margin-top:10px;">Continue</button>
+        <button type="button" class="btn btn-primary" onclick="wizardCheckEmail()" style="width: 100%;" id="wiz-refresh-btn">Check for emails</button>
+        <div id="wiz-received" class="hidden" style="margin-top: 14px;">
+          <div class="rbox"><div class="rlabel">Email received</div><div class="rval" id="wiz-received-from"></div></div>
+          <button type="button" class="btn btn-primary" onclick="wizardNext(4)" style="width: 100%; margin-top: 12px;">Continue</button>
         </div>
-        <p style="text-align:center;margin-top:14px;"><span style="color:#3f3f46;font-size:12px;cursor:pointer;" onclick="wizardNext(4)">Skip for now →</span></p>
-        <div class="steps-bar"><div class="sdot ok">✓</div><div class="sline"></div><div class="sdot on">2</div><div class="sline"></div><div class="sdot off">3</div></div>
+        <p style="margin-top: 14px; margin-bottom: 0;"><a href="#" style="color: var(--text-faint);" onclick="wizardNext(4); return false;">Skip for now</a></p>
+        <div class="steps-bar"><div class="sdot ok">x</div><div class="sline"></div><div class="sdot on">2</div><div class="sline"></div><div class="sdot off">3</div></div>
       </div>
       <div id="wiz-4" class="hidden">
-        <div class="wiz-icon">🎉</div>
-        <h2>You're All Set!</h2>
-        <p>Your inbox is ready.</p>
-        <div class="rbox"><div class="rlabel">Inbox Address</div><div class="rval" id="wiz-inbox-address"></div></div>
-        <p style="color:#52525b;font-size:12px;margin-top:8px;">Need an API key? Create one from the API Keys page.</p>
-        <button class="btn btn-primary" onclick="wizardDone()" style="width:100%;padding:12px;margin-top:8px;">Go to Dashboard</button>
-        <div class="steps-bar"><div class="sdot ok">✓</div><div class="sline"></div><div class="sdot ok">✓</div><div class="sline"></div><div class="sdot on">3</div></div>
+        <div class="wiz-icon">4</div>
+        <h2>You are ready</h2>
+        <p>Your inbox is live and the workspace is ready for API keys, domains, and message automation.</p>
+        <div class="rbox"><div class="rlabel">Inbox address</div><div class="rval" id="wiz-inbox-address"></div></div>
+        <button type="button" class="btn btn-primary" onclick="wizardDone()" style="width: 100%; margin-top: 8px;">Go to dashboard</button>
+        <div class="steps-bar"><div class="sdot ok">x</div><div class="sline"></div><div class="sdot ok">x</div><div class="sline"></div><div class="sdot on">3</div></div>
       </div>
     </div>
   </div>
 
   <script>
     function readCookie(name) {
-      const prefix = name + '=';
+      const prefix = name + "=";
       const match = document.cookie
-        .split(';')
+        .split(";")
         .map((cookie) => cookie.trim())
         .find((cookie) => cookie.startsWith(prefix));
-      return match ? decodeURIComponent(match.slice(prefix.length)) : '';
+      return match ? decodeURIComponent(match.slice(prefix.length)) : "";
     }
 
     function persistBrowserSession(nextToken) {
-      localStorage.setItem('agentsend_token', nextToken);
-      const secure = window.location.protocol === 'https:' ? '; Secure' : '';
-      document.cookie = 'agentsend_token=' + encodeURIComponent(nextToken) + '; Path=/; Max-Age=604800; SameSite=Lax' + secure;
+      localStorage.setItem("agentsend_token", nextToken);
+      const secure = window.location.protocol === "https:" ? "; Secure" : "";
+      document.cookie = "agentsend_token=" + encodeURIComponent(nextToken) + "; Path=/; Max-Age=604800; SameSite=Lax" + secure;
       token = nextToken;
     }
 
     function clearBrowserSession() {
-      localStorage.removeItem('agentsend_token');
-      localStorage.removeItem('agentsend_api_key');
-      document.cookie = 'agentsend_token=; Path=/; Max-Age=0; SameSite=Lax';
-      token = '';
-      apiKey = '';
+      localStorage.removeItem("agentsend_token");
+      localStorage.removeItem("agentsend_api_key");
+      document.cookie = "agentsend_token=; Path=/; Max-Age=0; SameSite=Lax";
+      token = "";
+      apiKey = "";
     }
 
     function showAppError(message) {
-      const el = document.getElementById('app-error');
+      const el = document.getElementById("app-error");
       el.textContent = message;
-      el.classList.add('show');
+      el.classList.add("show");
     }
 
     function hideAppError() {
-      document.getElementById('app-error').classList.remove('show');
+      document.getElementById("app-error").classList.remove("show");
+    }
+
+    function showToast(message, tone = "info") {
+      const stack = document.getElementById("toast-stack");
+      const toast = document.createElement("div");
+      toast.className = "toast" + (tone === "info" ? "" : " " + tone);
+      toast.textContent = message;
+      stack.appendChild(toast);
+      window.setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(-6px)";
+        window.setTimeout(() => toast.remove(), 180);
+      }, 2800);
+    }
+
+    async function copyText(value, successMessage) {
+      if (!value) return;
+      try {
+        await navigator.clipboard.writeText(value);
+        showToast(successMessage || "Copied to clipboard.", "success");
+      } catch {
+        showToast("Unable to copy to clipboard.", "error");
+      }
     }
 
     function handleUnauthorized() {
       clearBrowserSession();
-      window.location.href = '/auth/signup';
+      window.location.href = "/auth/signup";
     }
 
-    let token = localStorage.getItem('agentsend_token') || readCookie('agentsend_token');
-    let apiKey = localStorage.getItem('agentsend_api_key');
-    const dashboardParams = new URLSearchParams(window.location.search);
-    const requestedPage = dashboardParams.get('page');
-    const skipOnboarding = dashboardParams.get('skipOnboarding') === '1';
-    const auth = () => token ? { 'Authorization': 'Bearer ' + token } : apiKey ? { 'X-API-Key': apiKey } : {};
-    if (token && !localStorage.getItem('agentsend_token')) persistBrowserSession(token);
-    if (!token && !apiKey) window.location.href = '/auth/signup';
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
 
-    let allInboxes = [];
+    function formatShortDate(value) {
+      if (!value) return "-";
+      return new Date(value).toLocaleDateString([], {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      });
+    }
+
+    function formatShortTime(value) {
+      if (!value) return "--";
+      return new Date(value).toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+      });
+    }
+
+    function formatRelativeTime(value) {
+      if (!value) return "Unknown";
+      const diff = Date.now() - new Date(value).getTime();
+      const minute = 60 * 1000;
+      const hour = 60 * minute;
+      const day = 24 * hour;
+      if (diff < hour) return Math.max(1, Math.round(diff / minute)) + "m ago";
+      if (diff < day) return Math.round(diff / hour) + "h ago";
+      return Math.round(diff / day) + "d ago";
+    }
+
+    function getNameFromAddress(address) {
+      const raw = String(address || "").trim();
+      if (!raw) return "Unknown";
+      const named = raw.split("<")[0].trim();
+      if (named && named !== raw) return named;
+      return raw.split("@")[0].replace(/[._-]+/g, " ");
+    }
+
+    function getInitials(value) {
+      const parts = String(value || "")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+      if (!parts.length) return "AS";
+      return parts
+        .slice(0, 2)
+        .map((part) => part[0].toUpperCase())
+        .join("");
+    }
 
     function getErrorMessage(data, fallback) {
       if (!data) return fallback;
-      if (typeof data === 'string') return data;
-      if (typeof data.message === 'string') return data.message;
-      if (typeof data.error === 'string') return data.error;
-      if (data.error && typeof data.error.message === 'string') return data.error.message;
+      if (typeof data === "string") return data;
+      if (typeof data.message === "string") return data.message;
+      if (typeof data.error === "string") return data.error;
+      if (data.error && typeof data.error.message === "string") return data.error.message;
       return fallback;
     }
 
     function isInboxPayload(data) {
-      return Boolean(data && typeof data === 'object' && typeof data.id === 'string' && typeof data.address === 'string');
+      return Boolean(data && typeof data === "object" && typeof data.id === "string" && typeof data.address === "string");
     }
 
     function isApiKeyPayload(data) {
       return Boolean(
         data &&
-        typeof data === 'object' &&
-        typeof data.id === 'string' &&
-        typeof data.key === 'string' &&
-        typeof data.prefix === 'string'
+        typeof data === "object" &&
+        typeof data.id === "string" &&
+        typeof data.key === "string" &&
+        typeof data.prefix === "string"
       );
     }
 
     function formatDnsRecords(records) {
-      if (!records?.length) return 'No DNS records returned.';
+      if (!records || !records.length) return "No DNS records returned.";
       return records
         .map((record) => `${record.type}  ${record.name}  ${record.value}`)
-        .join('\n');
+        .join("\n");
     }
+
+    function renderEmptyState(title, description, buttonLabel, action, iconMarkup) {
+      return `
+        <div class="empty-state">
+          <div class="empty-icon">${iconMarkup}</div>
+          <h3>${escapeHtml(title)}</h3>
+          <p>${escapeHtml(description)}</p>
+          <button type="button" class="btn btn-primary btn-sm" onclick="${action}">${escapeHtml(buttonLabel)}</button>
+        </div>
+      `;
+    }
+
+    function getHealthStatus(totalSent, totalBounced, totalComplaints) {
+      if (totalSent === 0) {
+        return {
+          label: "Idle",
+          tone: "neutral",
+          summary: "No sending activity yet.",
+          pill: "Waiting for first send",
+        };
+      }
+
+      const bounceRate = totalBounced / totalSent;
+      const complaintRate = totalComplaints / totalSent;
+
+      if (bounceRate < 0.02 && complaintRate < 0.001) {
+        return {
+          label: "Healthy",
+          tone: "ok",
+          summary: "Deliverability is within a safe operating range.",
+          pill: "Healthy workspace",
+        };
+      }
+
+      if (bounceRate < 0.05 && complaintRate < 0.003) {
+        return {
+          label: "Watch",
+          tone: "warn",
+          summary: "Metrics are elevated. Review your sending quality soon.",
+          pill: "Needs monitoring",
+        };
+      }
+
+      return {
+        label: "Attention",
+        tone: "danger",
+        summary: "Deliverability risk is elevated. Pause and investigate.",
+        pill: "Deliverability risk",
+      };
+    }
+
+    function buildActivitySeries(messages) {
+      const currentHour = new Date();
+      currentHour.setMinutes(0, 0, 0);
+
+      const buckets = [];
+      const bucketMap = new Map();
+
+      for (let index = 23; index >= 0; index -= 1) {
+        const bucketDate = new Date(currentHour);
+        bucketDate.setHours(bucketDate.getHours() - index);
+        const key = bucketDate.getTime();
+        const bucket = {
+          key,
+          label: bucketDate.toLocaleTimeString([], { hour: "numeric" }),
+          count: 0,
+        };
+        buckets.push(bucket);
+        bucketMap.set(key, bucket);
+      }
+
+      const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+      for (const message of messages) {
+        const createdAt = new Date(message.createdAt);
+        if (Number.isNaN(createdAt.getTime()) || createdAt.getTime() < cutoff) continue;
+        createdAt.setMinutes(0, 0, 0);
+        const bucket = bucketMap.get(createdAt.getTime());
+        if (bucket) bucket.count += 1;
+      }
+
+      return buckets;
+    }
+
+    function renderActivity(messages) {
+      const bars = document.getElementById("activity-bars");
+      const axis = document.getElementById("activity-axis");
+      const series = buildActivitySeries(messages);
+      const maxCount = Math.max(...series.map((item) => item.count), 1);
+      const recentCount = series.reduce((total, item) => total + item.count, 0);
+      const peakBucket = [...series].sort((left, right) => right.count - left.count)[0];
+
+      document.getElementById("activity-total").textContent = String(recentCount);
+      document.getElementById("activity-peak").textContent = peakBucket && peakBucket.count > 0 ? `${peakBucket.label} (${peakBucket.count})` : "Quiet";
+
+      bars.innerHTML = series
+        .map((bucket) => {
+          const height = bucket.count > 0 ? Math.max(8, Math.round(bucket.count / maxCount * 100)) : 6;
+          const emptyClass = bucket.count > 0 ? "" : " is-empty";
+          return `<div class="activity-bar${emptyClass}" title="${bucket.label}: ${bucket.count}"><span style="height:${height}%"></span></div>`;
+        })
+        .join("");
+
+      axis.innerHTML = series
+        .filter((_, index) => index % 3 === 0)
+        .map((bucket) => `<span>${escapeHtml(bucket.label)}</span>`)
+        .join("");
+    }
+
+    function renderRecentMessages(messages) {
+      const container = document.getElementById("recent-messages");
+      if (!messages.length) {
+        container.innerHTML = renderEmptyState(
+          "No conversations yet",
+          "Once mail starts moving through your inboxes, recent message activity will land here.",
+          "Create inbox",
+          "showCreateInbox()",
+          `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 7C4 5.89543 4.89543 5 6 5H18C19.1046 5 20 5.89543 20 7V17C20 18.1046 19.1046 19 18 19H6C4.89543 19 4 18.1046 4 17V7Z" stroke="currentColor" stroke-width="1.8"/><path d="M5 8L12 13L19 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+        );
+        return;
+      }
+
+      container.innerHTML = messages
+        .slice(0, 6)
+        .map((message) => {
+          const sender = getNameFromAddress(message.fromAddress || message.to?.[0] || "Unknown");
+          const subject = message.subject && message.subject.trim() ? message.subject : "No subject";
+          const tag = message.direction === "inbound" ? "Received" : "Sent";
+          const tagClass = message.direction === "inbound" ? "inbound" : "outbound";
+          const inboxLabel = message.inboxDisplayName || message.inboxAddress || "Workspace inbox";
+
+          return `
+            <div class="message-item">
+              <div class="message-avatar">${escapeHtml(getInitials(sender))}</div>
+              <div class="message-copy">
+                <div class="message-topline">
+                  <span class="message-sender">${escapeHtml(sender)}</span>
+                  <span class="message-tag ${tagClass}">${escapeHtml(tag)}</span>
+                </div>
+                <div class="message-subject">${escapeHtml(subject)}</div>
+                <div class="message-meta">${escapeHtml(inboxLabel)} · ${escapeHtml(formatRelativeTime(message.createdAt))}</div>
+              </div>
+              <div class="message-time">${escapeHtml(formatShortTime(message.createdAt))}</div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    function updateOverviewStats(allInboxes, keys, domains, overviewMessages) {
+      const totalSent = allInboxes.reduce((sum, inbox) => sum + (inbox.totalSent || 0), 0);
+      const totalBounced = allInboxes.reduce((sum, inbox) => sum + (inbox.bounceCount || 0), 0);
+      const totalComplaints = allInboxes.reduce((sum, inbox) => sum + (inbox.complaintCount || 0), 0);
+      const totalReceived = allInboxes.reduce((sum, inbox) => sum + (inbox.totalReceived || 0), 0);
+      const activeInboxes = allInboxes.filter((inbox) => inbox.status === "active").length;
+
+      document.getElementById("s-sent").textContent = String(totalSent);
+      document.getElementById("s-received").textContent = String(totalReceived);
+      document.getElementById("s-complaints").textContent = String(totalComplaints);
+      document.getElementById("s-bounced").textContent = String(totalBounced);
+
+      const bounceRate = totalSent > 0 ? totalBounced / totalSent * 100 : 0;
+      const complaintRate = totalSent > 0 ? totalComplaints / totalSent * 100 : 0;
+      document.getElementById("res-bounce").textContent = bounceRate.toFixed(1) + "%";
+      document.getElementById("res-complaint").textContent = complaintRate.toFixed(1) + "%";
+
+      document.getElementById("nav-inbox-count").textContent = String(allInboxes.length);
+      document.getElementById("res-inboxes").textContent = `${allInboxes.length} / 5`;
+      document.getElementById("res-inboxes-note").textContent = `${activeInboxes} active inboxes`;
+      document.getElementById("res-inbox-bar").style.width = `${Math.min(allInboxes.length / 5 * 100, 100)}%`;
+      document.getElementById("res-keys").textContent = String(keys.length);
+      document.getElementById("res-domains").textContent = String(domains.length);
+
+      const health = getHealthStatus(totalSent, totalBounced, totalComplaints);
+      const healthStatus = document.getElementById("health-status");
+      healthStatus.textContent = health.label;
+      healthStatus.className = "health-state " + health.tone;
+      document.getElementById("health-summary").textContent = health.summary;
+      document.getElementById("health-pill").textContent = health.pill;
+
+      renderActivity(overviewMessages);
+    }
+
+    async function fetchOverviewMessages(inboxes) {
+      const slice = inboxes.slice(0, 8);
+      const responses = await Promise.all(
+        slice.map(async (inbox) => {
+          try {
+            const res = await fetch(`/inboxes/${inbox.id}/messages?limit=20`, { headers: auth() });
+            if (!res.ok) return [];
+            const data = await res.json().catch(() => null);
+            const messages = Array.isArray(data && data.data) ? data.data : [];
+            return messages.map((message) => ({
+              ...message,
+              inboxAddress: inbox.address,
+              inboxDisplayName: inbox.displayName || inbox.address,
+            }));
+          } catch {
+            return [];
+          }
+        })
+      );
+
+      return responses
+        .flat()
+        .sort((left, right) => new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime());
+    }
+
+    function showResultModal(title, description, value, canCopy = true) {
+      document.getElementById("result-title").textContent = title;
+      document.getElementById("result-description").textContent = description;
+      document.getElementById("result-value").textContent = value || "";
+      document.getElementById("result-copy-btn").classList.toggle("hidden", !canCopy || !value);
+      resultClipboardValue = value || "";
+      document.getElementById("result-modal").classList.add("show");
+    }
+
+    async function copyResultValue() {
+      await copyText(resultClipboardValue, "Copied to clipboard.");
+    }
+
+    let token = localStorage.getItem("agentsend_token") || readCookie("agentsend_token");
+    let apiKey = localStorage.getItem("agentsend_api_key");
+    const dashboardParams = new URLSearchParams(window.location.search);
+    const requestedPage = dashboardParams.get("page");
+    const skipOnboarding = dashboardParams.get("skipOnboarding") === "1";
+    const auth = () => token ? { Authorization: "Bearer " + token } : apiKey ? { "X-API-Key": apiKey } : {};
+
+    const pageMeta = {
+      overview: {
+        title: "Overview",
+        subtitle: "Monitor delivery, inboxes, and account health from one clean workspace.",
+      },
+      inboxes: {
+        title: "Inboxes",
+        subtitle: "Create and manage every mailbox attached to your workspace.",
+      },
+      apikeys: {
+        title: "API Keys",
+        subtitle: "Issue new credentials and keep track of active workspace secrets.",
+      },
+      webhooks: {
+        title: "Webhooks",
+        subtitle: "Route mailbox and delivery events into your own applications.",
+      },
+      domains: {
+        title: "Domains",
+        subtitle: "Manage branded sending domains and verify DNS in one place.",
+      },
+    };
+
+    const allowedPages = Object.keys(pageMeta);
+    let currentPage = allowedPages.includes(requestedPage) ? requestedPage : "overview";
+    let allInboxes = [];
+    let resultClipboardValue = "";
+    let wizInboxId = "";
+
+    if (token && !localStorage.getItem("agentsend_token")) persistBrowserSession(token);
+    if (!token && !apiKey) window.location.href = "/auth/signup";
 
     async function init() {
       try {
         hideAppError();
-        const res = await fetch('/account', { headers: auth() });
-        if (!res.ok) {
-          const data = await res.json().catch(() => null);
-          if (res.status === 401 || res.status === 403) {
+        const accountResponse = await fetch("/account", { headers: auth() });
+        if (!accountResponse.ok) {
+          const data = await accountResponse.json().catch(() => null);
+          if (accountResponse.status === 401 || accountResponse.status === 403) {
             handleUnauthorized();
             return;
           }
-          showAppError(getErrorMessage(data, 'Failed to load your dashboard. Refresh and try again.'));
+          showAppError(getErrorMessage(data, "Failed to load your dashboard. Refresh and try again."));
           return;
         }
-        const a = await res.json();
-        document.getElementById('user-name').textContent = a.name || a.email;
-        document.getElementById('user-avatar').textContent = (a.name || a.email)[0].toUpperCase();
+
+        const account = await accountResponse.json();
+        const workspaceName = account.name || account.email || "AgentSend";
+        document.getElementById("user-name").textContent = workspaceName;
+        document.getElementById("user-avatar").textContent = getInitials(workspaceName);
 
         const [inboxRes, keysRes, domainsRes] = await Promise.all([
-          fetch('/inboxes', { headers: auth() }),
-          fetch('/account/api-keys', { headers: auth() }),
-          fetch('/domains', { headers: auth() }),
+          fetch("/inboxes", { headers: auth() }),
+          fetch("/account/api-keys", { headers: auth() }),
+          fetch("/domains", { headers: auth() }),
         ]);
-        const inboxData = await inboxRes.json();
-        const keysData = await keysRes.json();
-        const domainsData = await domainsRes.json();
-        allInboxes = inboxData.data || [];
-        const keys = keysData.data || [];
-        const domains = domainsData.data || [];
 
-        // Stats
-        const totalSent = allInboxes.reduce((s,i) => s + (i.totalSent||0), 0);
-        const totalBounced = allInboxes.reduce((s,i) => s + (i.bounceCount||0), 0);
-        const totalComplaints = allInboxes.reduce((s,i) => s + (i.complaintCount||0), 0);
-        const totalReceived = allInboxes.reduce((s,i) => s + (i.totalReceived||0), 0);
-        document.getElementById('s-inboxes').textContent = allInboxes.length;
-        document.getElementById('s-sent').textContent = totalSent;
-        document.getElementById('s-received').textContent = totalReceived;
-        document.getElementById('s-bounced').textContent = totalBounced;
-        // Health
-        document.getElementById('res-bounce').textContent = totalSent > 0 ? (totalBounced/totalSent*100).toFixed(1)+'%' : '0.0%';
-        document.getElementById('res-complaint').textContent = totalSent > 0 ? (totalComplaints/totalSent*100).toFixed(1)+'%' : '0.0%';
-        document.getElementById('nav-inbox-count').textContent = allInboxes.length;
-
-        // Resources
-        document.getElementById('res-inboxes').textContent = allInboxes.length + ' / 5';
-        document.getElementById('res-inbox-bar').style.width = Math.min(allInboxes.length/5*100, 100) + '%';
-        document.getElementById('res-keys').textContent = keys.length;
-        document.getElementById('res-domains').textContent = domains.length;
-
-        if (requestedPage === 'apikeys') {
-          showPage('apikeys', document.querySelectorAll('.nav-item')[2]);
+        if ([inboxRes, keysRes, domainsRes].some((response) => response.status === 401 || response.status === 403)) {
+          handleUnauthorized();
+          return;
         }
 
-        // Recent messages
-        if (allInboxes.length > 0) {
-          const msgRes = await fetch('/inboxes/' + allInboxes[0].id + '/messages?limit=5', { headers: auth() });
-          const msgData = await msgRes.json();
-          const msgs = msgData.data || [];
-          if (msgs.length > 0) {
-            let html = '';
-            for (const m of msgs) {
-              const dir = m.direction === 'inbound' ? '📥' : '📤';
-              const time = new Date(m.createdAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-              html += '<div class="msg-row"><span class="msg-dir">' + dir + '</span><span class="msg-from">' + (m.fromAddress||'').split('<')[0].trim() + '</span><span class="msg-subject">' + m.subject + '</span><span class="msg-time">' + time + '</span></div>';
-            }
-            document.getElementById('recent-messages').innerHTML = html;
-          }
-        }
+        const inboxData = await inboxRes.json().catch(() => ({ data: [] }));
+        const keysData = await keysRes.json().catch(() => ({ data: [] }));
+        const domainsData = await domainsRes.json().catch(() => ({ data: [] }));
 
-        if (!skipOnboarding && allInboxes.length === 0) document.getElementById('onboarding').classList.add('show');
+        allInboxes = Array.isArray(inboxData.data) ? inboxData.data : [];
+        const keys = Array.isArray(keysData.data) ? keysData.data : [];
+        const domains = Array.isArray(domainsData.data) ? domainsData.data : [];
+
+        const overviewMessages = allInboxes.length ? await fetchOverviewMessages(allInboxes) : [];
+        updateOverviewStats(allInboxes, keys, domains, overviewMessages);
+        renderRecentMessages(overviewMessages);
+
+        showPage(currentPage);
+
+        if (!skipOnboarding && allInboxes.length === 0) {
+          document.getElementById("onboarding").classList.add("show");
+        }
       } catch (error) {
         console.error(error);
-        showAppError('Failed to load your dashboard. Refresh and try again.');
+        showAppError("Failed to load your dashboard. Refresh and try again.");
       }
     }
-    init();
 
     function showPage(name, el) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.getElementById('page-' + name).classList.add('active');
-      if (el) el.classList.add('active');
-      document.getElementById('page-title').textContent = name.charAt(0).toUpperCase() + name.slice(1);
-      if (name === 'inboxes') loadInboxes();
-      if (name === 'apikeys') loadApiKeys();
-      if (name === 'webhooks') loadWebhooks();
-      if (name === 'domains') loadDomains();
+      const nextPage = allowedPages.includes(name) ? name : "overview";
+      currentPage = nextPage;
+
+      document.querySelectorAll(".page").forEach((page) => page.classList.remove("active"));
+      document.querySelectorAll(".nav-item").forEach((item) => item.classList.remove("active"));
+
+      const page = document.getElementById("page-" + nextPage);
+      if (page) page.classList.add("active");
+
+      const navItem = el || document.querySelector(`.nav-item[data-page="${nextPage}"]`);
+      if (navItem) navItem.classList.add("active");
+
+      document.getElementById("page-title").textContent = pageMeta[nextPage].title;
+      document.getElementById("page-subtitle").textContent = pageMeta[nextPage].subtitle;
+
+      if (nextPage === "inboxes") loadInboxes();
+      if (nextPage === "apikeys") loadApiKeys();
+      if (nextPage === "webhooks") loadWebhooks();
+      if (nextPage === "domains") loadDomains();
     }
 
     async function loadInboxes() {
-      const res = await fetch('/inboxes', { headers: auth() });
-      const data = await res.json();
-      const inboxes = data.data || [];
-      if (!inboxes.length) { document.getElementById('inboxes-list').innerHTML = '<div class="empty"><div class="ico">📨</div><h3>No inboxes yet</h3><p>Create your first inbox</p><button class="btn btn-primary btn-sm" onclick="showCreateInbox()">+ Create</button></div>'; return; }
-      let h = '<table class="table"><thead><tr><th>Address</th><th>Display Name</th><th>Sent</th><th>Status</th><th>Created</th><th></th></tr></thead><tbody>';
-      for (const i of inboxes) h += '<tr><td class="mono" style="color:#818cf8;font-size:13px;">' + i.address + '</td><td>' + (i.displayName||'—') + '</td><td>' + (i.totalSent||0) + '</td><td><span class="badge ' + (i.status === 'active' ? 'badge-active' : 'badge-inactive') + '">' + i.status + '</span></td><td>' + new Date(i.createdAt).toLocaleDateString() + '</td><td><button class="btn btn-danger btn-sm" onclick="deleteInbox(\'' + i.id + '\')">Delete</button></td></tr>';
-      h += '</tbody></table>';
-      document.getElementById('inboxes-list').innerHTML = h;
+      const res = await fetch("/inboxes", { headers: auth() });
+      const data = await res.json().catch(() => ({ data: [] }));
+      const inboxes = Array.isArray(data.data) ? data.data : [];
+      document.getElementById("inboxes-count").textContent = `${inboxes.length} inbox${inboxes.length === 1 ? "" : "es"}`;
+
+      if (!inboxes.length) {
+        document.getElementById("inboxes-list").innerHTML = renderEmptyState(
+          "No inboxes yet",
+          "Create your first mailbox to start sending and receiving email through AgentSend.",
+          "Create inbox",
+          "showCreateInbox()",
+          `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 7C4 5.89543 4.89543 5 6 5H18C19.1046 5 20 5.89543 20 7V17C20 18.1046 19.1046 19 18 19H6C4.89543 19 4 18.1046 4 17V7Z" stroke="currentColor" stroke-width="1.8"/><path d="M5 8L12 13L19 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+        );
+        return;
+      }
+
+      const rows = inboxes
+        .map((inbox) => `
+          <tr>
+            <td>
+              <span class="table-primary mono">${escapeHtml(inbox.address)}</span>
+              <span class="table-secondary">${escapeHtml(inbox.displayName || "No display name")}</span>
+            </td>
+            <td>${escapeHtml(inbox.displayName || "-")}</td>
+            <td>${escapeHtml(String(inbox.totalSent || 0))}</td>
+            <td><span class="badge ${inbox.status === "active" ? "badge-active" : "badge-inactive"}">${escapeHtml(inbox.status || "inactive")}</span></td>
+            <td>${escapeHtml(formatShortDate(inbox.createdAt))}</td>
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn btn-danger btn-sm" onclick="deleteInbox('${escapeHtml(inbox.id)}')">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `)
+        .join("");
+
+      document.getElementById("inboxes-list").innerHTML = `
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Address</th>
+              <th>Display name</th>
+              <th>Sent</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
     }
 
-    function showCreateInbox() { document.getElementById('create-inbox-modal').classList.add('show'); }
-    function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+    async function loadApiKeys() {
+      const res = await fetch("/account/api-keys", { headers: auth() });
+      const data = await res.json().catch(() => ({ data: [] }));
+      const keys = Array.isArray(data.data) ? data.data : [];
+      document.getElementById("apikeys-count").textContent = `${keys.length} key${keys.length === 1 ? "" : "s"}`;
 
-    async function handleCreateInbox(e) {
-      e.preventDefault();
-      const btn = document.getElementById('create-inbox-btn');
-      btn.disabled = true; btn.textContent = 'Creating...';
+      if (!keys.length) {
+        document.getElementById("apikeys-list").innerHTML = renderEmptyState(
+          "No API keys yet",
+          "Create a credential to let your agents or services call the AgentSend API.",
+          "Create key",
+          "showCreateApiKey()",
+          `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="8.5" cy="12" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 8V12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18 10V12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`
+        );
+        return;
+      }
+
+      const rows = keys
+        .map((key) => `
+          <tr>
+            <td><span class="table-primary mono">${escapeHtml(key.keyPrefix)}...</span></td>
+            <td>${escapeHtml(key.name || "Unnamed key")}</td>
+            <td>${escapeHtml(key.lastUsedAt ? formatShortDate(key.lastUsedAt) : "Never")}</td>
+            <td>${escapeHtml(formatShortDate(key.createdAt))}</td>
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn btn-danger btn-sm" onclick="revokeKey('${escapeHtml(key.id)}')">Revoke</button>
+              </div>
+            </td>
+          </tr>
+        `)
+        .join("");
+
+      document.getElementById("apikeys-list").innerHTML = `
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Prefix</th>
+              <th>Name</th>
+              <th>Last used</th>
+              <th>Created</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    async function loadWebhooks() {
       try {
-        const body = {};
-        const u = document.getElementById('inbox-username').value.trim();
-        const d = document.getElementById('inbox-display').value;
-        if (!u) {
-          alert('Username is required.');
+        const res = await fetch("/webhooks", { headers: auth() });
+        const data = await res.json().catch(() => ({ data: [] }));
+        const hooks = Array.isArray(data.data) ? data.data : [];
+        document.getElementById("webhooks-count").textContent = `${hooks.length} webhook${hooks.length === 1 ? "" : "s"}`;
+
+        if (!hooks.length) {
+          document.getElementById("webhooks-list").innerHTML = renderEmptyState(
+            "No webhooks yet",
+            "Create a destination to receive message and delivery events from AgentSend.",
+            "Create webhook",
+            "showCreateWebhook()",
+            `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M7 14C4.79086 14 3 12.2091 3 10C3 7.79086 4.79086 6 7 6C8.37019 6 9.57916 6.68835 10.301 7.73742" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M17 10C19.2091 10 21 11.7909 21 14C21 16.2091 19.2091 18 17 18C15.6298 18 14.4208 17.3117 13.699 16.2626" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 16L16 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`
+          );
           return;
         }
-        if (d) body.displayName = d;
-        if (u) body.address = u + '@agentsend.io';
-        const res = await fetch('/inboxes', { method:'POST', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify(body) });
-        const data = await res.json();
-        if (res.ok) {
-          if (!isInboxPayload(data)) {
-            alert('Inbox creation succeeded but the server returned an invalid response. Refresh and try again.');
-            return;
-          }
-          document.getElementById('inbox-username').value = '';
-          document.getElementById('inbox-display').value = '';
-          closeModal('create-inbox-modal');
-          loadInboxes();
-          init();
-        } else {
-          alert(getErrorMessage(data, 'Failed to create inbox'));
+
+        const rows = hooks
+          .map((hook) => `
+            <tr>
+              <td>
+                <span class="table-primary mono">${escapeHtml(hook.url)}</span>
+                <span class="table-secondary">${escapeHtml((hook.events || []).join(", ") || "No events")}</span>
+              </td>
+              <td>${escapeHtml((hook.events || []).join(", ") || "-")}</td>
+              <td><span class="badge ${hook.isActive ? "badge-active" : "badge-inactive"}">${hook.isActive ? "active" : "inactive"}</span></td>
+              <td>${escapeHtml(formatShortDate(hook.createdAt))}</td>
+              <td>
+                <div class="table-actions">
+                  <button type="button" class="btn btn-ghost btn-sm" onclick="toggleWebhook('${escapeHtml(hook.id)}', ${hook.isActive})">${hook.isActive ? "Disable" : "Enable"}</button>
+                  <button type="button" class="btn btn-danger btn-sm" onclick="deleteWebhook('${escapeHtml(hook.id)}')">Delete</button>
+                </div>
+              </td>
+            </tr>
+          `)
+          .join("");
+
+        document.getElementById("webhooks-list").innerHTML = `
+          <table class="table">
+            <thead>
+              <tr>
+                <th>URL</th>
+                <th>Events</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
+      } catch {
+        document.getElementById("webhooks-count").textContent = "0 webhooks";
+        document.getElementById("webhooks-list").innerHTML = renderEmptyState(
+          "Unable to load webhooks",
+          "Refresh the page and try again. If the problem persists, verify your session and API access.",
+          "Try again",
+          "loadWebhooks()",
+          `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 8V12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 16H12.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10.29 3.86L1.82 18A2 2 0 0 0 3.53 21H20.47A2 2 0 0 0 22.18 18L13.71 3.86A2 2 0 0 0 10.29 3.86Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`
+        );
+      }
+    }
+
+    async function loadDomains() {
+      try {
+        const res = await fetch("/domains", { headers: auth() });
+        const data = await res.json().catch(() => ({ data: [] }));
+        const domains = Array.isArray(data.data) ? data.data : [];
+        document.getElementById("domains-count").textContent = `${domains.length} domain${domains.length === 1 ? "" : "s"}`;
+
+        if (!domains.length) {
+          document.getElementById("domains-list").innerHTML = renderEmptyState(
+            "No custom domains yet",
+            "Add a sending domain to send email from your own brand instead of the default workspace domain.",
+            "Add domain",
+            "showCreateDomain()",
+            `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/><path d="M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 4C14.5 6.2 15.92 9.04 16 12C15.92 14.96 14.5 17.8 12 20C9.5 17.8 8.08 14.96 8 12C8.08 9.04 9.5 6.2 12 4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`
+          );
+          return;
         }
+
+        const rows = domains
+          .map((domain) => {
+            const verified = domain.verificationStatus === "verified";
+            return `
+              <tr>
+                <td><span class="table-primary mono">${escapeHtml(domain.domain)}</span></td>
+                <td><span class="badge ${verified ? "badge-active" : "badge-inactive"}">${escapeHtml(domain.verificationStatus || "pending")}</span></td>
+                <td>${escapeHtml(domain.verifiedAt ? formatShortDate(domain.verifiedAt) : "Pending")}</td>
+                <td>${escapeHtml(formatShortDate(domain.createdAt))}</td>
+                <td>
+                  <div class="table-actions">
+                    <button type="button" class="btn btn-ghost btn-sm" onclick="showDomainDns('${escapeHtml(domain.id)}')">DNS</button>
+                    ${verified ? "" : `<button type="button" class="btn btn-ghost btn-sm" onclick="verifyDomain('${escapeHtml(domain.id)}')">Verify</button>`}
+                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteDomain('${escapeHtml(domain.id)}')">Remove</button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          })
+          .join("");
+
+        document.getElementById("domains-list").innerHTML = `
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Domain</th>
+                <th>Status</th>
+                <th>Verified</th>
+                <th>Created</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
+      } catch {
+        document.getElementById("domains-count").textContent = "0 domains";
+        document.getElementById("domains-list").innerHTML = renderEmptyState(
+          "Unable to load domains",
+          "Refresh the page and try again. If DNS setup is in progress, nothing has been removed.",
+          "Try again",
+          "loadDomains()",
+          `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 8V12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 16H12.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10.29 3.86L1.82 18A2 2 0 0 0 3.53 21H20.47A2 2 0 0 0 22.18 18L13.71 3.86A2 2 0 0 0 10.29 3.86Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`
+        );
+      }
+    }
+
+    function showCreateInbox() {
+      document.getElementById("create-inbox-modal").classList.add("show");
+    }
+
+    function showCreateApiKey() {
+      document.getElementById("create-api-key-modal").classList.add("show");
+    }
+
+    function showCreateWebhook() {
+      document.getElementById("create-webhook-modal").classList.add("show");
+    }
+
+    function showCreateDomain() {
+      document.getElementById("create-domain-modal").classList.add("show");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("show");
+    }
+
+    async function handleCreateInbox(event) {
+      event.preventDefault();
+      const button = document.getElementById("create-inbox-btn");
+      button.disabled = true;
+      button.textContent = "Creating...";
+
+      try {
+        const username = document.getElementById("inbox-username").value.trim();
+        const displayName = document.getElementById("inbox-display").value.trim();
+
+        if (!username) {
+          showToast("Username is required.", "error");
+          return;
+        }
+
+        const body = { address: username + "@agentsend.io" };
+        if (displayName) body.displayName = displayName;
+
+        const res = await fetch("/inboxes", {
+          method: "POST",
+          headers: { ...auth(), "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json().catch(() => null);
+
+        if (!res.ok) {
+          showToast(getErrorMessage(data, "Failed to create inbox."), "error");
+          return;
+        }
+
+        if (!isInboxPayload(data)) {
+          showToast("Inbox creation succeeded but the response payload was invalid.", "error");
+          return;
+        }
+
+        document.getElementById("inbox-username").value = "";
+        document.getElementById("inbox-display").value = "";
+        closeModal("create-inbox-modal");
+        showToast(`Inbox ${data.address} created.`, "success");
+        await init();
       } finally {
-        btn.disabled = false; btn.textContent = '+ Create';
+        button.disabled = false;
+        button.textContent = "Create inbox";
+      }
+    }
+
+    async function handleCreateApiKey(event) {
+      event.preventDefault();
+      const button = document.getElementById("create-api-key-btn");
+      button.disabled = true;
+      button.textContent = "Creating...";
+
+      try {
+        const name = document.getElementById("api-key-name").value.trim() || undefined;
+        const res = await fetch("/account/api-keys", {
+          method: "POST",
+          headers: { ...auth(), "Content-Type": "application/json" },
+          body: JSON.stringify({ name }),
+        });
+        const data = await res.json().catch(() => null);
+
+        if (!res.ok) {
+          showToast(getErrorMessage(data, "Failed to create API key."), "error");
+          return;
+        }
+
+        if (!isApiKeyPayload(data)) {
+          showToast("API key creation succeeded but the response payload was invalid.", "error");
+          return;
+        }
+
+        document.getElementById("api-key-name").value = "";
+        closeModal("create-api-key-modal");
+        showResultModal(
+          "API key created",
+          "Store this secret securely now. For safety, it will not be shown again after you close this dialog.",
+          data.key
+        );
+        await init();
+      } finally {
+        button.disabled = false;
+        button.textContent = "Create key";
+      }
+    }
+
+    async function handleCreateWebhook(event) {
+      event.preventDefault();
+      const button = document.getElementById("create-webhook-btn");
+      button.disabled = true;
+      button.textContent = "Creating...";
+
+      try {
+        const url = document.getElementById("webhook-url").value.trim();
+        const events = Array.from(document.querySelectorAll('input[name="webhook-event"]:checked')).map((input) => input.value);
+
+        if (!url) {
+          showToast("Webhook URL is required.", "error");
+          return;
+        }
+
+        if (!events.length) {
+          showToast("Select at least one event.", "error");
+          return;
+        }
+
+        const res = await fetch("/webhooks", {
+          method: "POST",
+          headers: { ...auth(), "Content-Type": "application/json" },
+          body: JSON.stringify({ url, events }),
+        });
+        const data = await res.json().catch(() => null);
+
+        if (!res.ok) {
+          showToast(getErrorMessage(data, "Failed to create webhook."), "error");
+          return;
+        }
+
+        document.getElementById("webhook-url").value = "";
+        document.querySelectorAll('input[name="webhook-event"]').forEach((input, index) => {
+          input.checked = index < 2;
+        });
+        closeModal("create-webhook-modal");
+        showResultModal(
+          "Webhook created",
+          "Save this signing secret now. You will use it to verify webhook payloads in your application.",
+          data && data.secret ? data.secret : "No signing secret returned."
+        );
+        await init();
+      } finally {
+        button.disabled = false;
+        button.textContent = "Create webhook";
+      }
+    }
+
+    async function handleCreateDomain(event) {
+      event.preventDefault();
+      const button = document.getElementById("create-domain-btn");
+      button.disabled = true;
+      button.textContent = "Adding...";
+
+      try {
+        const domain = document.getElementById("domain-name").value.trim();
+        if (!domain) {
+          showToast("Domain is required.", "error");
+          return;
+        }
+
+        const res = await fetch("/domains", {
+          method: "POST",
+          headers: { ...auth(), "Content-Type": "application/json" },
+          body: JSON.stringify({ domain }),
+        });
+        const data = await res.json().catch(() => null);
+
+        if (!res.ok) {
+          showToast(getErrorMessage(data, "Failed to add domain."), "error");
+          return;
+        }
+
+        document.getElementById("domain-name").value = "";
+        closeModal("create-domain-modal");
+        showResultModal(
+          "Domain added",
+          `Add the DNS records below for ${domain}, then return here and verify once they have propagated.`,
+          formatDnsRecords(data && data.dnsRecords ? data.dnsRecords : [])
+        );
+        await init();
+      } finally {
+        button.disabled = false;
+        button.textContent = "Add domain";
       }
     }
 
     async function deleteInbox(id) {
-      if (!confirm('Delete this inbox?')) return;
-      const res = await fetch('/inboxes/' + id, { method:'DELETE', headers:auth() });
+      if (!window.confirm("Delete this inbox?")) return;
+      const res = await fetch("/inboxes/" + id, { method: "DELETE", headers: auth() });
       if (res.ok) {
+        showToast("Inbox deleted.", "success");
         await init();
-        loadInboxes();
         return;
       }
-      const data = await res.json();
-      alert(getErrorMessage(data, 'Failed to delete inbox'));
+      const data = await res.json().catch(() => null);
+      showToast(getErrorMessage(data, "Failed to delete inbox."), "error");
     }
 
-    async function loadApiKeys() {
-      const res = await fetch('/account/api-keys', { headers: auth() });
-      const data = await res.json();
-      const keys = data.data || [];
-      if (!keys.length) { document.getElementById('apikeys-list').innerHTML = '<div class="empty"><div class="ico">🔑</div><h3>No API keys</h3><p>Create one to authenticate</p><button class="btn btn-primary btn-sm" onclick="createApiKey()">+ Create</button></div>'; return; }
-      let h = '<table class="table"><thead><tr><th>Prefix</th><th>Name</th><th>Last Used</th><th>Created</th><th></th></tr></thead><tbody>';
-      for (const k of keys) h += '<tr><td class="mono" style="color:#818cf8;font-size:13px;">' + k.keyPrefix + '...</td><td>' + (k.name||'—') + '</td><td>' + (k.lastUsedAt?new Date(k.lastUsedAt).toLocaleDateString():'Never') + '</td><td>' + new Date(k.createdAt).toLocaleDateString() + '</td><td><button class="btn btn-danger btn-sm" onclick="revokeKey(\''+k.id+'\')">Revoke</button></td></tr>';
-      h += '</tbody></table>';
-      document.getElementById('apikeys-list').innerHTML = h;
-    }
-
-    async function createApiKey() {
-      const name = prompt('Key name (optional):') || undefined;
-      const res = await fetch('/account/api-keys', { method:'POST', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify({name}) });
-      const data = await res.json();
-      if (res.ok) {
-        if (!isApiKeyPayload(data)) {
-          alert('API key creation succeeded but the server returned an invalid response. Refresh and try again.');
-          return;
-        }
-        alert(`Key created!\n\n${data.key}\n\nSave it — won't be shown again.`);
-        init();
-        loadApiKeys();
-      }
-      else { alert(getErrorMessage(data, 'Failed to create API key')); }
-    }
     async function revokeKey(id) {
-      if (!confirm('Revoke this key?')) return;
-      const res = await fetch('/account/api-keys/' + id, { method:'DELETE', headers:auth() });
-      if (res.ok) { init(); loadApiKeys(); return; }
-      const data = await res.json();
-      alert(getErrorMessage(data, 'Failed to revoke API key'));
+      if (!window.confirm("Revoke this key?")) return;
+      const res = await fetch("/account/api-keys/" + id, { method: "DELETE", headers: auth() });
+      if (res.ok) {
+        showToast("API key revoked.", "success");
+        await init();
+        return;
+      }
+      const data = await res.json().catch(() => null);
+      showToast(getErrorMessage(data, "Failed to revoke API key."), "error");
     }
 
-    // Webhooks
-    async function loadWebhooks() {
-      try {
-        const res = await fetch('/webhooks', { headers: auth() });
-        const data = await res.json();
-        const hooks = data.data || [];
-        if (!hooks.length) { document.getElementById('webhooks-list').innerHTML = '<div class="empty"><div class="ico">⚡</div><h3>No webhooks yet</h3><p>Create a webhook to receive notifications</p><button class="btn btn-primary btn-sm" onclick="createWebhook()">+ Create</button></div>'; return; }
-        let h = '<table class="table"><thead><tr><th>URL</th><th>Events</th><th>Status</th><th>Created</th><th></th></tr></thead><tbody>';
-        for (const w of hooks) h += '<tr><td class="mono" style="color:#818cf8;font-size:13px;word-break:break-all;">' + w.url + '</td><td>' + (w.events||[]).join(', ') + '</td><td><span class="badge ' + (w.isActive ? 'badge-active' : 'badge-inactive') + '">' + (w.isActive ? 'active' : 'inactive') + '</span></td><td>' + new Date(w.createdAt).toLocaleDateString() + '</td><td><button class="btn btn-ghost btn-sm" onclick="toggleWebhook(\'' + w.id + '\',' + w.isActive + ')">' + (w.isActive ? 'Disable' : 'Enable') + '</button> <button class="btn btn-danger btn-sm" onclick="deleteWebhook(\'' + w.id + '\')">Delete</button></td></tr>';
-        h += '</tbody></table>';
-        document.getElementById('webhooks-list').innerHTML = h;
-      } catch { document.getElementById('webhooks-list').innerHTML = '<div class="empty"><div class="ico">⚡</div><h3>No webhooks yet</h3><p>Create a webhook to receive notifications</p><button class="btn btn-primary btn-sm" onclick="createWebhook()">+ Create</button></div>'; }
-    }
-    async function createWebhook() {
-      const url = prompt('Webhook URL:');
-      if (!url) return;
-      const events = prompt('Events (comma-separated, e.g. message.received,message.bounced):') || 'message.received';
-      const res = await fetch('/webhooks', { method:'POST', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify({url, events: events.split(',').map(e=>e.trim())}) });
-      const data = await res.json();
-      if (res.ok) {
-        alert(`Webhook created!\n\nSigning secret:\n${data.secret}\n\nStore it securely — it won't be shown again.`);
-        loadWebhooks();
-      } else {
-        alert(getErrorMessage(data, 'Failed to create webhook'));
-      }
-    }
     async function toggleWebhook(id, isActive) {
-      const res = await fetch('/webhooks/' + id, { method:'PUT', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify({ isActive: !isActive }) });
-      if (res.ok) { loadWebhooks(); return; }
-      const data = await res.json();
-      alert(getErrorMessage(data, 'Failed to update webhook'));
+      const res = await fetch("/webhooks/" + id, {
+        method: "PUT",
+        headers: { ...auth(), "Content-Type": "application/json" },
+        body: JSON.stringify({ isActive: !isActive }),
+      });
+
+      if (res.ok) {
+        showToast(`Webhook ${isActive ? "disabled" : "enabled"}.`, "success");
+        await loadWebhooks();
+        return;
+      }
+
+      const data = await res.json().catch(() => null);
+      showToast(getErrorMessage(data, "Failed to update webhook."), "error");
     }
+
     async function deleteWebhook(id) {
-      if (!confirm('Delete this webhook?')) return;
-      const res = await fetch('/webhooks/' + id, { method:'DELETE', headers:auth() });
-      if (res.ok) { loadWebhooks(); return; }
-      const data = await res.json();
-      alert(getErrorMessage(data, 'Failed to delete webhook'));
+      if (!window.confirm("Delete this webhook?")) return;
+      const res = await fetch("/webhooks/" + id, { method: "DELETE", headers: auth() });
+      if (res.ok) {
+        showToast("Webhook deleted.", "success");
+        await loadWebhooks();
+        return;
+      }
+      const data = await res.json().catch(() => null);
+      showToast(getErrorMessage(data, "Failed to delete webhook."), "error");
     }
 
-    // Domains
-    async function loadDomains() {
-      try {
-        const res = await fetch('/domains', { headers: auth() });
-        const data = await res.json();
-        const domains = data.data || [];
-        if (!domains.length) { document.getElementById('domains-list').innerHTML = '<div class="empty"><div class="ico">🌐</div><h3>No custom domains</h3><p>Add a domain to send from your own address</p><button class="btn btn-primary btn-sm" onclick="createDomain()">+ Add</button></div>'; return; }
-        let h = '<table class="table"><thead><tr><th>Domain</th><th>Status</th><th>Verified</th><th>Created</th><th></th></tr></thead><tbody>';
-        for (const d of domains) {
-          const isVerified = d.verificationStatus === 'verified';
-          h += '<tr><td class="mono" style="color:#818cf8;font-size:13px;">' + d.domain + '</td><td><span class="badge ' + (isVerified ? 'badge-active' : 'badge-inactive') + '">' + (d.verificationStatus || 'pending') + '</span></td><td>' + (d.verifiedAt ? new Date(d.verifiedAt).toLocaleDateString() : 'Pending') + '</td><td>' + new Date(d.createdAt).toLocaleDateString() + '</td><td><button class="btn btn-ghost btn-sm" onclick="showDomainDns(\'' + d.id + '\')">DNS</button> ' + (!isVerified ? '<button class="btn btn-ghost btn-sm" onclick="verifyDomain(\'' + d.id + '\')">Verify</button> ' : '') + '<button class="btn btn-danger btn-sm" onclick="deleteDomain(\'' + d.id + '\')">Remove</button></td></tr>';
-        }
-        h += '</tbody></table>';
-        document.getElementById('domains-list').innerHTML = h;
-      } catch { document.getElementById('domains-list').innerHTML = '<div class="empty"><div class="ico">🌐</div><h3>No custom domains</h3><p>Add a domain to send from your own address</p><button class="btn btn-primary btn-sm" onclick="createDomain()">+ Add</button></div>'; }
-    }
-    async function createDomain() {
-      const domain = prompt('Enter your domain (e.g. mail.yourdomain.com):');
-      if (!domain) return;
-      const res = await fetch('/domains', { method:'POST', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify({domain}) });
-      const data = await res.json();
-      if (res.ok) {
-        alert(`Domain added!\n\nAdd these DNS records:\n\n${formatDnsRecords(data.dnsRecords)}\n\nAfter DNS propagates, use Verify in the Domains page.`);
-        init();
-        loadDomains();
-      } else {
-        alert(getErrorMessage(data, 'Failed to add domain'));
-      }
-    }
     async function showDomainDns(id) {
-      const res = await fetch('/domains/' + id, { headers: auth() });
-      const data = await res.json();
+      const res = await fetch("/domains/" + id, { headers: auth() });
+      const data = await res.json().catch(() => null);
       if (res.ok) {
-        alert(`DNS records for ${data.domain}:\n\n${formatDnsRecords(data.dnsRecords)}`);
+        showResultModal(
+          `DNS records for ${data.domain}`,
+          "Add or confirm these records in your DNS provider so AgentSend can verify and use this domain.",
+          formatDnsRecords(data.dnsRecords)
+        );
         return;
       }
-      alert(getErrorMessage(data, 'Failed to load DNS records'));
+      showToast(getErrorMessage(data, "Failed to load DNS records."), "error");
     }
+
     async function verifyDomain(id) {
-      const res = await fetch('/domains/' + id + '/verify', { method:'POST', headers: auth() });
-      const data = await res.json();
+      const res = await fetch("/domains/" + id + "/verify", { method: "POST", headers: auth() });
+      const data = await res.json().catch(() => null);
       if (res.ok) {
-        const isVerified = data.verificationStatus === 'verified';
-        alert(isVerified ? 'Domain verified successfully.' : 'Domain is still pending. Check your DNS records and try again.');
-        init();
-        loadDomains();
+        const verified = data.verificationStatus === "verified";
+        showToast(verified ? "Domain verified successfully." : "Domain is still pending verification.", verified ? "success" : "info");
+        await init();
         return;
       }
-      alert(getErrorMessage(data, 'Failed to verify domain'));
+      showToast(getErrorMessage(data, "Failed to verify domain."), "error");
     }
+
     async function deleteDomain(id) {
-      if (!confirm('Remove this domain?')) return;
-      const res = await fetch('/domains/' + id, { method:'DELETE', headers:auth() });
-      if (res.ok) { init(); loadDomains(); return; }
-      const data = await res.json();
-      alert(getErrorMessage(data, 'Failed to remove domain'));
+      if (!window.confirm("Remove this domain?")) return;
+      const res = await fetch("/domains/" + id, { method: "DELETE", headers: auth() });
+      if (res.ok) {
+        showToast("Domain removed.", "success");
+        await init();
+        return;
+      }
+      const data = await res.json().catch(() => null);
+      showToast(getErrorMessage(data, "Failed to remove domain."), "error");
     }
 
-    // Wizard
-    function wizardNext(s) { document.querySelectorAll('[id^="wiz-"]').forEach(el=>{if(el.id.match(/^wiz-\d$/))el.classList.add('hidden')}); document.getElementById('wiz-'+s).classList.remove('hidden'); }
-    document.getElementById('wiz-username')?.addEventListener('input', e => { document.getElementById('wiz-preview').textContent = (e.target.value||'hello') + '@agentsend.io'; });
+    function wizardNext(step) {
+      document.querySelectorAll('[id^="wiz-"]').forEach((node) => {
+        if (/^wiz-\d$/.test(node.id)) node.classList.add("hidden");
+      });
+      document.getElementById("wiz-" + step).classList.remove("hidden");
+    }
 
-    let wizInboxId='';
+    document.getElementById("wiz-username")?.addEventListener("input", (event) => {
+      document.getElementById("wiz-preview").textContent = ((event.target.value || "hello").trim() || "hello") + "@agentsend.io";
+    });
+
     async function wizardCreateInbox() {
-      const btn = document.getElementById('wiz-create-btn');
-      btn.disabled=true; btn.textContent='Creating...';
+      const button = document.getElementById("wiz-create-btn");
+      button.disabled = true;
+      button.textContent = "Creating...";
       try {
-        const u = document.getElementById('wiz-username').value.trim();
-        if (!u) {
-          alert('Username is required.');
+        const username = document.getElementById("wiz-username").value.trim();
+        if (!username) {
+          showToast("Username is required.", "error");
           return;
         }
-        const res = await fetch('/inboxes',{method:'POST',headers:{...auth(),'Content-Type':'application/json'},body:JSON.stringify({address:u+'@agentsend.io',displayName:'AgentSend'})});
-        const data = await res.json();
-        if (res.ok) {
-          if (!isInboxPayload(data)) {
-            alert('Inbox creation succeeded but the server returned an invalid response. Refresh and try again.');
-            return;
-          }
-          wizInboxId = data.id;
-          document.getElementById('wiz-try-address').textContent = data.address;
-          document.getElementById('wiz-inbox-address').textContent = data.address;
-          wizardNext(3);
+
+        const res = await fetch("/inboxes", {
+          method: "POST",
+          headers: { ...auth(), "Content-Type": "application/json" },
+          body: JSON.stringify({ address: username + "@agentsend.io", displayName: "AgentSend" }),
+        });
+        const data = await res.json().catch(() => null);
+
+        if (!res.ok) {
+          showToast(getErrorMessage(data, "Failed to create inbox."), "error");
           return;
         }
-        alert(getErrorMessage(data, 'Failed'));
+
+        if (!isInboxPayload(data)) {
+          showToast("Inbox creation succeeded but the response payload was invalid.", "error");
+          return;
+        }
+
+        wizInboxId = data.id;
+        document.getElementById("wiz-try-address").textContent = data.address;
+        document.getElementById("wiz-inbox-address").textContent = data.address;
+        showToast(`Inbox ${data.address} created.`, "success");
+        wizardNext(3);
+        await init();
       } finally {
-        btn.disabled=false; btn.textContent='Create Inbox';
+        button.disabled = false;
+        button.textContent = "Create inbox";
       }
     }
+
     async function wizardCheckEmail() {
-      const btn=document.getElementById('wiz-refresh-btn');btn.disabled=true;btn.textContent='Checking...';
-      try{const res=await fetch('/inboxes/'+wizInboxId+'/messages?status=received&limit=1',{headers:auth()});const d=await res.json();const m=d.data||[];
-      if(m.length>0){document.getElementById('wiz-received-from').textContent='From: '+m[0].fromAddress+' — "'+m[0].subject+'"';document.getElementById('wiz-received').classList.remove('hidden');}
-      else{btn.textContent='No emails yet';setTimeout(()=>{btn.textContent='🔄 Check for emails';},2000);}
-      }catch{}btn.disabled=false;
+      const button = document.getElementById("wiz-refresh-btn");
+      button.disabled = true;
+      button.textContent = "Checking...";
+
+      try {
+        const res = await fetch(`/inboxes/${wizInboxId}/messages?status=received&limit=1`, { headers: auth() });
+        const data = await res.json().catch(() => ({ data: [] }));
+        const messages = Array.isArray(data.data) ? data.data : [];
+
+        if (messages.length) {
+          document.getElementById("wiz-received-from").textContent = `From: ${messages[0].fromAddress} - "${messages[0].subject || "No subject"}"`;
+          document.getElementById("wiz-received").classList.remove("hidden");
+          showToast("Inbound email received.", "success");
+          return;
+        }
+
+        showToast("No emails yet. Try again in a moment.", "info");
+      } catch {
+        showToast("Unable to check this inbox right now.", "error");
+      } finally {
+        button.disabled = false;
+        button.textContent = "Check for emails";
+      }
     }
-    function wizardDone(){document.getElementById('onboarding').classList.remove('show');init();}
-    function logout(){clearBrowserSession();window.location.href='/';}
+
+    function wizardDone() {
+      document.getElementById("onboarding").classList.remove("show");
+      init();
+    }
+
+    function logout() {
+      clearBrowserSession();
+      window.location.href = "/";
+    }
+
+    document.querySelectorAll(".modal-overlay").forEach((overlay) => {
+      overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) overlay.classList.remove("show");
+      });
+    });
+
+    init();
   </script>
 </body>
 </html>
