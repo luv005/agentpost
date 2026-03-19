@@ -9,90 +9,138 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', -apple-system, sans-serif; background: #09090b; color: #e5e5e5; min-height: 100vh; }
     a { color: #818cf8; text-decoration: none; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
 
     /* Layout */
     .app { display: flex; min-height: 100vh; }
-    .sidebar { width: 240px; background: #0f0f11; border-right: 1px solid rgba(255,255,255,0.06); padding: 20px 0; flex-shrink: 0; display: flex; flex-direction: column; }
-    .main { flex: 1; padding: 32px 40px; overflow-y: auto; }
+    .sidebar { width: 220px; background: #0c0c0e; border-right: 1px solid rgba(129,140,248,0.06); flex-shrink: 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 10; }
+    .main { flex: 1; margin-left: 220px; min-height: 100vh; }
+    .topbar { padding: 16px 32px; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: rgba(9,9,11,0.9); backdrop-filter: blur(12px); z-index: 5; }
+    .topbar-title { font-size: 14px; color: #52525b; }
+    .topbar-title strong { color: #fafafa; font-weight: 700; }
+    .content { padding: 28px 32px; }
 
     /* Sidebar */
-    .sidebar-logo { font-size: 20px; font-weight: 800; color: #fff; padding: 0 20px 24px; letter-spacing: -0.5px; }
+    .sidebar-header { padding: 20px 16px 20px; }
+    .sidebar-logo { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
     .sidebar-logo span { background: linear-gradient(135deg, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 20px; font-size: 14px; font-weight: 500; color: #71717a; cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; }
-    .nav-item:hover { color: #e5e5e5; background: rgba(255,255,255,0.03); }
-    .nav-item.active { color: #e5e5e5; background: rgba(129,140,248,0.08); border-left-color: #818cf8; }
-    .nav-item .icon { font-size: 18px; width: 20px; text-align: center; }
-    .sidebar-footer { margin-top: auto; padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.06); }
-    .sidebar-footer .email { font-size: 12px; color: #52525b; overflow: hidden; text-overflow: ellipsis; }
-    .logout-btn { font-size: 12px; color: #ef4444; cursor: pointer; margin-top: 4px; }
+    .sidebar-section { padding: 0 8px; margin-bottom: 8px; }
+    .sidebar-label { font-size: 10px; font-weight: 700; color: #3f3f46; text-transform: uppercase; letter-spacing: 1.5px; padding: 8px 12px 4px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; font-size: 13px; font-weight: 500; color: #71717a; cursor: pointer; transition: all 0.15s; border-radius: 8px; margin: 1px 0; }
+    .nav-item:hover { color: #d4d4d8; background: rgba(255,255,255,0.04); }
+    .nav-item.active { color: #fff; background: rgba(129,140,248,0.12); }
+    .nav-item .ico { width: 18px; text-align: center; font-size: 15px; }
+    .nav-item .count { margin-left: auto; font-size: 11px; background: rgba(255,255,255,0.06); color: #71717a; padding: 1px 7px; border-radius: 10px; font-weight: 600; }
+    .sidebar-bottom { margin-top: auto; padding: 12px 16px; border-top: 1px solid rgba(255,255,255,0.04); }
+    .sidebar-bottom a { display: block; font-size: 12px; color: #3f3f46; padding: 4px 0; transition: color 0.15s; }
+    .sidebar-bottom a:hover { color: #71717a; }
+    .user-pill { display: flex; align-items: center; gap: 8px; padding: 10px 12px; margin: 0 8px 8px; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); }
+    .user-avatar { width: 28px; height: 28px; border-radius: 6px; background: linear-gradient(135deg, #818cf8, #c084fc); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
+    .user-info { flex: 1; overflow: hidden; }
+    .user-name { font-size: 12px; font-weight: 600; color: #d4d4d8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-plan { font-size: 10px; color: #52525b; }
 
-    /* Page header */
-    .page-header { margin-bottom: 32px; }
-    .page-header h1 { font-size: 28px; font-weight: 800; color: #fafafa; letter-spacing: -1px; margin-bottom: 4px; }
-    .page-header p { font-size: 14px; color: #52525b; }
+    /* Stat cards row */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .stat-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 16px 18px; }
+    .stat-value { font-size: 28px; font-weight: 800; color: #fafafa; letter-spacing: -1px; }
+    .stat-label { font-size: 12px; color: #52525b; margin-top: 2px; }
+    .stat-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; }
 
-    /* Cards */
-    .card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 24px; }
+    /* Two-column overview */
+    .overview-grid { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+
+    /* Recent messages */
+    .card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; }
+    .card-header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: space-between; }
+    .card-header h3 { font-size: 13px; font-weight: 700; color: #d4d4d8; text-transform: uppercase; letter-spacing: 0.5px; }
+    .card-header a { font-size: 12px; color: #818cf8; font-weight: 600; }
+    .card-body { padding: 0; }
+    .msg-row { display: flex; align-items: center; padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; transition: background 0.1s; gap: 12px; }
+    .msg-row:last-child { border-bottom: none; }
+    .msg-row:hover { background: rgba(129,140,248,0.04); }
+    .msg-dir { font-size: 14px; }
+    .msg-from { font-size: 13px; font-weight: 600; color: #d4d4d8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+    .msg-subject { font-size: 13px; color: #52525b; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .msg-time { font-size: 11px; color: #3f3f46; white-space: nowrap; margin-left: auto; }
+    .msg-empty { padding: 40px 20px; text-align: center; color: #3f3f46; font-size: 13px; }
+
+    /* Resource sidebar */
+    .res-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 20px; margin-bottom: 12px; }
+    .res-title { font-size: 12px; font-weight: 700; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; }
+    .res-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .res-row:last-child { margin-bottom: 0; }
+    .res-name { font-size: 13px; color: #d4d4d8; display: flex; align-items: center; gap: 8px; }
+    .res-name .ico { font-size: 15px; }
+    .res-val { font-size: 13px; color: #52525b; font-weight: 600; }
+    .res-bar { height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+    .res-bar-fill { height: 100%; background: linear-gradient(90deg, #818cf8, #c084fc); border-radius: 2px; transition: width 0.5s; }
+    .res-pct { font-size: 12px; font-weight: 700; }
+    .res-big { font-size: 24px; font-weight: 800; color: #fafafa; }
+    .res-sub { font-size: 11px; color: #3f3f46; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
 
     /* Table */
     .table { width: 100%; border-collapse: collapse; }
-    .table th { text-align: left; font-size: 12px; font-weight: 600; color: #52525b; text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .table td { padding: 14px 16px; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.04); color: #a1a1aa; }
-    .table tr:hover td { background: rgba(255,255,255,0.02); }
-    .table .mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #818cf8; }
-    .table .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+    .table th { text-align: left; font-size: 11px; font-weight: 700; color: #3f3f46; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .table td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.03); color: #a1a1aa; }
+    .table tr:hover td { background: rgba(129,140,248,0.03); }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
     .badge-active { background: rgba(52,211,153,0.1); color: #34d399; }
-    .badge-free { background: rgba(129,140,248,0.1); color: #818cf8; }
 
     /* Buttons */
-    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; font-family: inherit; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; font-family: inherit; }
     .btn-primary { background: #818cf8; color: #fff; }
     .btn-primary:hover { background: #6366f1; }
-    .btn-sm { padding: 6px 14px; font-size: 13px; }
+    .btn-sm { padding: 5px 12px; font-size: 12px; }
     .btn-ghost { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #d4d4d8; }
-    .btn-danger { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+    .btn-danger { background: rgba(239,68,68,0.08); color: #ef4444; border: 1px solid rgba(239,68,68,0.15); }
+    .btn-danger:hover { background: rgba(239,68,68,0.15); }
 
-    /* Empty state */
-    .empty { text-align: center; padding: 60px 20px; }
-    .empty .icon { font-size: 48px; margin-bottom: 16px; }
-    .empty h3 { color: #71717a; font-size: 16px; margin-bottom: 8px; }
-    .empty p { color: #3f3f46; font-size: 14px; margin-bottom: 24px; }
+    /* Empty */
+    .empty { text-align: center; padding: 48px 20px; }
+    .empty .ico { font-size: 40px; margin-bottom: 12px; }
+    .empty h3 { color: #52525b; font-size: 14px; margin-bottom: 6px; }
+    .empty p { color: #3f3f46; font-size: 13px; margin-bottom: 20px; }
 
     /* Modal */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
     .modal-overlay.show { display: flex; }
-    .modal { background: #141414; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 32px; max-width: 480px; width: 90%; }
-    .modal h2 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-    .modal p { font-size: 13px; color: #52525b; margin-bottom: 24px; }
-    .modal label { display: block; font-size: 13px; font-weight: 600; color: #a1a1aa; margin-bottom: 6px; }
-    .modal input, .modal select { width: 100%; padding: 10px 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; font-size: 14px; font-family: inherit; outline: none; margin-bottom: 16px; }
-    .modal input:focus, .modal select:focus { border-color: rgba(129,140,248,0.5); }
-    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
+    .modal { background: #111113; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 28px; max-width: 440px; width: 90%; }
+    .modal h2 { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .modal p { font-size: 13px; color: #52525b; margin-bottom: 20px; }
+    .modal label { display: block; font-size: 12px; font-weight: 600; color: #71717a; margin-bottom: 5px; }
+    .modal input { width: 100%; padding: 9px 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; font-size: 13px; font-family: inherit; outline: none; margin-bottom: 14px; }
+    .modal input:focus { border-color: rgba(129,140,248,0.5); }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
 
-    /* Onboarding wizard */
-    .wizard-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+    /* Wizard */
+    .wizard-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
     .wizard-overlay.show { display: flex; }
-    .wizard { background: #141414; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 48px; max-width: 520px; width: 90%; text-align: center; }
-    .wizard .icon { font-size: 48px; margin-bottom: 20px; }
-    .wizard h2 { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 8px; }
-    .wizard p { color: #71717a; font-size: 15px; margin-bottom: 32px; line-height: 1.6; }
-    .wizard .steps-indicator { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 32px; }
-    .wizard .step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
-    .step-dot.active { background: #818cf8; color: #fff; }
-    .step-dot.done { background: #34d399; color: #fff; }
-    .step-dot.pending { background: rgba(255,255,255,0.06); color: #52525b; }
-    .step-line { width: 40px; height: 1px; background: rgba(255,255,255,0.1); }
-    .step-label { font-size: 12px; color: #52525b; margin-top: 4px; }
-    .wizard .result-box { background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.2); border-radius: 10px; padding: 16px; margin: 20px 0; text-align: left; }
-    .wizard .result-box .mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #34d399; word-break: break-all; }
-    .wizard .result-box .label { font-size: 12px; color: #52525b; margin-bottom: 4px; }
+    .wizard { background: #111113; border: 1px solid rgba(129,140,248,0.1); border-radius: 20px; padding: 44px; max-width: 480px; width: 90%; text-align: center; box-shadow: 0 0 80px rgba(129,140,248,0.06); }
+    .wizard .wiz-icon { font-size: 44px; margin-bottom: 16px; }
+    .wizard h2 { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .wizard p { color: #71717a; font-size: 14px; margin-bottom: 28px; line-height: 1.5; }
+    .steps-bar { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 28px; }
+    .sdot { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+    .sdot.on { background: #818cf8; color: #fff; }
+    .sdot.ok { background: #34d399; color: #fff; }
+    .sdot.off { background: rgba(255,255,255,0.06); color: #3f3f46; }
+    .sline { width: 32px; height: 1px; background: rgba(255,255,255,0.08); }
+    .slabels { display: flex; gap: 24px; justify-content: center; margin-top: 4px; font-size: 11px; color: #3f3f46; }
+    .wizard .rbox { background: rgba(129,140,248,0.06); border: 1px solid rgba(129,140,248,0.15); border-radius: 10px; padding: 14px; margin: 16px 0; text-align: left; }
+    .wizard .rbox .rlabel { font-size: 11px; color: #52525b; margin-bottom: 3px; }
+    .wizard .rbox .rval { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #a5b4fc; word-break: break-all; }
+    .wizard .try-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(129,140,248,0.2); border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .wizard .try-addr { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #818cf8; }
     .hidden { display: none; }
     .page { display: none; }
     .page.active { display: block; }
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       .sidebar { display: none; }
-      .main { padding: 20px; }
+      .main { margin-left: 0; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .overview-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -100,62 +148,107 @@
   <div class="app">
     <!-- Sidebar -->
     <div class="sidebar">
-      <div class="sidebar-logo">Agent<span>Send</span></div>
-      <div class="nav-item active" onclick="showPage('overview')"><span class="icon">📊</span> Overview</div>
-      <div class="nav-item" onclick="showPage('inboxes')"><span class="icon">📨</span> Inboxes</div>
-      <div class="nav-item" onclick="showPage('apikeys')"><span class="icon">🔑</span> API Keys</div>
-      <div class="nav-item" onclick="showPage('webhooks')"><span class="icon">⚡</span> Webhooks</div>
-      <div class="nav-item" onclick="window.open('/docs','_blank')"><span class="icon">📖</span> API Docs</div>
-      <div class="sidebar-footer">
-        <div class="email" id="user-email"></div>
-        <div class="logout-btn" onclick="logout()">Sign out</div>
+      <div class="sidebar-header">
+        <div class="sidebar-logo">Agent<span>Send</span></div>
+      </div>
+      <div class="user-pill">
+        <div class="user-avatar" id="user-avatar">A</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">Loading...</div>
+          <div class="user-plan">Free plan</div>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="nav-item active" onclick="showPage('overview',this)"><span class="ico">📊</span> Overview</div>
+        <div class="nav-item" onclick="showPage('inboxes',this)"><span class="ico">📨</span> Inboxes <span class="count" id="nav-inbox-count">0</span></div>
+        <div class="nav-item" onclick="showPage('apikeys',this)"><span class="ico">🔑</span> API Keys</div>
+        <div class="nav-item" onclick="showPage('webhooks',this)"><span class="ico">⚡</span> Webhooks</div>
+        <div class="nav-item" onclick="showPage('domains',this)"><span class="ico">🌐</span> Domains</div>
+      </div>
+      <div class="sidebar-bottom">
+        <a href="/docs" target="_blank">📖 Documentation</a>
+        <a href="/skill">🧩 MCP Skill</a>
+        <a href="https://github.com/luv005/agentpost" target="_blank">⭐ GitHub</a>
+        <a onclick="logout()" style="cursor:pointer;color:#ef4444;margin-top:8px;">Sign out</a>
       </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main -->
     <div class="main">
-      <!-- Overview Page -->
-      <div class="page active" id="page-overview">
-        <div class="page-header">
-          <h1>Overview</h1>
-          <p>Welcome to AgentSend</p>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;">
-          <div class="card"><div style="font-size:32px;font-weight:800;color:#fff;" id="stat-inboxes">0</div><div style="color:#52525b;font-size:13px;">Inboxes</div></div>
-          <div class="card"><div style="font-size:32px;font-weight:800;color:#fff;" id="stat-plan">Free</div><div style="color:#52525b;font-size:13px;">Plan</div></div>
-          <div class="card"><div style="font-size:32px;font-weight:800;color:#fff;" id="stat-keys">0</div><div style="color:#52525b;font-size:13px;">API Keys</div></div>
-        </div>
-        <div class="card">
-          <h3 style="color:#fff;font-size:16px;margin-bottom:12px;">Quick Start</h3>
-          <p style="color:#71717a;font-size:14px;line-height:1.6;">1. Create an inbox to get an @agentsend.io email address<br>2. Use your API key to send and receive emails via the API<br>3. Set up webhooks to get notified when emails arrive</p>
-        </div>
+      <div class="topbar">
+        <div class="topbar-title">Dashboard › <strong id="page-title">Overview</strong></div>
+        <button class="btn btn-primary btn-sm" onclick="showCreateInbox()">+ New Inbox</button>
       </div>
-
-      <!-- Inboxes Page -->
-      <div class="page" id="page-inboxes">
-        <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;">
-          <div><h1>Inboxes</h1><p>Manage your email inboxes</p></div>
-          <button class="btn btn-primary" onclick="showCreateInbox()">+ Create Inbox</button>
+      <div class="content">
+        <!-- Overview -->
+        <div class="page active" id="page-overview">
+          <div class="stats-row">
+            <div class="stat-card"><div class="stat-value" id="s-sent">0</div><div class="stat-label"><span class="stat-dot" style="background:#818cf8"></span>Sent</div></div>
+            <div class="stat-card"><div class="stat-value" id="s-received">0</div><div class="stat-label"><span class="stat-dot" style="background:#34d399"></span>Received</div></div>
+            <div class="stat-card"><div class="stat-value" id="s-bounced">0</div><div class="stat-label"><span class="stat-dot" style="background:#fbbf24"></span>Bounced</div></div>
+            <div class="stat-card"><div class="stat-value" id="s-inboxes">0</div><div class="stat-label"><span class="stat-dot" style="background:#c084fc"></span>Inboxes</div></div>
+          </div>
+          <div class="overview-grid">
+            <div>
+              <div class="card">
+                <div class="card-header"><h3>Recent Messages</h3><a onclick="showPage('inboxes',document.querySelectorAll('.nav-item')[1])" style="cursor:pointer">View all →</a></div>
+                <div class="card-body" id="recent-messages"><div class="msg-empty">No messages yet</div></div>
+              </div>
+            </div>
+            <div>
+              <div class="res-card">
+                <div class="res-title">Resources</div>
+                <div class="res-row"><div class="res-name"><span class="ico">📨</span> Inboxes</div><div class="res-val" id="res-inboxes">0 / 5</div></div>
+                <div class="res-bar"><div class="res-bar-fill" id="res-inbox-bar" style="width:0%"></div></div>
+                <div style="height:14px"></div>
+                <div class="res-row"><div class="res-name"><span class="ico">🔑</span> API Keys</div><div class="res-val" id="res-keys">0</div></div>
+                <div style="height:14px"></div>
+                <div class="res-row"><div class="res-name"><span class="ico">🌐</span> Domains</div><div class="res-val" id="res-domains">0</div></div>
+              </div>
+              <div class="res-card">
+                <div class="res-title">Health</div>
+                <div style="display:flex;gap:16px;">
+                  <div><div class="res-big" id="res-bounce">0.0%</div><div class="res-sub">Bounce rate</div></div>
+                  <div><div class="res-big" id="res-complaint">0.0%</div><div class="res-sub">Complaint rate</div></div>
+                </div>
+              </div>
+              <div class="res-card">
+                <div class="res-title">Quick Actions</div>
+                <button class="btn btn-ghost btn-sm" onclick="showCreateInbox()" style="width:100%;margin-bottom:6px;">+ Create Inbox</button>
+                <button class="btn btn-ghost btn-sm" onclick="showPage('apikeys',document.querySelectorAll('.nav-item')[2])" style="width:100%;margin-bottom:6px;">🔑 Manage Keys</button>
+                <button class="btn btn-ghost btn-sm" onclick="window.open('/docs','_blank')" style="width:100%;">📖 API Docs</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div id="inboxes-list"></div>
-      </div>
 
-      <!-- API Keys Page -->
-      <div class="page" id="page-apikeys">
-        <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;">
-          <div><h1>API Keys</h1><p>Manage your API keys</p></div>
-          <button class="btn btn-primary" onclick="createApiKey()">+ Create Key</button>
+        <!-- Inboxes -->
+        <div class="page" id="page-inboxes">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+            <div></div>
+            <button class="btn btn-primary" onclick="showCreateInbox()">+ Create Inbox</button>
+          </div>
+          <div class="card"><div class="card-body" id="inboxes-list"></div></div>
         </div>
-        <div id="apikeys-list"></div>
-      </div>
 
-      <!-- Webhooks Page -->
-      <div class="page" id="page-webhooks">
-        <div class="page-header">
-          <h1>Webhooks</h1>
-          <p>Get notified when emails arrive</p>
+        <!-- API Keys -->
+        <div class="page" id="page-apikeys">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+            <div></div>
+            <button class="btn btn-primary" onclick="createApiKey()">+ Create Key</button>
+          </div>
+          <div class="card"><div class="card-body" id="apikeys-list"></div></div>
         </div>
-        <div class="card"><p style="color:#52525b">Webhook management coming soon. Use the API to create webhooks: <code style="color:#818cf8">POST /webhooks</code></p></div>
+
+        <!-- Webhooks -->
+        <div class="page" id="page-webhooks">
+          <div class="card" style="padding:24px"><p style="color:#52525b;font-size:13px;">Webhook management coming soon. Use the API: <code class="mono" style="color:#818cf8;">POST /webhooks</code></p></div>
+        </div>
+
+        <!-- Domains -->
+        <div class="page" id="page-domains">
+          <div class="card" style="padding:24px"><p style="color:#52525b;font-size:13px;">Domain management coming soon. Use the API: <code class="mono" style="color:#818cf8;">POST /domains</code></p></div>
+        </div>
       </div>
     </div>
   </div>
@@ -170,10 +263,10 @@
         <input type="text" id="inbox-username" placeholder="e.g. support">
         <label>Display Name (optional)</label>
         <input type="text" id="inbox-display" placeholder="e.g. Sales Team">
-        <p style="color:#3f3f46;font-size:12px;margin-top:-8px;margin-bottom:16px;">Username will be auto-generated if not specified</p>
+        <p style="color:#3f3f46;font-size:11px;margin:-8px 0 14px;">Auto-generated if not specified</p>
         <div class="modal-actions">
           <button type="button" class="btn btn-ghost btn-sm" onclick="closeModal('create-inbox-modal')">Cancel</button>
-          <button type="submit" class="btn btn-primary btn-sm" id="create-inbox-btn">+ Create Inbox</button>
+          <button type="submit" class="btn btn-primary btn-sm" id="create-inbox-btn">+ Create</button>
         </div>
       </form>
     </div>
@@ -182,82 +275,48 @@
   <!-- Onboarding Wizard -->
   <div class="wizard-overlay" id="onboarding">
     <div class="wizard">
-      <!-- Step 1: Welcome -->
       <div id="wiz-1">
-        <div class="icon">📨</div>
+        <div class="wiz-icon">📨</div>
         <h2>Welcome to AgentSend!</h2>
-        <p>Let's get you started by creating your first inbox.<br>This takes less than a minute.</p>
-        <button class="btn btn-primary" onclick="wizardNext(2)" style="width:100%;padding:14px;">NEXT</button>
-        <div class="steps-indicator">
-          <div class="step-dot active">1</div><div class="step-line"></div>
-          <div class="step-dot pending">2</div><div class="step-line"></div>
-          <div class="step-dot pending">3</div>
-        </div>
-        <div style="display:flex;gap:32px;justify-content:center;margin-top:4px;">
-          <span class="step-label">Setup</span><span class="step-label" style="margin-left:12px;">Send</span><span class="step-label" style="margin-left:8px;">Done</span>
-        </div>
+        <p>Let's create your first inbox.<br>This takes less than a minute.</p>
+        <button class="btn btn-primary" onclick="wizardNext(2)" style="width:100%;padding:12px;">NEXT</button>
+        <div class="steps-bar"><div class="sdot on">1</div><div class="sline"></div><div class="sdot off">2</div><div class="sline"></div><div class="sdot off">3</div></div>
+        <div class="slabels"><span>Setup</span><span>Send</span><span>Done</span></div>
       </div>
-      <!-- Step 2: Create inbox -->
       <div id="wiz-2" class="hidden">
-        <div class="icon">📮</div>
+        <div class="wiz-icon">📮</div>
         <h2>Create Your First Inbox</h2>
-        <p>Choose a username for your inbox email address.</p>
-        <input type="text" id="wiz-username" placeholder="e.g. hello" style="width:100%;padding:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:#fff;font-size:16px;text-align:center;margin-bottom:8px;">
-        <p style="color:#52525b;font-size:13px;margin-bottom:20px;">Your email: <strong style="color:#818cf8;" id="wiz-preview">hello@agentsend.io</strong></p>
-        <button class="btn btn-primary" onclick="wizardCreateInbox()" style="width:100%;padding:14px;" id="wiz-create-btn">Create Inbox</button>
-        <div class="steps-indicator">
-          <div class="step-dot done">✓</div><div class="step-line"></div>
-          <div class="step-dot active">2</div><div class="step-line"></div>
-          <div class="step-dot pending">3</div>
-        </div>
+        <p>Choose a username for your email address.</p>
+        <input type="text" id="wiz-username" placeholder="e.g. hello" style="width:100%;padding:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;font-size:15px;text-align:center;margin-bottom:6px;outline:none;">
+        <p style="color:#52525b;font-size:12px;margin-bottom:18px;">Your email: <strong style="color:#818cf8" id="wiz-preview">hello@agentsend.io</strong></p>
+        <button class="btn btn-primary" onclick="wizardCreateInbox()" style="width:100%;padding:12px;" id="wiz-create-btn">Create Inbox</button>
+        <div class="steps-bar"><div class="sdot ok">✓</div><div class="sline"></div><div class="sdot on">2</div><div class="sline"></div><div class="sdot off">3</div></div>
       </div>
-      <!-- Step 3: Try it out -->
       <div id="wiz-3" class="hidden">
-        <div class="icon">✉️</div>
+        <div class="wiz-icon">✉️</div>
         <h2>Try It Out!</h2>
-        <p>Open your email client and send an email to:</p>
-        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-          <span class="mono" style="font-size:16px;color:#818cf8;" id="wiz-try-address"></span>
+        <p>Open your email and send a message to:</p>
+        <div class="try-box">
+          <span class="try-addr" id="wiz-try-address"></span>
           <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('wiz-try-address').textContent);this.textContent='Copied!'">📋 Copy</button>
         </div>
-        <p style="color:#52525b;font-size:13px;margin-bottom:24px;">It may take a moment for your email to appear. Click refresh to check.</p>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-primary" onclick="wizardCheckEmail()" style="flex:1;padding:14px;" id="wiz-refresh-btn">🔄 Refresh</button>
+        <p style="color:#3f3f46;font-size:12px;margin-bottom:18px;">It may take a moment to appear.</p>
+        <button class="btn btn-primary" onclick="wizardCheckEmail()" style="width:100%;padding:12px;" id="wiz-refresh-btn">🔄 Check for emails</button>
+        <div id="wiz-received" class="hidden" style="margin-top:14px;">
+          <div class="rbox"><div class="rlabel">Email received!</div><div class="rval" id="wiz-received-from"></div></div>
+          <button class="btn btn-primary" onclick="wizardNext(4)" style="width:100%;padding:12px;margin-top:10px;">Continue</button>
         </div>
-        <div id="wiz-received" class="hidden" style="margin-top:16px;">
-          <div class="result-box">
-            <div class="label">Email received!</div>
-            <div class="mono" id="wiz-received-from"></div>
-          </div>
-          <button class="btn btn-primary" onclick="wizardNext(4)" style="width:100%;padding:14px;margin-top:12px;">Continue</button>
-        </div>
-        <p style="text-align:center;margin-top:16px;"><span style="color:#52525b;font-size:13px;cursor:pointer;" onclick="wizardNext(4)">Skip for now →</span></p>
-        <div class="steps-indicator">
-          <div class="step-dot done">✓</div><div class="step-line"></div>
-          <div class="step-dot active">2</div><div class="step-line"></div>
-          <div class="step-dot pending">3</div>
-        </div>
+        <p style="text-align:center;margin-top:14px;"><span style="color:#3f3f46;font-size:12px;cursor:pointer;" onclick="wizardNext(4)">Skip for now →</span></p>
+        <div class="steps-bar"><div class="sdot ok">✓</div><div class="sline"></div><div class="sdot on">2</div><div class="sline"></div><div class="sdot off">3</div></div>
       </div>
-      <!-- Step 4: Done -->
       <div id="wiz-4" class="hidden">
-        <div class="icon">🎉</div>
+        <div class="wiz-icon">🎉</div>
         <h2>You're All Set!</h2>
-        <p>Your inbox is ready. Here are your details:</p>
-        <div class="result-box">
-          <div class="label">Inbox Address</div>
-          <div class="mono" id="wiz-inbox-address"></div>
-        </div>
-        <div class="result-box">
-          <div class="label">API Key</div>
-          <div class="mono" id="wiz-api-key" style="cursor:pointer" onclick="navigator.clipboard.writeText(this.textContent)"></div>
-          <div style="font-size:11px;color:#52525b;margin-top:4px;">Click to copy</div>
-        </div>
-        <button class="btn btn-primary" onclick="wizardDone()" style="width:100%;padding:14px;margin-top:8px;">Go to Dashboard</button>
-        <div class="steps-indicator">
-          <div class="step-dot done">✓</div><div class="step-line"></div>
-          <div class="step-dot done">✓</div><div class="step-line"></div>
-          <div class="step-dot active">3</div>
-        </div>
+        <p>Your inbox is ready.</p>
+        <div class="rbox"><div class="rlabel">Inbox Address</div><div class="rval" id="wiz-inbox-address"></div></div>
+        <div class="rbox"><div class="rlabel">API Key (click to copy)</div><div class="rval" id="wiz-api-key" style="cursor:pointer" onclick="navigator.clipboard.writeText(this.textContent)"></div></div>
+        <button class="btn btn-primary" onclick="wizardDone()" style="width:100%;padding:12px;margin-top:8px;">Go to Dashboard</button>
+        <div class="steps-bar"><div class="sdot ok">✓</div><div class="sline"></div><div class="sdot ok">✓</div><div class="sline"></div><div class="sdot on">3</div></div>
       </div>
     </div>
   </div>
@@ -266,61 +325,80 @@
     let token = localStorage.getItem('agentsend_token');
     let apiKey = localStorage.getItem('agentsend_api_key');
     const auth = () => token ? { 'Authorization': 'Bearer ' + token } : apiKey ? { 'X-API-Key': apiKey } : {};
+    if (!token && !apiKey) window.location.href = '/auth/signup';
 
-    // Check auth
-    if (!token && !apiKey) { window.location.href = '/auth/signup'; }
+    let allInboxes = [];
 
-    // Init
     async function init() {
       try {
         const res = await fetch('/account', { headers: auth() });
         if (!res.ok) { window.location.href = '/auth/signup'; return; }
-        const acct = await res.json();
-        document.getElementById('user-email').textContent = acct.email;
-        document.getElementById('stat-plan').textContent = acct.plan || 'Free';
+        const a = await res.json();
+        document.getElementById('user-name').textContent = a.name || a.email;
+        document.getElementById('user-avatar').textContent = (a.name || a.email)[0].toUpperCase();
 
-        // Check if first time (no inboxes)
-        const inboxRes = await fetch('/inboxes', { headers: auth() });
+        const [inboxRes, keysRes] = await Promise.all([
+          fetch('/inboxes', { headers: auth() }),
+          fetch('/account/api-keys', { headers: auth() }),
+        ]);
         const inboxData = await inboxRes.json();
-        const inboxes = inboxData.data || [];
-        document.getElementById('stat-inboxes').textContent = inboxes.length;
-
-        const keysRes = await fetch('/account/api-keys', { headers: auth() });
         const keysData = await keysRes.json();
-        document.getElementById('stat-keys').textContent = (keysData.data || []).length;
+        allInboxes = inboxData.data || [];
+        const keys = keysData.data || [];
 
-        if (inboxes.length === 0) {
-          document.getElementById('onboarding').classList.add('show');
+        // Stats
+        document.getElementById('s-inboxes').textContent = allInboxes.length;
+        document.getElementById('s-sent').textContent = allInboxes.reduce((s,i) => s + (i.totalSent||0), 0);
+        document.getElementById('s-received').textContent = '—';
+        document.getElementById('s-bounced').textContent = allInboxes.reduce((s,i) => s + (i.bounceCount||0), 0);
+        document.getElementById('nav-inbox-count').textContent = allInboxes.length;
+
+        // Resources
+        document.getElementById('res-inboxes').textContent = allInboxes.length + ' / 5';
+        document.getElementById('res-inbox-bar').style.width = Math.min(allInboxes.length/5*100, 100) + '%';
+        document.getElementById('res-keys').textContent = keys.length;
+        document.getElementById('res-domains').textContent = '0';
+
+        // Recent messages
+        if (allInboxes.length > 0) {
+          const msgRes = await fetch('/inboxes/' + allInboxes[0].id + '/messages?limit=5', { headers: auth() });
+          const msgData = await msgRes.json();
+          const msgs = msgData.data || [];
+          if (msgs.length > 0) {
+            let html = '';
+            for (const m of msgs) {
+              const dir = m.direction === 'inbound' ? '📥' : '📤';
+              const time = new Date(m.createdAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+              html += '<div class="msg-row"><span class="msg-dir">' + dir + '</span><span class="msg-from">' + (m.fromAddress||'').split('<')[0].trim() + '</span><span class="msg-subject">' + m.subject + '</span><span class="msg-time">' + time + '</span></div>';
+            }
+            document.getElementById('recent-messages').innerHTML = html;
+          }
         }
+
+        if (allInboxes.length === 0) document.getElementById('onboarding').classList.add('show');
       } catch { window.location.href = '/auth/signup'; }
     }
     init();
 
-    // Navigation
-    function showPage(name) {
+    function showPage(name, el) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
       document.getElementById('page-' + name).classList.add('active');
-      event.currentTarget.classList.add('active');
+      if (el) el.classList.add('active');
+      document.getElementById('page-title').textContent = name.charAt(0).toUpperCase() + name.slice(1);
       if (name === 'inboxes') loadInboxes();
       if (name === 'apikeys') loadApiKeys();
     }
 
-    // Inboxes
     async function loadInboxes() {
       const res = await fetch('/inboxes', { headers: auth() });
       const data = await res.json();
       const inboxes = data.data || [];
-      if (inboxes.length === 0) {
-        document.getElementById('inboxes-list').innerHTML = '<div class="empty"><div class="icon">📨</div><h3>No inboxes yet</h3><p>Create your first inbox to get started</p><button class="btn btn-primary" onclick="showCreateInbox()">+ Create Inbox</button></div>';
-        return;
-      }
-      let html = '<table class="table"><thead><tr><th>Address</th><th>Display Name</th><th>Status</th><th>Created</th></tr></thead><tbody>';
-      for (const i of inboxes) {
-        html += '<tr><td class="mono">' + i.address + '</td><td>' + (i.displayName || '—') + '</td><td><span class="badge badge-active">active</span></td><td>' + new Date(i.createdAt).toLocaleDateString() + '</td></tr>';
-      }
-      html += '</tbody></table>';
-      document.getElementById('inboxes-list').innerHTML = html;
+      if (!inboxes.length) { document.getElementById('inboxes-list').innerHTML = '<div class="empty"><div class="ico">📨</div><h3>No inboxes yet</h3><p>Create your first inbox</p><button class="btn btn-primary btn-sm" onclick="showCreateInbox()">+ Create</button></div>'; return; }
+      let h = '<table class="table"><thead><tr><th>Address</th><th>Display Name</th><th>Sent</th><th>Status</th><th>Created</th></tr></thead><tbody>';
+      for (const i of inboxes) h += '<tr><td class="mono" style="color:#818cf8;font-size:13px;">' + i.address + '</td><td>' + (i.displayName||'—') + '</td><td>' + (i.totalSent||0) + '</td><td><span class="badge badge-active">active</span></td><td>' + new Date(i.createdAt).toLocaleDateString() + '</td></tr>';
+      h += '</tbody></table>';
+      document.getElementById('inboxes-list').innerHTML = h;
     }
 
     function showCreateInbox() { document.getElementById('create-inbox-modal').classList.add('show'); }
@@ -335,111 +413,52 @@
       const d = document.getElementById('inbox-display').value;
       if (d) body.displayName = d;
       if (u) body.address = u + '@agentsend.io';
-      const res = await fetch('/inboxes', { method: 'POST', headers: { ...auth(), 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-      if (res.ok) { closeModal('create-inbox-modal'); loadInboxes(); }
-      else { const data = await res.json(); alert(data.message || 'Failed'); }
-      btn.disabled = false; btn.textContent = '+ Create Inbox';
+      const res = await fetch('/inboxes', { method:'POST', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify(body) });
+      if (res.ok) { closeModal('create-inbox-modal'); loadInboxes(); init(); } else { const data = await res.json(); alert(data.message||'Failed'); }
+      btn.disabled = false; btn.textContent = '+ Create';
     }
 
-    // API Keys
     async function loadApiKeys() {
       const res = await fetch('/account/api-keys', { headers: auth() });
       const data = await res.json();
       const keys = data.data || [];
-      if (keys.length === 0) {
-        document.getElementById('apikeys-list').innerHTML = '<div class="empty"><div class="icon">🔑</div><h3>No API keys</h3><p>Create an API key to authenticate your requests</p><button class="btn btn-primary" onclick="createApiKey()">+ Create Key</button></div>';
-        return;
-      }
-      let html = '<table class="table"><thead><tr><th>Prefix</th><th>Name</th><th>Last Used</th><th>Created</th><th></th></tr></thead><tbody>';
-      for (const k of keys) {
-        html += '<tr><td class="mono">' + k.keyPrefix + '...</td><td>' + (k.name || '—') + '</td><td>' + (k.lastUsedAt ? new Date(k.lastUsedAt).toLocaleDateString() : 'Never') + '</td><td>' + new Date(k.createdAt).toLocaleDateString() + '</td><td><button class="btn btn-danger btn-sm" onclick="revokeKey(\'' + k.id + '\')">Revoke</button></td></tr>';
-      }
-      html += '</tbody></table>';
-      document.getElementById('apikeys-list').innerHTML = html;
+      if (!keys.length) { document.getElementById('apikeys-list').innerHTML = '<div class="empty"><div class="ico">🔑</div><h3>No API keys</h3><p>Create one to authenticate</p><button class="btn btn-primary btn-sm" onclick="createApiKey()">+ Create</button></div>'; return; }
+      let h = '<table class="table"><thead><tr><th>Prefix</th><th>Name</th><th>Last Used</th><th>Created</th><th></th></tr></thead><tbody>';
+      for (const k of keys) h += '<tr><td class="mono" style="color:#818cf8;font-size:13px;">' + k.keyPrefix + '...</td><td>' + (k.name||'—') + '</td><td>' + (k.lastUsedAt?new Date(k.lastUsedAt).toLocaleDateString():'Never') + '</td><td>' + new Date(k.createdAt).toLocaleDateString() + '</td><td><button class="btn btn-danger btn-sm" onclick="revokeKey(\''+k.id+'\')">Revoke</button></td></tr>';
+      h += '</tbody></table>';
+      document.getElementById('apikeys-list').innerHTML = h;
     }
 
     async function createApiKey() {
       const name = prompt('Key name (optional):') || undefined;
-      const res = await fetch('/account/api-keys', { method: 'POST', headers: { ...auth(), 'Content-Type': 'application/json' }, body: JSON.stringify({ name }) });
+      const res = await fetch('/account/api-keys', { method:'POST', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify({name}) });
       const data = await res.json();
-      if (res.ok) {
-        alert('API Key created!\\n\\n' + data.key + '\\n\\nStore it safely — it won\\'t be shown again.');
-        loadApiKeys();
-      }
+      if (res.ok) { alert('Key created!\\n\\n' + data.key + '\\n\\nSave it — won\\'t be shown again.'); loadApiKeys(); }
     }
+    async function revokeKey(id) { if (!confirm('Revoke this key?')) return; await fetch('/account/api-keys/'+id,{method:'DELETE',headers:auth()}); loadApiKeys(); }
 
-    async function revokeKey(id) {
-      if (!confirm('Revoke this API key? This cannot be undone.')) return;
-      await fetch('/account/api-keys/' + id, { method: 'DELETE', headers: auth() });
-      loadApiKeys();
-    }
+    // Wizard
+    function wizardNext(s) { document.querySelectorAll('[id^="wiz-"]').forEach(el=>{if(el.id.match(/^wiz-\d$/))el.classList.add('hidden')}); document.getElementById('wiz-'+s).classList.remove('hidden'); }
+    document.getElementById('wiz-username')?.addEventListener('input', e => { document.getElementById('wiz-preview').textContent = (e.target.value||'hello') + '@agentsend.io'; });
 
-    // Onboarding wizard
-    function wizardNext(step) {
-      document.querySelectorAll('[id^="wiz-"]').forEach(el => { if (el.id.match(/^wiz-\\d$/)) el.classList.add('hidden'); });
-      document.getElementById('wiz-' + step).classList.remove('hidden');
-    }
-
-    document.getElementById('wiz-username')?.addEventListener('input', (e) => {
-      const val = e.target.value || 'hello';
-      document.getElementById('wiz-preview').textContent = val + '@agentsend.io';
-    });
-
-    let wizInboxId = '';
-    let wizInboxAddr = '';
-
+    let wizInboxId='';
     async function wizardCreateInbox() {
       const btn = document.getElementById('wiz-create-btn');
-      btn.disabled = true; btn.textContent = 'Creating...';
-      const username = document.getElementById('wiz-username').value || ('agent-' + Math.random().toString(36).slice(2,6));
-      const res = await fetch('/inboxes', {
-        method: 'POST',
-        headers: { ...auth(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({ address: username + '@agentsend.io', displayName: 'AgentSend' }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        wizInboxId = data.id;
-        wizInboxAddr = data.address;
-        document.getElementById('wiz-try-address').textContent = data.address;
-        document.getElementById('wiz-inbox-address').textContent = data.address;
-        document.getElementById('wiz-api-key').textContent = apiKey || '(use your existing key)';
-        wizardNext(3);
-      } else {
-        const data = await res.json();
-        alert(data.message || 'Failed to create inbox');
-        btn.disabled = false; btn.textContent = 'Create Inbox';
-      }
+      btn.disabled=true; btn.textContent='Creating...';
+      const u = document.getElementById('wiz-username').value || ('agent-'+Math.random().toString(36).slice(2,6));
+      const res = await fetch('/inboxes',{method:'POST',headers:{...auth(),'Content-Type':'application/json'},body:JSON.stringify({address:u+'@agentsend.io',displayName:'AgentSend'})});
+      if(res.ok){const d=await res.json();wizInboxId=d.id;document.getElementById('wiz-try-address').textContent=d.address;document.getElementById('wiz-inbox-address').textContent=d.address;document.getElementById('wiz-api-key').textContent=apiKey||'(use existing key)';wizardNext(3);}
+      else{const d=await res.json();alert(d.message||'Failed');btn.disabled=false;btn.textContent='Create Inbox';}
     }
-
     async function wizardCheckEmail() {
-      const btn = document.getElementById('wiz-refresh-btn');
-      btn.disabled = true; btn.textContent = 'Checking...';
-      try {
-        const res = await fetch('/inboxes/' + wizInboxId + '/messages?status=received&limit=1', { headers: auth() });
-        const data = await res.json();
-        const msgs = data.data || [];
-        if (msgs.length > 0) {
-          document.getElementById('wiz-received-from').textContent = 'From: ' + msgs[0].fromAddress + ' — "' + msgs[0].subject + '"';
-          document.getElementById('wiz-received').classList.remove('hidden');
-        } else {
-          btn.textContent = 'No emails yet — try again';
-          setTimeout(() => { btn.textContent = '🔄 Refresh'; }, 2000);
-        }
-      } catch { btn.textContent = '🔄 Refresh'; }
-      btn.disabled = false;
+      const btn=document.getElementById('wiz-refresh-btn');btn.disabled=true;btn.textContent='Checking...';
+      try{const res=await fetch('/inboxes/'+wizInboxId+'/messages?status=received&limit=1',{headers:auth()});const d=await res.json();const m=d.data||[];
+      if(m.length>0){document.getElementById('wiz-received-from').textContent='From: '+m[0].fromAddress+' — "'+m[0].subject+'"';document.getElementById('wiz-received').classList.remove('hidden');}
+      else{btn.textContent='No emails yet';setTimeout(()=>{btn.textContent='🔄 Check for emails';},2000);}
+      }catch{}btn.disabled=false;
     }
-
-    function wizardDone() {
-      document.getElementById('onboarding').classList.remove('show');
-      init();
-    }
-
-    function logout() {
-      localStorage.removeItem('agentsend_token');
-      localStorage.removeItem('agentsend_api_key');
-      window.location.href = '/';
-    }
+    function wizardDone(){document.getElementById('onboarding').classList.remove('show');init();}
+    function logout(){localStorage.removeItem('agentsend_token');localStorage.removeItem('agentsend_api_key');window.location.href='/';}
   </script>
 </body>
 </html>
