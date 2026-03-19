@@ -27,6 +27,7 @@ function isPublicPath(url: string): boolean {
     "/docs",
     "/public",
     "/auth",
+    "/skill",
   ];
   if (url === "/") return true;
   return publicPrefixes.some(
