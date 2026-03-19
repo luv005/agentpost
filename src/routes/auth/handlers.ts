@@ -227,10 +227,15 @@ const SIGNUP_PAGE = `<!DOCTYPE html>
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Verification failed');
+        // Save auth to localStorage
+        if (data.token) localStorage.setItem('agentsend_token', data.token);
+        if (data.apiKey) localStorage.setItem('agentsend_api_key', data.apiKey);
         document.getElementById('api-key').textContent = data.apiKey;
         document.getElementById('step2').classList.add('hidden');
         document.getElementById('step3').classList.remove('hidden');
         document.getElementById('subtitle').textContent = 'You\\u2019re in!';
+        // Redirect to dashboard after 2 seconds
+        setTimeout(() => window.location.href = '/dashboard', 2000);
       } catch (err) {
         showError(err.message);
         btn.disabled = false; btn.textContent = 'Verify & Get API Key';

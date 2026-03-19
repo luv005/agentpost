@@ -25,6 +25,7 @@ import { landingRoute } from "./routes/landing.js";
 import { authRoutes } from "./routes/auth/index.js";
 import { accountRoutes } from "./routes/account/index.js";
 import { skillRoute } from "./routes/skill.js";
+import { dashboardRoute } from "./routes/dashboard.js";
 
 export async function buildApp() {
   const config = env();
@@ -74,6 +75,7 @@ export async function buildApp() {
   await app.register(authPlugin);
   await app.register(landingRoute);
   await app.register(skillRoute);
+  await app.register(dashboardRoute);
   await app.register(authRoutes, { prefix: "/auth" });
   await app.register(healthRoutes);
   await app.register(inboxRoutes, { prefix: "/inboxes" });
