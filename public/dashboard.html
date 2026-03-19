@@ -87,6 +87,8 @@
     .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
     .badge-active { background: rgba(52,211,153,0.1); color: #34d399; }
     .badge-inactive { background: rgba(255,255,255,0.08); color: #a1a1aa; }
+    .app-error { display: none; margin-bottom: 16px; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(239,68,68,0.2); background: rgba(239,68,68,0.08); color: #fca5a5; font-size: 13px; }
+    .app-error.show { display: block; }
 
     /* Buttons */
     .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; font-family: inherit; }
@@ -181,6 +183,7 @@
         <button class="btn btn-primary btn-sm" onclick="showCreateInbox()">+ New Inbox</button>
       </div>
       <div class="content">
+        <div class="app-error" id="app-error"></div>
         <!-- Overview -->
         <div class="page active" id="page-overview">
           <div class="stats-row">
@@ -331,12 +334,52 @@
   </div>
 
   <script>
-    let token = localStorage.getItem('agentsend_token');
+    function readCookie(name) {
+      const prefix = name + '=';
+      const match = document.cookie
+        .split(';')
+        .map((cookie) => cookie.trim())
+        .find((cookie) => cookie.startsWith(prefix));
+      return match ? decodeURIComponent(match.slice(prefix.length)) : '';
+    }
+
+    function persistBrowserSession(nextToken) {
+      localStorage.setItem('agentsend_token', nextToken);
+      const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+      document.cookie = 'agentsend_token=' + encodeURIComponent(nextToken) + '; Path=/; Max-Age=604800; SameSite=Lax' + secure;
+      token = nextToken;
+    }
+
+    function clearBrowserSession() {
+      localStorage.removeItem('agentsend_token');
+      localStorage.removeItem('agentsend_api_key');
+      document.cookie = 'agentsend_token=; Path=/; Max-Age=0; SameSite=Lax';
+      token = '';
+      apiKey = '';
+    }
+
+    function showAppError(message) {
+      const el = document.getElementById('app-error');
+      el.textContent = message;
+      el.classList.add('show');
+    }
+
+    function hideAppError() {
+      document.getElementById('app-error').classList.remove('show');
+    }
+
+    function handleUnauthorized() {
+      clearBrowserSession();
+      window.location.href = '/auth/signup';
+    }
+
+    let token = localStorage.getItem('agentsend_token') || readCookie('agentsend_token');
     let apiKey = localStorage.getItem('agentsend_api_key');
     const dashboardParams = new URLSearchParams(window.location.search);
     const requestedPage = dashboardParams.get('page');
     const skipOnboarding = dashboardParams.get('skipOnboarding') === '1';
     const auth = () => token ? { 'Authorization': 'Bearer ' + token } : apiKey ? { 'X-API-Key': apiKey } : {};
+    if (token && !localStorage.getItem('agentsend_token')) persistBrowserSession(token);
     if (!token && !apiKey) window.location.href = '/auth/signup';
 
     let allInboxes = [];
@@ -354,8 +397,17 @@
 
     async function init() {
       try {
+        hideAppError();
         const res = await fetch('/account', { headers: auth() });
-        if (!res.ok) { window.location.href = '/auth/signup'; return; }
+        if (!res.ok) {
+          const data = await res.json().catch(() => null);
+          if (res.status === 401 || res.status === 403) {
+            handleUnauthorized();
+            return;
+          }
+          showAppError(getErrorMessage(data, 'Failed to load your dashboard. Refresh and try again.'));
+          return;
+        }
         const a = await res.json();
         document.getElementById('user-name').textContent = a.name || a.email;
         document.getElementById('user-avatar').textContent = (a.name || a.email)[0].toUpperCase();
@@ -413,7 +465,10 @@
         }
 
         if (!skipOnboarding && allInboxes.length === 0) document.getElementById('onboarding').classList.add('show');
-      } catch { window.location.href = '/auth/signup'; }
+      } catch (error) {
+        console.error(error);
+        showAppError('Failed to load your dashboard. Refresh and try again.');
+      }
     }
     init();
 
@@ -623,7 +678,7 @@
       }catch{}btn.disabled=false;
     }
     function wizardDone(){document.getElementById('onboarding').classList.remove('show');init();}
-    function logout(){localStorage.removeItem('agentsend_token');localStorage.removeItem('agentsend_api_key');window.location.href='/';}
+    function logout(){clearBrowserSession();window.location.href='/';}
   </script>
 </body>
 </html>

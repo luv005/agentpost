@@ -20,6 +20,25 @@ import {
 } from "./schemas.js";
 import { env } from "../../config/env.js";
 
+const SESSION_COOKIE_NAME = "agentsend_token";
+const SESSION_COOKIE_MAX_AGE_SECONDS = 7 * 24 * 60 * 60;
+
+function buildSessionCookie(token: string): string {
+  const config = env();
+  const parts = [
+    `${SESSION_COOKIE_NAME}=${encodeURIComponent(token)}`,
+    "Path=/",
+    `Max-Age=${SESSION_COOKIE_MAX_AGE_SECONDS}`,
+    "SameSite=Lax",
+  ];
+
+  if (config.APP_URL.startsWith("https://")) {
+    parts.push("Secure");
+  }
+
+  return parts.join("; ");
+}
+
 /**
  * GET /auth/signup — Signup page with form
  */
@@ -33,6 +52,7 @@ export async function signupPage(_request: FastifyRequest, reply: FastifyReply) 
 export async function signup(request: FastifyRequest, reply: FastifyReply) {
   const body = signupBody.parse(request.body);
   const result = await publicSignup(body.email, body.name);
+  reply.header("Set-Cookie", buildSessionCookie(result.token));
   return reply.status(201).send(result);
 }
 
@@ -67,6 +87,7 @@ export async function verifyCode(request: FastifyRequest, reply: FastifyReply) {
   if ("error" in result) {
     return reply.status(400).send({ error: result.error });
   }
+  reply.header("Set-Cookie", buildSessionCookie(result.token));
   return reply.status(201).send(result);
 }
 
@@ -168,6 +189,11 @@ const SIGNUP_PAGE = `<!DOCTYPE html>
 
   <script>
     let userEmail = '';
+    function persistBrowserSession(token) {
+      localStorage.setItem('agentsend_token', token);
+      const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+      document.cookie = 'agentsend_token=' + encodeURIComponent(token) + '; Path=/; Max-Age=604800; SameSite=Lax' + secure;
+    }
     function showError(msg) {
       const el = document.getElementById('error');
       el.textContent = msg;
@@ -232,7 +258,7 @@ const SIGNUP_PAGE = `<!DOCTYPE html>
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Verification failed');
         // Save auth to localStorage
-        if (data.token) localStorage.setItem('agentsend_token', data.token);
+        if (data.token) persistBrowserSession(data.token);
         localStorage.removeItem('agentsend_api_key');
         document.getElementById('step2').classList.add('hidden');
         document.getElementById('step3').classList.remove('hidden');
@@ -278,6 +304,7 @@ export async function verify(request: FastifyRequest, reply: FastifyReply) {
     request.headers.accept?.includes("application/json") ?? false;
 
   if (acceptsJson) {
+    reply.header("Set-Cookie", buildSessionCookie(result.token));
     return reply.send({
       account: {
         id: result.account.id,
@@ -289,11 +316,9 @@ export async function verify(request: FastifyRequest, reply: FastifyReply) {
     });
   }
 
-  // For browser-based magic link clicks, redirect with token
-  const config = env();
-  return reply.redirect(
-    `${config.APP_URL}/auth/success?token=${result.token}`,
-  );
+  // For browser-based magic link clicks, establish the session and go straight to the dashboard.
+  reply.header("Set-Cookie", buildSessionCookie(result.token));
+  return reply.redirect("/dashboard?skipOnboarding=1");
 }
 
 /**
@@ -315,12 +340,8 @@ export async function googleCallback(
 
   try {
     const result = await handleGoogleCallback(code);
-    const config = env();
-
-    // Redirect to app with token
-    return reply.redirect(
-      `${config.APP_URL}/auth/success?token=${result.token}`,
-    );
+    reply.header("Set-Cookie", buildSessionCookie(result.token));
+    return reply.redirect("/dashboard?skipOnboarding=1");
   } catch (error) {
     return reply.status(400).send({
       error: "Google authentication failed",
@@ -333,9 +354,14 @@ export async function googleCallback(
  * GET /auth/success — Session handoff page for browser auth flows
  */
 export async function authSuccess(
-  _request: FastifyRequest,
+  request: FastifyRequest,
   reply: FastifyReply,
 ) {
+  const token = (request.query as Record<string, string>).token ?? "";
+  if (token) {
+    reply.header("Set-Cookie", buildSessionCookie(token));
+  }
+
   return reply.type("text/html").send(`
     <!DOCTYPE html>
     <html>
@@ -365,6 +391,8 @@ export async function authSuccess(
 
         if (token) {
           localStorage.setItem('agentsend_token', token);
+          const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+          document.cookie = 'agentsend_token=' + encodeURIComponent(token) + '; Path=/; Max-Age=604800; SameSite=Lax' + secure;
           localStorage.removeItem('agentsend_api_key');
         }
 

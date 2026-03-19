@@ -17,6 +17,19 @@ function extractKey(request: FastifyRequest): string | null {
     return apiKeyHeader;
   }
 
+  const cookieHeader = request.headers.cookie;
+  if (cookieHeader) {
+    const tokenCookie = cookieHeader
+      .split(";")
+      .map((cookie) => cookie.trim())
+      .find((cookie) => cookie.startsWith("agentsend_token="));
+
+    if (tokenCookie) {
+      const [, value = ""] = tokenCookie.split("=", 2);
+      if (value) return decodeURIComponent(value);
+    }
+  }
+
   return null;
 }
 
