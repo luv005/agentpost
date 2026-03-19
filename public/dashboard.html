@@ -211,8 +211,35 @@
           <div class="step-dot pending">3</div>
         </div>
       </div>
-      <!-- Step 3: Done -->
+      <!-- Step 3: Try it out -->
       <div id="wiz-3" class="hidden">
+        <div class="icon">✉️</div>
+        <h2>Try It Out!</h2>
+        <p>Open your email client and send an email to:</p>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <span class="mono" style="font-size:16px;color:#818cf8;" id="wiz-try-address"></span>
+          <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('wiz-try-address').textContent);this.textContent='Copied!'">📋 Copy</button>
+        </div>
+        <p style="color:#52525b;font-size:13px;margin-bottom:24px;">It may take a moment for your email to appear. Click refresh to check.</p>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary" onclick="wizardCheckEmail()" style="flex:1;padding:14px;" id="wiz-refresh-btn">🔄 Refresh</button>
+        </div>
+        <div id="wiz-received" class="hidden" style="margin-top:16px;">
+          <div class="result-box">
+            <div class="label">Email received!</div>
+            <div class="mono" id="wiz-received-from"></div>
+          </div>
+          <button class="btn btn-primary" onclick="wizardNext(4)" style="width:100%;padding:14px;margin-top:12px;">Continue</button>
+        </div>
+        <p style="text-align:center;margin-top:16px;"><span style="color:#52525b;font-size:13px;cursor:pointer;" onclick="wizardNext(4)">Skip for now →</span></p>
+        <div class="steps-indicator">
+          <div class="step-dot done">✓</div><div class="step-line"></div>
+          <div class="step-dot active">2</div><div class="step-line"></div>
+          <div class="step-dot pending">3</div>
+        </div>
+      </div>
+      <!-- Step 4: Done -->
+      <div id="wiz-4" class="hidden">
         <div class="icon">🎉</div>
         <h2>You're All Set!</h2>
         <p>Your inbox is ready. Here are your details:</p>
@@ -358,6 +385,9 @@
       document.getElementById('wiz-preview').textContent = val + '@agentsend.io';
     });
 
+    let wizInboxId = '';
+    let wizInboxAddr = '';
+
     async function wizardCreateInbox() {
       const btn = document.getElementById('wiz-create-btn');
       btn.disabled = true; btn.textContent = 'Creating...';
@@ -369,6 +399,9 @@
       });
       if (res.ok) {
         const data = await res.json();
+        wizInboxId = data.id;
+        wizInboxAddr = data.address;
+        document.getElementById('wiz-try-address').textContent = data.address;
         document.getElementById('wiz-inbox-address').textContent = data.address;
         document.getElementById('wiz-api-key').textContent = apiKey || '(use your existing key)';
         wizardNext(3);
@@ -377,6 +410,24 @@
         alert(data.message || 'Failed to create inbox');
         btn.disabled = false; btn.textContent = 'Create Inbox';
       }
+    }
+
+    async function wizardCheckEmail() {
+      const btn = document.getElementById('wiz-refresh-btn');
+      btn.disabled = true; btn.textContent = 'Checking...';
+      try {
+        const res = await fetch('/inboxes/' + wizInboxId + '/messages?status=received&limit=1', { headers: auth() });
+        const data = await res.json();
+        const msgs = data.data || [];
+        if (msgs.length > 0) {
+          document.getElementById('wiz-received-from').textContent = 'From: ' + msgs[0].fromAddress + ' — "' + msgs[0].subject + '"';
+          document.getElementById('wiz-received').classList.remove('hidden');
+        } else {
+          btn.textContent = 'No emails yet — try again';
+          setTimeout(() => { btn.textContent = '🔄 Refresh'; }, 2000);
+        }
+      } catch { btn.textContent = '🔄 Refresh'; }
+      btn.disabled = false;
     }
 
     function wizardDone() {
