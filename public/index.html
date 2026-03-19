@@ -3,147 +3,474 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgentSend — Email Infrastructure for AI Agents</title>
-  <meta name="description" content="Send, receive, and manage email conversations programmatically. Built for AI agents.">
+  <title>AgentSend — Email Inboxes for AI Agents</title>
+  <meta name="description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically. Like Gmail, but for agents.">
+  <meta property="og:title" content="AgentSend — Email Inboxes for AI Agents">
+  <meta property="og:description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://agentsend.io">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #e5e5e5; line-height: 1.6; }
-    a { color: #6366f1; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #09090b; color: #a1a1aa; line-height: 1.6; }
+    a { color: #818cf8; text-decoration: none; }
+    a:hover { color: #a5b4fc; }
 
-    .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
-    /* Nav */
-    nav { padding: 20px 0; border-bottom: 1px solid #1a1a1a; }
+    /* ── Nav ─────────────────────────────────────── */
+    nav { padding: 16px 0; position: sticky; top: 0; z-index: 100; background: rgba(9,9,11,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid #18181b; }
     nav .container { display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-size: 20px; font-weight: 700; color: #fff; }
-    .logo span { color: #6366f1; }
-    nav a { color: #a3a3a3; margin-left: 24px; font-size: 14px; }
-    nav a:hover { color: #fff; text-decoration: none; }
+    .logo { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+    .logo span { background: linear-gradient(135deg, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .nav-links { display: flex; align-items: center; gap: 8px; }
+    .nav-links a { color: #71717a; font-size: 14px; font-weight: 500; padding: 8px 14px; border-radius: 8px; transition: all 0.15s; }
+    .nav-links a:hover { color: #fff; background: #18181b; text-decoration: none; }
+    .nav-links .btn-sm { background: #818cf8; color: #fff; font-weight: 600; }
+    .nav-links .btn-sm:hover { background: #6366f1; }
 
-    /* Hero */
-    .hero { padding: 100px 0 80px; text-align: center; }
-    .hero h1 { font-size: 52px; font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 20px; }
-    .hero h1 span { background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero p { font-size: 20px; color: #a3a3a3; max-width: 600px; margin: 0 auto 40px; }
-    .btn { display: inline-block; padding: 14px 32px; background: #6366f1; color: #fff; border-radius: 8px; font-size: 16px; font-weight: 600; transition: background 0.2s; }
-    .btn:hover { background: #4f46e5; text-decoration: none; }
-    .btn-outline { background: transparent; border: 1px solid #333; color: #e5e5e5; margin-left: 12px; }
-    .btn-outline:hover { border-color: #6366f1; background: transparent; }
+    /* ── Badge ────────────────────────────────────── */
+    .badge { display: inline-flex; align-items: center; gap: 8px; background: #18181b; border: 1px solid #27272a; padding: 6px 16px; border-radius: 100px; font-size: 13px; font-weight: 500; color: #a1a1aa; margin-bottom: 24px; }
+    .badge-dot { width: 7px; height: 7px; background: #34d399; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-    /* Code */
-    .code-section { padding: 0 0 80px; }
-    .code-block { background: #111; border: 1px solid #222; border-radius: 12px; padding: 28px; overflow-x: auto; font-family: 'Fira Code', 'SF Mono', monospace; font-size: 14px; line-height: 1.7; max-width: 680px; margin: 0 auto; }
-    .code-block .comment { color: #525252; }
-    .code-block .keyword { color: #c084fc; }
-    .code-block .string { color: #34d399; }
+    /* ── Hero ─────────────────────────────────────── */
+    .hero { padding: 100px 0 60px; text-align: center; }
+    .hero h1 { font-size: 60px; font-weight: 900; color: #fafafa; line-height: 1.05; letter-spacing: -2px; margin-bottom: 20px; }
+    .hero h1 .gradient { background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f0abfc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { font-size: 20px; color: #71717a; max-width: 560px; margin: 0 auto 40px; line-height: 1.6; }
+    .hero-ctas { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 600; transition: all 0.2s; cursor: pointer; border: none; }
+    .btn-primary { background: #818cf8; color: #fff; box-shadow: 0 0 24px rgba(129,140,248,0.25); }
+    .btn-primary:hover { background: #6366f1; box-shadow: 0 0 32px rgba(129,140,248,0.35); text-decoration: none; color: #fff; }
+    .btn-ghost { background: #18181b; border: 1px solid #27272a; color: #d4d4d8; }
+    .btn-ghost:hover { border-color: #3f3f46; background: #1c1c1f; text-decoration: none; color: #fff; }
+    .hero-note { margin-top: 16px; font-size: 13px; color: #52525b; }
+
+    /* ── Code ──────────────────────────────────────── */
+    .code-section { padding: 20px 0 80px; }
+    .code-tabs { display: flex; justify-content: center; gap: 4px; margin-bottom: 16px; }
+    .code-tab { padding: 8px 18px; font-size: 13px; font-weight: 600; color: #52525b; background: transparent; border: 1px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .code-tab.active { color: #e4e4e7; background: #18181b; border-color: #27272a; }
+    .code-block { background: #0f0f11; border: 1px solid #1e1e22; border-radius: 16px; padding: 32px; overflow-x: auto; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 13.5px; line-height: 1.8; max-width: 700px; margin: 0 auto; position: relative; }
+    .code-block::before { content: attr(data-lang); position: absolute; top: 12px; right: 16px; font-size: 11px; color: #3f3f46; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+    .code-block .cm { color: #3f3f46; }
+    .code-block .kw { color: #c084fc; }
+    .code-block .st { color: #34d399; }
     .code-block .fn { color: #60a5fa; }
-    .code-block .const { color: #f9a8d4; }
+    .code-block .cn { color: #f9a8d4; }
+    .code-block .op { color: #71717a; }
+    .code-hidden { display: none; }
 
-    /* Features */
-    .features { padding: 80px 0; border-top: 1px solid #1a1a1a; }
-    .features h2 { text-align: center; font-size: 32px; color: #fff; margin-bottom: 48px; }
-    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .feature { background: #111; border: 1px solid #1a1a1a; border-radius: 12px; padding: 28px; }
-    .feature h3 { color: #fff; font-size: 18px; margin-bottom: 8px; }
-    .feature p { color: #737373; font-size: 14px; }
-    .feature-icon { font-size: 28px; margin-bottom: 12px; }
+    /* ── How it works ──────────────────────────────── */
+    .how { padding: 80px 0; border-top: 1px solid #18181b; }
+    .how h2 { text-align: center; font-size: 36px; font-weight: 800; color: #fafafa; margin-bottom: 12px; letter-spacing: -1px; }
+    .how .subtitle { text-align: center; color: #52525b; font-size: 16px; margin-bottom: 56px; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .step { text-align: center; padding: 32px 24px; }
+    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #818cf8, #c084fc); color: #fff; font-size: 16px; font-weight: 800; margin-bottom: 16px; }
+    .step h3 { color: #fafafa; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .step p { color: #71717a; font-size: 14px; line-height: 1.6; }
 
-    /* Footer */
-    footer { padding: 40px 0; border-top: 1px solid #1a1a1a; text-align: center; color: #525252; font-size: 14px; }
+    /* ── Features ──────────────────────────────────── */
+    .features { padding: 80px 0; border-top: 1px solid #18181b; }
+    .features h2 { text-align: center; font-size: 36px; font-weight: 800; color: #fafafa; margin-bottom: 12px; letter-spacing: -1px; }
+    .features .subtitle { text-align: center; color: #52525b; font-size: 16px; margin-bottom: 56px; }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .feature { background: #0f0f11; border: 1px solid #1e1e22; border-radius: 16px; padding: 28px; transition: border-color 0.2s; }
+    .feature:hover { border-color: #27272a; }
+    .feature-icon { font-size: 28px; margin-bottom: 14px; display: block; }
+    .feature h3 { color: #e4e4e7; font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .feature p { color: #52525b; font-size: 14px; line-height: 1.5; }
+
+    /* ── Comparison ────────────────────────────────── */
+    .comparison { padding: 80px 0; border-top: 1px solid #18181b; }
+    .comparison h2 { text-align: center; font-size: 36px; font-weight: 800; color: #fafafa; margin-bottom: 12px; letter-spacing: -1px; }
+    .comparison .subtitle { text-align: center; color: #52525b; font-size: 16px; margin-bottom: 48px; }
+    .comp-table { max-width: 700px; margin: 0 auto; border: 1px solid #1e1e22; border-radius: 16px; overflow: hidden; }
+    .comp-row { display: grid; grid-template-columns: 1fr 120px 120px; padding: 14px 24px; font-size: 14px; border-bottom: 1px solid #1e1e22; }
+    .comp-row:last-child { border-bottom: none; }
+    .comp-header { background: #0f0f11; font-weight: 700; color: #a1a1aa; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .comp-row .label { color: #d4d4d8; font-weight: 500; }
+    .comp-row .yes { color: #34d399; font-weight: 600; text-align: center; }
+    .comp-row .no { color: #ef4444; font-weight: 500; text-align: center; }
+    .comp-row .partial { color: #fbbf24; font-weight: 500; text-align: center; }
+
+    /* ── Frameworks ────────────────────────────────── */
+    .frameworks { padding: 60px 0 80px; text-align: center; }
+    .frameworks h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; color: #3f3f46; font-weight: 600; margin-bottom: 28px; }
+    .framework-logos { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; align-items: center; }
+    .framework-logos span { color: #52525b; font-size: 15px; font-weight: 600; padding: 10px 20px; border: 1px solid #1e1e22; border-radius: 10px; transition: all 0.2s; }
+    .framework-logos span:hover { color: #a1a1aa; border-color: #27272a; }
+
+    /* ── Pricing ───────────────────────────────────── */
+    .pricing { padding: 80px 0; border-top: 1px solid #18181b; }
+    .pricing h2 { text-align: center; font-size: 36px; font-weight: 800; color: #fafafa; margin-bottom: 12px; letter-spacing: -1px; }
+    .pricing .subtitle { text-align: center; color: #52525b; font-size: 16px; margin-bottom: 56px; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 900px; margin: 0 auto; }
+    .price-card { background: #0f0f11; border: 1px solid #1e1e22; border-radius: 16px; padding: 32px; position: relative; }
+    .price-card.popular { border-color: #818cf8; box-shadow: 0 0 32px rgba(129,140,248,0.1); }
+    .price-card.popular::after { content: "Most Popular"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #818cf8; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .price-name { font-size: 16px; font-weight: 700; color: #e4e4e7; margin-bottom: 4px; }
+    .price-amount { font-size: 40px; font-weight: 900; color: #fafafa; margin-bottom: 4px; }
+    .price-amount span { font-size: 16px; font-weight: 500; color: #52525b; }
+    .price-desc { font-size: 13px; color: #52525b; margin-bottom: 24px; }
+    .price-features { list-style: none; margin-bottom: 28px; }
+    .price-features li { font-size: 14px; color: #a1a1aa; padding: 6px 0; display: flex; align-items: center; gap: 10px; }
+    .price-features li::before { content: "\2713"; color: #34d399; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+    .price-btn { display: block; width: 100%; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600; text-align: center; transition: all 0.2s; border: none; cursor: pointer; }
+    .price-btn-primary { background: #818cf8; color: #fff; }
+    .price-btn-primary:hover { background: #6366f1; text-decoration: none; color: #fff; }
+    .price-btn-ghost { background: #18181b; border: 1px solid #27272a; color: #d4d4d8; }
+    .price-btn-ghost:hover { border-color: #3f3f46; text-decoration: none; color: #fff; }
+
+    /* ── CTA ───────────────────────────────────────── */
+    .cta { padding: 100px 0; text-align: center; }
+    .cta h2 { font-size: 44px; font-weight: 900; color: #fafafa; margin-bottom: 16px; letter-spacing: -1.5px; }
+    .cta p { font-size: 18px; color: #52525b; margin-bottom: 32px; }
+
+    /* ── Footer ────────────────────────────────────── */
+    footer { padding: 40px 0; border-top: 1px solid #18181b; }
+    footer .container { display: flex; justify-content: space-between; align-items: center; }
+    footer .copy { color: #3f3f46; font-size: 13px; }
+    footer .links { display: flex; gap: 20px; }
+    footer .links a { color: #3f3f46; font-size: 13px; }
+    footer .links a:hover { color: #71717a; }
 
     @media (max-width: 768px) {
-      .hero h1 { font-size: 32px; }
-      .hero p { font-size: 16px; }
-      .feature-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 36px; letter-spacing: -1px; }
+      .hero p { font-size: 17px; }
+      .feature-grid, .pricing-grid, .steps { grid-template-columns: 1fr; }
+      .comp-row { grid-template-columns: 1fr 80px 80px; padding: 12px 16px; font-size: 13px; }
+      .cta h2 { font-size: 30px; }
+      footer .container { flex-direction: column; gap: 12px; }
+      .nav-links a:not(.btn-sm) { display: none; }
     }
   </style>
 </head>
 <body>
+  <!-- Nav -->
   <nav>
     <div class="container">
       <div class="logo">Agent<span>Send</span></div>
-      <div>
-        <a href="/docs">API Docs</a>
+      <div class="nav-links">
+        <a href="#pricing">Pricing</a>
+        <a href="/docs">Docs</a>
         <a href="https://github.com/luv005/agentpost">GitHub</a>
+        <a href="/docs" class="btn-sm">Start for Free</a>
       </div>
     </div>
   </nav>
 
+  <!-- Hero -->
   <section class="hero">
     <div class="container">
-      <h1>Email infrastructure<br>for <span>AI agents</span></h1>
-      <p>Send, receive, and manage email conversations programmatically. Full two-way email with threading, webhooks, and custom domains.</p>
-      <a href="/docs" class="btn">View API Docs</a>
-      <a href="https://github.com/luv005/agentpost" class="btn btn-outline">GitHub</a>
+      <div class="badge"><span class="badge-dot"></span> Now in public beta</div>
+      <h1>Email inboxes for<br><span class="gradient">AI agents</span></h1>
+      <p>Give your agent its own email inbox. Send, receive, and manage full conversations &mdash; like Gmail, but built for agents.</p>
+      <div class="hero-ctas">
+        <a href="/docs" class="btn btn-primary">Start for Free &rarr;</a>
+        <a href="/docs" class="btn btn-ghost">Read the Docs</a>
+      </div>
+      <p class="hero-note">No credit card required &middot; Free tier with 1,000 emails/month</p>
     </div>
   </section>
 
+  <!-- Code Example -->
   <section class="code-section">
     <div class="container">
-      <pre class="code-block"><span class="keyword">import</span> { <span class="const">AgentSend</span> } <span class="keyword">from</span> <span class="string">"@agentsend/sdk"</span>;
+      <div class="code-tabs">
+        <button class="code-tab active" onclick="showTab('ts')">TypeScript</button>
+        <button class="code-tab" onclick="showTab('py')">Python</button>
+        <button class="code-tab" onclick="showTab('curl')">cURL</button>
+      </div>
+      <pre class="code-block" data-lang="TypeScript" id="code-ts"><span class="kw">import</span> { <span class="cn">AgentSend</span> } <span class="kw">from</span> <span class="st">"@agentsend/sdk"</span><span class="op">;</span>
 
-<span class="keyword">const</span> client = <span class="keyword">new</span> <span class="fn">AgentSend</span>({ <span class="const">apiKey</span>: <span class="string">"ask_..."</span> });
+<span class="kw">const</span> client <span class="op">=</span> <span class="kw">new</span> <span class="fn">AgentSend</span>({ <span class="cn">apiKey</span>: process.env.<span class="cn">AGENTSEND_KEY</span> })<span class="op">;</span>
 
-<span class="comment">// Create an inbox</span>
-<span class="keyword">const</span> inbox = <span class="keyword">await</span> client.inboxes.<span class="fn">create</span>({
-  <span class="const">displayName</span>: <span class="string">"Support Bot"</span>
-});
+<span class="cm">// Create an inbox for your agent</span>
+<span class="kw">const</span> inbox <span class="op">=</span> <span class="kw">await</span> client.inboxes.<span class="fn">create</span>({
+  <span class="cn">displayName</span>: <span class="st">"Support Agent"</span>
+})<span class="op">;</span>
 
-<span class="comment">// Send an email</span>
-<span class="keyword">await</span> client.messages.<span class="fn">send</span>(inbox.id, {
-  <span class="const">to</span>: [<span class="string">"user@example.com"</span>],
-  <span class="const">subject</span>: <span class="string">"Hello from my AI agent"</span>,
-  <span class="const">bodyText</span>: <span class="string">"This email was sent by an AI agent."</span>
-});
+<span class="cm">// Send an email</span>
+<span class="kw">await</span> client.messages.<span class="fn">send</span>(inbox.id, {
+  <span class="cn">to</span>: [<span class="st">"user@example.com"</span>],
+  <span class="cn">subject</span>: <span class="st">"Your order has shipped"</span>,
+  <span class="cn">bodyText</span>: <span class="st">"Hi! Your order #1234 is on the way."</span>
+})<span class="op">;</span>
 
-<span class="comment">// List conversation threads</span>
-<span class="keyword">const</span> threads = <span class="keyword">await</span> client.threads.<span class="fn">list</span>(inbox.id);</pre>
+<span class="cm">// When they reply, get the conversation</span>
+<span class="kw">const</span> threads <span class="op">=</span> <span class="kw">await</span> client.threads.<span class="fn">list</span>(inbox.id)<span class="op">;</span></pre>
+
+      <pre class="code-block code-hidden" data-lang="Python" id="code-py"><span class="kw">import</span> requests
+
+<span class="cn">API_KEY</span> <span class="op">=</span> <span class="st">"ask_..."</span>
+<span class="cn">BASE</span> <span class="op">=</span> <span class="st">"https://agentsend.io"</span>
+<span class="cn">headers</span> <span class="op">=</span> { <span class="st">"x-api-key"</span>: <span class="cn">API_KEY</span> }
+
+<span class="cm"># Create an inbox</span>
+inbox <span class="op">=</span> requests.<span class="fn">post</span>(
+  <span class="st">f"{BASE}/inboxes"</span>,
+  json<span class="op">=</span>{<span class="st">"displayName"</span>: <span class="st">"Support Agent"</span>},
+  headers<span class="op">=</span><span class="cn">headers</span>
+).<span class="fn">json</span>()
+
+<span class="cm"># Send an email</span>
+requests.<span class="fn">post</span>(
+  <span class="st">f"{BASE}/inboxes/{inbox['id']}/messages"</span>,
+  json<span class="op">=</span>{
+    <span class="st">"to"</span>: [<span class="st">"user@example.com"</span>],
+    <span class="st">"subject"</span>: <span class="st">"Your order has shipped"</span>,
+    <span class="st">"bodyText"</span>: <span class="st">"Hi! Order #1234 is on the way."</span>
+  },
+  headers<span class="op">=</span><span class="cn">headers</span>
+)</pre>
+
+      <pre class="code-block code-hidden" data-lang="cURL" id="code-curl"><span class="cm"># Create an inbox</span>
+<span class="fn">curl</span> <span class="op">-X</span> POST https://agentsend.io/inboxes \
+  <span class="op">-H</span> <span class="st">"x-api-key: ask_..."</span> \
+  <span class="op">-H</span> <span class="st">"Content-Type: application/json"</span> \
+  <span class="op">-d</span> <span class="st">'{"displayName": "Support Agent"}'</span>
+
+<span class="cm"># Send an email</span>
+<span class="fn">curl</span> <span class="op">-X</span> POST https://agentsend.io/inboxes/{id}/messages \
+  <span class="op">-H</span> <span class="st">"x-api-key: ask_..."</span> \
+  <span class="op">-H</span> <span class="st">"Content-Type: application/json"</span> \
+  <span class="op">-d</span> <span class="st">'{
+    "to": ["user@example.com"],
+    "subject": "Your order has shipped",
+    "bodyText": "Hi! Order #1234 is on the way."
+  }'</span></pre>
     </div>
   </section>
 
-  <section class="features">
+  <!-- How it Works -->
+  <section class="how">
     <div class="container">
-      <h2>Everything your agent needs</h2>
-      <div class="feature-grid">
-        <div class="feature">
-          <div class="feature-icon">&#9993;</div>
-          <h3>Send &amp; Receive</h3>
-          <p>Full two-way email via AWS SES (outbound) and built-in SMTP server (inbound). Queue-based async processing.</p>
+      <h2>Up and running in 60 seconds</h2>
+      <p class="subtitle">Three steps. No config. No SMTP setup.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Get an API key</h3>
+          <p>Sign up and grab your key. No credit card, no email verification, no waiting.</p>
         </div>
-        <div class="feature">
-          <div class="feature-icon">&#128172;</div>
-          <h3>Threading</h3>
-          <p>RFC 5322 compliant conversation threading. Auto-resolves threads via Message-ID, In-Reply-To, and References headers.</p>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Create an inbox</h3>
+          <p>One API call creates a fully functional email inbox for your agent with a unique address.</p>
         </div>
-        <div class="feature">
-          <div class="feature-icon">&#128268;</div>
-          <h3>Webhooks</h3>
-          <p>Real-time notifications when emails arrive. HMAC-SHA256 signed payloads with automatic retry and exponential backoff.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">&#127760;</div>
-          <h3>Custom Domains</h3>
-          <p>Add your own domain with DKIM/SPF verification via SES. Create inboxes on any verified domain.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">&#128206;</div>
-          <h3>Attachments</h3>
-          <p>Upload files to S3 and attach to outbound emails. Automatic MIME encoding with presigned download URLs.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">&#128272;</div>
-          <h3>API Key Auth</h3>
-          <p>Simple API key authentication. SHA-256 hashed storage, rate limiting per account and per inbox.</p>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Send &amp; receive</h3>
+          <p>Your agent sends emails, gets replies via webhooks, and tracks full conversation threads.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Features -->
+  <section class="features">
+    <div class="container">
+      <h2>Everything your agent needs</h2>
+      <p class="subtitle">It's not AI for your email. It's email for your AI.</p>
+      <div class="feature-grid">
+        <div class="feature">
+          <span class="feature-icon">&#9993;&#65039;</span>
+          <h3>Send &amp; Receive</h3>
+          <p>Full two-way email. AWS SES for outbound delivery, built-in SMTP server for inbound. Queue-based async processing.</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">&#128172;</span>
+          <h3>Auto-Threading</h3>
+          <p>RFC 5322 compliant conversation threading. Messages are auto-grouped via Message-ID, In-Reply-To, and References.</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">&#9889;</span>
+          <h3>Realtime Webhooks</h3>
+          <p>Instant notifications when emails arrive. HMAC-SHA256 signed payloads with automatic retry and exponential backoff.</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">&#127760;</span>
+          <h3>Custom Domains</h3>
+          <p>Use your own domain with automated DKIM and SPF verification. Your agent sends from your-brand.com.</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">&#128206;</span>
+          <h3>Attachments</h3>
+          <p>Upload and attach files up to 10MB. S3-backed storage with presigned download URLs for inbound attachments.</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">&#128737;&#65039;</span>
+          <h3>Bounce &amp; Complaint Tracking</h3>
+          <p>Automatic SES event processing for bounces, complaints, and delivery confirmations. Protects your sender reputation.</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">&#128272;</span>
+          <h3>API Key Auth</h3>
+          <p>Simple bearer token and API key auth. SHA-256 hashed storage with per-account and per-inbox rate limiting.</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">&#128230;</span>
+          <h3>TypeScript SDK</h3>
+          <p>First-class TypeScript SDK with full type safety. npm install @agentsend/sdk and start sending in minutes.</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">&#128214;</span>
+          <h3>OpenAPI Docs</h3>
+          <p>Interactive Swagger UI with complete API documentation. Try endpoints directly from your browser at /docs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison -->
+  <section class="comparison">
+    <div class="container">
+      <h2>Why not just use Gmail?</h2>
+      <p class="subtitle">Email services built for humans don't work for agents.</p>
+      <div class="comp-table">
+        <div class="comp-row comp-header">
+          <span></span>
+          <span style="text-align:center">AgentSend</span>
+          <span style="text-align:center">Gmail API</span>
+        </div>
+        <div class="comp-row">
+          <span class="label">Programmatic inbox creation</span>
+          <span class="yes">&#10003;</span>
+          <span class="no">&#10007;</span>
+        </div>
+        <div class="comp-row">
+          <span class="label">No human signup required</span>
+          <span class="yes">&#10003;</span>
+          <span class="no">&#10007;</span>
+        </div>
+        <div class="comp-row">
+          <span class="label">Conversation threading API</span>
+          <span class="yes">&#10003;</span>
+          <span class="partial">Partial</span>
+        </div>
+        <div class="comp-row">
+          <span class="label">Realtime webhooks</span>
+          <span class="yes">&#10003;</span>
+          <span class="partial">Push only</span>
+        </div>
+        <div class="comp-row">
+          <span class="label">Custom domains</span>
+          <span class="yes">&#10003;</span>
+          <span class="no">&#10007;</span>
+        </div>
+        <div class="comp-row">
+          <span class="label">No OAuth dance</span>
+          <span class="yes">&#10003;</span>
+          <span class="no">&#10007;</span>
+        </div>
+        <div class="comp-row">
+          <span class="label">Built for AI agents</span>
+          <span class="yes">&#10003;</span>
+          <span class="no">&#10007;</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Framework Compatibility -->
+  <section class="frameworks">
+    <div class="container">
+      <h3>Works with your agent framework</h3>
+      <div class="framework-logos">
+        <span>LangChain</span>
+        <span>CrewAI</span>
+        <span>AutoGen</span>
+        <span>OpenAI Agents</span>
+        <span>Claude MCP</span>
+        <span>Any HTTP client</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <h2>Simple, transparent pricing</h2>
+      <p class="subtitle">Start free. Scale when you need to.</p>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-name">Free</div>
+          <div class="price-amount">$0<span>/mo</span></div>
+          <div class="price-desc">Perfect for prototyping</div>
+          <ul class="price-features">
+            <li>5 inboxes</li>
+            <li>1,000 emails/month</li>
+            <li>10 emails/day per inbox</li>
+            <li>Webhooks</li>
+            <li>Threading</li>
+            <li>Community support</li>
+          </ul>
+          <a href="/docs" class="price-btn price-btn-ghost">Get Started</a>
+        </div>
+        <div class="price-card popular">
+          <div class="price-name">Pro</div>
+          <div class="price-amount">$29<span>/mo</span></div>
+          <div class="price-desc">For production agents</div>
+          <ul class="price-features">
+            <li>50 inboxes</li>
+            <li>25,000 emails/month</li>
+            <li>1,000 emails/day per inbox</li>
+            <li>Custom domains</li>
+            <li>Attachments up to 10MB</li>
+            <li>Priority support</li>
+          </ul>
+          <a href="/docs" class="price-btn price-btn-primary">Start Free Trial</a>
+        </div>
+        <div class="price-card">
+          <div class="price-name">Enterprise</div>
+          <div class="price-amount">Custom</div>
+          <div class="price-desc">For high-volume teams</div>
+          <ul class="price-features">
+            <li>Unlimited inboxes</li>
+            <li>Unlimited emails</li>
+            <li>Dedicated IP</li>
+            <li>SLA guarantee</li>
+            <li>Custom integrations</li>
+            <li>Dedicated support</li>
+          </ul>
+          <a href="mailto:hello@agentsend.io" class="price-btn price-btn-ghost">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="cta">
+    <div class="container">
+      <h2>Give your agent an email inbox</h2>
+      <p>Free to start. No credit card required. Takes 60 seconds.</p>
+      <a href="/docs" class="btn btn-primary">Start Building &rarr;</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer>
     <div class="container">
-      <p>AgentSend &mdash; Email infrastructure for AI agents</p>
+      <span class="copy">&copy; 2025 AgentSend. Email infrastructure for AI agents.</span>
+      <div class="links">
+        <a href="/docs">Docs</a>
+        <a href="https://github.com/luv005/agentpost">GitHub</a>
+        <a href="mailto:hello@agentsend.io">Contact</a>
+      </div>
     </div>
   </footer>
+
+  <script>
+    function showTab(lang) {
+      document.querySelectorAll('.code-block').forEach(el => el.classList.add('code-hidden'));
+      document.querySelectorAll('.code-tab').forEach(el => el.classList.remove('active'));
+      document.getElementById('code-' + lang).classList.remove('code-hidden');
+      event.target.classList.add('active');
+    }
+  </script>
 </body>
 </html>
