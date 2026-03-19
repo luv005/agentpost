@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgentSend — Email Infrastructure for AI Agents</title>
+  <meta name="description" content="Send, receive, and manage email conversations programmatically. Built for AI agents.">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #e5e5e5; line-height: 1.6; }
+    a { color: #6366f1; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    nav { padding: 20px 0; border-bottom: 1px solid #1a1a1a; }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 20px; font-weight: 700; color: #fff; }
+    .logo span { color: #6366f1; }
+    nav a { color: #a3a3a3; margin-left: 24px; font-size: 14px; }
+    nav a:hover { color: #fff; text-decoration: none; }
+
+    /* Hero */
+    .hero { padding: 100px 0 80px; text-align: center; }
+    .hero h1 { font-size: 52px; font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 20px; }
+    .hero h1 span { background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 20px; color: #a3a3a3; max-width: 600px; margin: 0 auto 40px; }
+    .btn { display: inline-block; padding: 14px 32px; background: #6366f1; color: #fff; border-radius: 8px; font-size: 16px; font-weight: 600; transition: background 0.2s; }
+    .btn:hover { background: #4f46e5; text-decoration: none; }
+    .btn-outline { background: transparent; border: 1px solid #333; color: #e5e5e5; margin-left: 12px; }
+    .btn-outline:hover { border-color: #6366f1; background: transparent; }
+
+    /* Code */
+    .code-section { padding: 0 0 80px; }
+    .code-block { background: #111; border: 1px solid #222; border-radius: 12px; padding: 28px; overflow-x: auto; font-family: 'Fira Code', 'SF Mono', monospace; font-size: 14px; line-height: 1.7; max-width: 680px; margin: 0 auto; }
+    .code-block .comment { color: #525252; }
+    .code-block .keyword { color: #c084fc; }
+    .code-block .string { color: #34d399; }
+    .code-block .fn { color: #60a5fa; }
+    .code-block .const { color: #f9a8d4; }
+
+    /* Features */
+    .features { padding: 80px 0; border-top: 1px solid #1a1a1a; }
+    .features h2 { text-align: center; font-size: 32px; color: #fff; margin-bottom: 48px; }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .feature { background: #111; border: 1px solid #1a1a1a; border-radius: 12px; padding: 28px; }
+    .feature h3 { color: #fff; font-size: 18px; margin-bottom: 8px; }
+    .feature p { color: #737373; font-size: 14px; }
+    .feature-icon { font-size: 28px; margin-bottom: 12px; }
+
+    /* Footer */
+    footer { padding: 40px 0; border-top: 1px solid #1a1a1a; text-align: center; color: #525252; font-size: 14px; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 32px; }
+      .hero p { font-size: 16px; }
+      .feature-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <div class="logo">Agent<span>Send</span></div>
+      <div>
+        <a href="/docs">API Docs</a>
+        <a href="https://github.com/luv005/agentpost">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Email infrastructure<br>for <span>AI agents</span></h1>
+      <p>Send, receive, and manage email conversations programmatically. Full two-way email with threading, webhooks, and custom domains.</p>
+      <a href="/docs" class="btn">View API Docs</a>
+      <a href="https://github.com/luv005/agentpost" class="btn btn-outline">GitHub</a>
+    </div>
+  </section>
+
+  <section class="code-section">
+    <div class="container">
+      <pre class="code-block"><span class="keyword">import</span> { <span class="const">AgentSend</span> } <span class="keyword">from</span> <span class="string">"@agentsend/sdk"</span>;
+
+<span class="keyword">const</span> client = <span class="keyword">new</span> <span class="fn">AgentSend</span>({ <span class="const">apiKey</span>: <span class="string">"ask_..."</span> });
+
+<span class="comment">// Create an inbox</span>
+<span class="keyword">const</span> inbox = <span class="keyword">await</span> client.inboxes.<span class="fn">create</span>({
+  <span class="const">displayName</span>: <span class="string">"Support Bot"</span>
+});
+
+<span class="comment">// Send an email</span>
+<span class="keyword">await</span> client.messages.<span class="fn">send</span>(inbox.id, {
+  <span class="const">to</span>: [<span class="string">"user@example.com"</span>],
+  <span class="const">subject</span>: <span class="string">"Hello from my AI agent"</span>,
+  <span class="const">bodyText</span>: <span class="string">"This email was sent by an AI agent."</span>
+});
+
+<span class="comment">// List conversation threads</span>
+<span class="keyword">const</span> threads = <span class="keyword">await</span> client.threads.<span class="fn">list</span>(inbox.id);</pre>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container">
+      <h2>Everything your agent needs</h2>
+      <div class="feature-grid">
+        <div class="feature">
+          <div class="feature-icon">&#9993;</div>
+          <h3>Send &amp; Receive</h3>
+          <p>Full two-way email via AWS SES (outbound) and built-in SMTP server (inbound). Queue-based async processing.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">&#128172;</div>
+          <h3>Threading</h3>
+          <p>RFC 5322 compliant conversation threading. Auto-resolves threads via Message-ID, In-Reply-To, and References headers.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">&#128268;</div>
+          <h3>Webhooks</h3>
+          <p>Real-time notifications when emails arrive. HMAC-SHA256 signed payloads with automatic retry and exponential backoff.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">&#127760;</div>
+          <h3>Custom Domains</h3>
+          <p>Add your own domain with DKIM/SPF verification via SES. Create inboxes on any verified domain.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">&#128206;</div>
+          <h3>Attachments</h3>
+          <p>Upload files to S3 and attach to outbound emails. Automatic MIME encoding with presigned download URLs.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">&#128272;</div>
+          <h3>API Key Auth</h3>
+          <p>Simple API key authentication. SHA-256 hashed storage, rate limiting per account and per inbox.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>AgentSend &mdash; Email infrastructure for AI agents</p>
+    </div>
+  </footer>
+</body>
+</html>

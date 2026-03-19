@@ -21,7 +21,9 @@ export async function authPlugin(app: FastifyInstance) {
 
   app.addHook("onRequest", async (request, _reply) => {
     // Skip auth for health check
-    if (request.url === "/health" || request.url.startsWith("/webhooks/sns")) return;
+    const publicPaths = ["/health", "/webhooks/sns", "/docs", "/public", "/"];
+    if (publicPaths.some((p) => request.url === p || request.url.startsWith(p + "/"))) return;
+    if (request.url.startsWith("/docs")) return;
 
     const rawKey = extractKey(request);
     if (!rawKey) throw new UnauthorizedError();

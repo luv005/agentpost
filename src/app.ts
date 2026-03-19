@@ -1,7 +1,14 @@
+import { readFileSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import multipart from "@fastify/multipart";
 import sensible from "@fastify/sensible";
+import fastifyStatic from "@fastify/static";
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUi from "@fastify/swagger-ui";
+import yaml from "js-yaml";
 import { env } from "./config/env.js";
 import { errorHandler } from "./plugins/error-handler.js";
 import { authPlugin } from "./plugins/auth.js";
@@ -14,6 +21,7 @@ import { webhookRoutes } from "./routes/webhooks/index.js";
 import { snsRoutes } from "./routes/sns/index.js";
 import { domainRoutes } from "./routes/domains/index.js";
 import { attachmentRoutes } from "./routes/attachments/index.js";
+import { landingRoute } from "./routes/landing.js";
 
 export async function buildApp() {
   const config = env();
@@ -27,12 +35,41 @@ export async function buildApp() {
     },
   });
 
+  // Load OpenAPI spec
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const specPath = join(__dirname, "..", "docs", "openapi.yaml");
+  let spec: Record<string, unknown> = {};
+  try {
+    spec = yaml.load(readFileSync(specPath, "utf8")) as Record<string, unknown>;
+  } catch {
+    console.warn("OpenAPI spec not found, swagger docs will be empty");
+  }
+
   await app.register(cors);
   await app.register(multipart, { limits: { fileSize: config.MAX_ATTACHMENT_SIZE_BYTES } });
   await app.register(sensible);
+
+  // Swagger
+  await app.register(fastifySwagger, {
+    mode: "static",
+    specification: { document: spec as any },
+  });
+  await app.register(fastifySwaggerUi, {
+    routePrefix: "/docs",
+    uiConfig: { docExpansion: "list", deepLinking: true },
+  });
+
+  // Static files
+  await app.register(fastifyStatic, {
+    root: join(__dirname, "..", "public"),
+    prefix: "/public/",
+    decorateReply: false,
+  });
+
   await app.register(errorHandler);
   await app.register(rateLimitPlugin);
   await app.register(authPlugin);
+  await app.register(landingRoute);
   await app.register(healthRoutes);
   await app.register(inboxRoutes, { prefix: "/inboxes" });
   await app.register(inboxMessageRoutes, { prefix: "/inboxes" });

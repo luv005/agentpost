@@ -1,0 +1,477 @@
+openapi: 3.0.3
+info:
+  title: AgentSend API
+  description: Email infrastructure API for AI agents. Send, receive, and manage email conversations programmatically.
+  version: 0.1.0
+  contact:
+    name: AgentSend
+    url: https://agentsend.io
+
+servers:
+  - url: https://api.agentsend.io
+    description: Production
+  - url: http://localhost:3000
+    description: Local development
+
+security:
+  - BearerAuth: []
+  - ApiKeyAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+
+  schemas:
+    Inbox:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        address: { type: string, format: email }
+        displayName: { type: string, nullable: true }
+        domainId: { type: string, format: uuid, nullable: true }
+        status: { type: string, enum: [active, suspended, deleted] }
+        dailySendLimit: { type: integer }
+        sendsToday: { type: integer }
+        totalSent: { type: integer }
+        bounceCount: { type: integer }
+        complaintCount: { type: integer }
+        createdAt: { type: string, format: date-time }
+
+    Message:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        inboxId: { type: string, format: uuid }
+        threadId: { type: string, format: uuid, nullable: true }
+        direction: { type: string, enum: [outbound, inbound] }
+        fromAddress: { type: string }
+        toAddresses: { type: array, items: { type: string } }
+        ccAddresses: { type: array, items: { type: string } }
+        subject: { type: string }
+        bodyText: { type: string, nullable: true }
+        bodyHtml: { type: string, nullable: true }
+        status: { type: string, enum: [queued, sending, sent, delivered, failed, bounced, complained, received] }
+        attachments: { type: array, items: { $ref: '#/components/schemas/AttachmentMeta' } }
+        messageIdHeader: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+
+    Thread:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        inboxId: { type: string, format: uuid }
+        subject: { type: string }
+        messageCount: { type: integer }
+        lastMessageAt: { type: string, format: date-time }
+        createdAt: { type: string, format: date-time }
+
+    Webhook:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        url: { type: string, format: uri }
+        events: { type: array, items: { type: string } }
+        isActive: { type: boolean }
+        createdAt: { type: string, format: date-time }
+
+    Domain:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        domain: { type: string }
+        verificationStatus: { type: string, enum: [pending, verified, failed] }
+        dnsRecords: { type: array, items: { $ref: '#/components/schemas/DnsRecord' } }
+        createdAt: { type: string, format: date-time }
+
+    DnsRecord:
+      type: object
+      properties:
+        type: { type: string }
+        name: { type: string }
+        value: { type: string }
+
+    Attachment:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        filename: { type: string }
+        contentType: { type: string }
+        size: { type: integer }
+        url: { type: string, format: uri }
+        createdAt: { type: string, format: date-time }
+
+    AttachmentMeta:
+      type: object
+      properties:
+        key: { type: string }
+        filename: { type: string }
+        contentType: { type: string }
+        size: { type: integer }
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+            status: { type: integer }
+
+paths:
+  /health:
+    get:
+      tags: [System]
+      summary: Health check
+      security: []
+      responses:
+        '200':
+          description: OK
+
+  # ── Inboxes ──────────────────────────────────────────────────────────
+  /inboxes:
+    post:
+      tags: [Inboxes]
+      summary: Create inbox
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                displayName: { type: string }
+                domainId: { type: string, format: uuid }
+      responses:
+        '201':
+          description: Inbox created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Inbox' }
+    get:
+      tags: [Inboxes]
+      summary: List inboxes
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20 }
+        - name: offset
+          in: query
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: Paginated inbox list
+
+  /inboxes/{id}:
+    get:
+      tags: [Inboxes]
+      summary: Get inbox
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Inbox details
+    delete:
+      tags: [Inboxes]
+      summary: Delete inbox
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204':
+          description: Inbox deleted
+
+  # ── Messages ──────────────────────────────────────────────────────────
+  /inboxes/{inboxId}/messages:
+    post:
+      tags: [Messages]
+      summary: Send email
+      parameters:
+        - name: inboxId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [to, subject]
+              properties:
+                to: { type: array, items: { type: string, format: email }, minItems: 1 }
+                cc: { type: array, items: { type: string, format: email } }
+                bcc: { type: array, items: { type: string, format: email } }
+                subject: { type: string, maxLength: 998 }
+                bodyText: { type: string }
+                bodyHtml: { type: string }
+                threadId: { type: string, format: uuid }
+                attachmentIds: { type: array, items: { type: string, format: uuid } }
+      responses:
+        '202':
+          description: Message queued
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Message' }
+    get:
+      tags: [Messages]
+      summary: List messages
+      parameters:
+        - name: inboxId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20 }
+        - name: offset
+          in: query
+          schema: { type: integer, default: 0 }
+        - name: status
+          in: query
+          schema: { type: string, enum: [queued, sending, sent, delivered, failed, bounced, complained, received] }
+      responses:
+        '200':
+          description: Paginated message list
+
+  /messages/{id}:
+    get:
+      tags: [Messages]
+      summary: Get message
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Message details
+    delete:
+      tags: [Messages]
+      summary: Delete message
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204':
+          description: Message deleted
+
+  # ── Threads ──────────────────────────────────────────────────────────
+  /inboxes/{id}/threads:
+    get:
+      tags: [Threads]
+      summary: List threads
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20 }
+        - name: offset
+          in: query
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: Paginated thread list
+
+  /threads/{id}:
+    get:
+      tags: [Threads]
+      summary: Get thread
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Thread details
+
+  /threads/{id}/messages:
+    get:
+      tags: [Threads]
+      summary: Get thread messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Paginated messages in thread
+
+  # ── Webhooks ──────────────────────────────────────────────────────────
+  /webhooks:
+    post:
+      tags: [Webhooks]
+      summary: Create webhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url: { type: string, format: uri }
+                events: { type: array, items: { type: string, enum: [message.received, message.sent, message.bounced] } }
+      responses:
+        '201':
+          description: Webhook created (includes secret)
+    get:
+      tags: [Webhooks]
+      summary: List webhooks
+      responses:
+        '200':
+          description: Webhook list
+
+  /webhooks/{id}:
+    get:
+      tags: [Webhooks]
+      summary: Get webhook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Webhook details
+    put:
+      tags: [Webhooks]
+      summary: Update webhook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url: { type: string, format: uri }
+                events: { type: array, items: { type: string } }
+                isActive: { type: boolean }
+      responses:
+        '200':
+          description: Updated webhook
+    delete:
+      tags: [Webhooks]
+      summary: Delete webhook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204':
+          description: Webhook deleted
+
+  # ── Domains ──────────────────────────────────────────────────────────
+  /domains:
+    post:
+      tags: [Domains]
+      summary: Add domain
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [domain]
+              properties:
+                domain: { type: string }
+      responses:
+        '201':
+          description: Domain added with DNS records
+    get:
+      tags: [Domains]
+      summary: List domains
+      responses:
+        '200':
+          description: Domain list
+
+  /domains/{id}:
+    get:
+      tags: [Domains]
+      summary: Get domain
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Domain with DNS records
+    delete:
+      tags: [Domains]
+      summary: Delete domain
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204':
+          description: Domain removed
+
+  /domains/{id}/verify:
+    post:
+      tags: [Domains]
+      summary: Verify domain DNS
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Updated domain status
+
+  # ── Attachments ──────────────────────────────────────────────────────
+  /attachments:
+    post:
+      tags: [Attachments]
+      summary: Upload attachment
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Attachment uploaded
+
+  /attachments/{id}:
+    get:
+      tags: [Attachments]
+      summary: Get attachment (presigned URL)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Attachment with download URL
