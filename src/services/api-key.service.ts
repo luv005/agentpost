@@ -3,6 +3,7 @@ import { eq, and, isNull } from "drizzle-orm";
 import { getDb } from "../db/client.js";
 import { apiKeys, accounts } from "../db/schema.js";
 import { generateApiKey } from "../lib/id.js";
+import { AppError } from "../lib/errors.js";
 
 function hashKey(rawKey: string): string {
   return createHash("sha256").update(rawKey).digest("hex");
@@ -28,7 +29,33 @@ export async function createApiKey(accountId: string, name?: string) {
     })
     .returning();
 
-  return { id: row.id, key: rawKey, prefix, name: row.name };
+  if (row) {
+    return { id: row.id, key: rawKey, prefix, name: row.name };
+  }
+
+  const [persistedKey] = await db
+    .select({
+      id: apiKeys.id,
+      name: apiKeys.name,
+    })
+    .from(apiKeys)
+    .where(eq(apiKeys.keyHash, hash))
+    .limit(1);
+
+  if (persistedKey) {
+    return {
+      id: persistedKey.id,
+      key: rawKey,
+      prefix,
+      name: persistedKey.name,
+    };
+  }
+
+  throw new AppError(
+    "API_KEY_CREATE_FAILED",
+    "API key was created but could not be loaded",
+    500,
+  );
 }
 
 export async function validateApiKey(rawKey: string) {

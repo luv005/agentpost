@@ -271,11 +271,11 @@
       <h2>Create Inbox</h2>
       <p>Create a new email inbox for your agents</p>
       <form onsubmit="handleCreateInbox(event)">
-        <label>Username (optional)</label>
-        <input type="text" id="inbox-username" placeholder="e.g. support">
+        <label>Username</label>
+        <input type="text" id="inbox-username" placeholder="e.g. support" required>
         <label>Display Name (optional)</label>
         <input type="text" id="inbox-display" placeholder="e.g. Sales Team">
-        <p style="color:#3f3f46;font-size:11px;margin:-8px 0 14px;">Auto-generated if not specified</p>
+        <p style="color:#3f3f46;font-size:11px;margin:-8px 0 14px;">Inbox address will be <span class="mono">username@agentsend.io</span></p>
         <div class="modal-actions">
           <button type="button" class="btn btn-ghost btn-sm" onclick="closeModal('create-inbox-modal')">Cancel</button>
           <button type="submit" class="btn btn-primary btn-sm" id="create-inbox-btn">+ Create</button>
@@ -299,7 +299,7 @@
         <div class="wiz-icon">📮</div>
         <h2>Create Your First Inbox</h2>
         <p>Choose a username for your email address.</p>
-        <input type="text" id="wiz-username" placeholder="e.g. hello" style="width:100%;padding:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;font-size:15px;text-align:center;margin-bottom:6px;outline:none;">
+        <input type="text" id="wiz-username" placeholder="e.g. hello" required style="width:100%;padding:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;font-size:15px;text-align:center;margin-bottom:6px;outline:none;">
         <p style="color:#52525b;font-size:12px;margin-bottom:18px;">Your email: <strong style="color:#818cf8" id="wiz-preview">hello@agentsend.io</strong></p>
         <button class="btn btn-primary" onclick="wizardCreateInbox()" style="width:100%;padding:12px;" id="wiz-create-btn">Create Inbox</button>
         <div class="steps-bar"><div class="sdot ok">✓</div><div class="sline"></div><div class="sdot on">2</div><div class="sline"></div><div class="sdot off">3</div></div>
@@ -385,7 +385,26 @@
     let allInboxes = [];
 
     function getErrorMessage(data, fallback) {
-      return data?.message || data?.error || fallback;
+      if (!data) return fallback;
+      if (typeof data === 'string') return data;
+      if (typeof data.message === 'string') return data.message;
+      if (typeof data.error === 'string') return data.error;
+      if (data.error && typeof data.error.message === 'string') return data.error.message;
+      return fallback;
+    }
+
+    function isInboxPayload(data) {
+      return Boolean(data && typeof data === 'object' && typeof data.id === 'string' && typeof data.address === 'string');
+    }
+
+    function isApiKeyPayload(data) {
+      return Boolean(
+        data &&
+        typeof data === 'object' &&
+        typeof data.id === 'string' &&
+        typeof data.key === 'string' &&
+        typeof data.prefix === 'string'
+      );
     }
 
     function formatDnsRecords(records) {
@@ -502,23 +521,34 @@
       e.preventDefault();
       const btn = document.getElementById('create-inbox-btn');
       btn.disabled = true; btn.textContent = 'Creating...';
-      const body = {};
-      const u = document.getElementById('inbox-username').value;
-      const d = document.getElementById('inbox-display').value;
-      if (d) body.displayName = d;
-      if (u) body.address = u + '@agentsend.io';
-      const res = await fetch('/inboxes', { method:'POST', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify(body) });
-      const data = await res.json();
-      if (res.ok) {
-        document.getElementById('inbox-username').value = '';
-        document.getElementById('inbox-display').value = '';
-        closeModal('create-inbox-modal');
-        await init();
-        loadInboxes();
-      } else {
-        alert(getErrorMessage(data, 'Failed to create inbox'));
+      try {
+        const body = {};
+        const u = document.getElementById('inbox-username').value.trim();
+        const d = document.getElementById('inbox-display').value;
+        if (!u) {
+          alert('Username is required.');
+          return;
+        }
+        if (d) body.displayName = d;
+        if (u) body.address = u + '@agentsend.io';
+        const res = await fetch('/inboxes', { method:'POST', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify(body) });
+        const data = await res.json();
+        if (res.ok) {
+          if (!isInboxPayload(data)) {
+            alert('Inbox creation succeeded but the server returned an invalid response. Refresh and try again.');
+            return;
+          }
+          document.getElementById('inbox-username').value = '';
+          document.getElementById('inbox-display').value = '';
+          closeModal('create-inbox-modal');
+          loadInboxes();
+          init();
+        } else {
+          alert(getErrorMessage(data, 'Failed to create inbox'));
+        }
+      } finally {
+        btn.disabled = false; btn.textContent = '+ Create';
       }
-      btn.disabled = false; btn.textContent = '+ Create';
     }
 
     async function deleteInbox(id) {
@@ -548,7 +578,15 @@
       const name = prompt('Key name (optional):') || undefined;
       const res = await fetch('/account/api-keys', { method:'POST', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify({name}) });
       const data = await res.json();
-      if (res.ok) { alert(`Key created!\n\n${data.key}\n\nSave it — won't be shown again.`); init(); loadApiKeys(); }
+      if (res.ok) {
+        if (!isApiKeyPayload(data)) {
+          alert('API key creation succeeded but the server returned an invalid response. Refresh and try again.');
+          return;
+        }
+        alert(`Key created!\n\n${data.key}\n\nSave it — won't be shown again.`);
+        init();
+        loadApiKeys();
+      }
       else { alert(getErrorMessage(data, 'Failed to create API key')); }
     }
     async function revokeKey(id) {
@@ -665,10 +703,29 @@
     async function wizardCreateInbox() {
       const btn = document.getElementById('wiz-create-btn');
       btn.disabled=true; btn.textContent='Creating...';
-      const u = document.getElementById('wiz-username').value || ('agent-'+Math.random().toString(36).slice(2,6));
-      const res = await fetch('/inboxes',{method:'POST',headers:{...auth(),'Content-Type':'application/json'},body:JSON.stringify({address:u+'@agentsend.io',displayName:'AgentSend'})});
-      if(res.ok){const d=await res.json();wizInboxId=d.id;document.getElementById('wiz-try-address').textContent=d.address;document.getElementById('wiz-inbox-address').textContent=d.address;wizardNext(3);}
-      else{const d=await res.json();alert(d.message||'Failed');btn.disabled=false;btn.textContent='Create Inbox';}
+      try {
+        const u = document.getElementById('wiz-username').value.trim();
+        if (!u) {
+          alert('Username is required.');
+          return;
+        }
+        const res = await fetch('/inboxes',{method:'POST',headers:{...auth(),'Content-Type':'application/json'},body:JSON.stringify({address:u+'@agentsend.io',displayName:'AgentSend'})});
+        const data = await res.json();
+        if (res.ok) {
+          if (!isInboxPayload(data)) {
+            alert('Inbox creation succeeded but the server returned an invalid response. Refresh and try again.');
+            return;
+          }
+          wizInboxId = data.id;
+          document.getElementById('wiz-try-address').textContent = data.address;
+          document.getElementById('wiz-inbox-address').textContent = data.address;
+          wizardNext(3);
+          return;
+        }
+        alert(getErrorMessage(data, 'Failed'));
+      } finally {
+        btn.disabled=false; btn.textContent='Create Inbox';
+      }
     }
     async function wizardCheckEmail() {
       const btn=document.getElementById('wiz-refresh-btn');btn.disabled=true;btn.textContent='Checking...';

@@ -91,7 +91,27 @@ export async function createInbox(
     })
     .returning();
 
-  return inbox;
+  if (inbox) return inbox;
+
+  const [persistedInbox] = await db
+    .select()
+    .from(inboxes)
+    .where(
+      and(
+        eq(inboxes.accountId, accountId),
+        eq(inboxes.address, address),
+        isNull(inboxes.deletedAt),
+      ),
+    )
+    .limit(1);
+
+  if (persistedInbox) return persistedInbox;
+
+  throw new AppError(
+    "INBOX_CREATE_FAILED",
+    "Inbox was created but could not be loaded",
+    500,
+  );
 }
 
 export async function listInboxes(
