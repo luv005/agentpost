@@ -328,7 +328,7 @@ paths:
               required: [url]
               properties:
                 url: { type: string, format: uri }
-                events: { type: array, items: { type: string, enum: [message.received, message.sent, message.bounced] } }
+                events: { type: array, items: { type: string, enum: [message.received, message.sent, message.delivered, message.bounced, message.complained] } }
       responses:
         '201':
           description: Webhook created (includes secret)

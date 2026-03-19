@@ -1,15 +1,10 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 import { processSesEvent, type SesNotification } from "../../services/ses-event.service.js";
 import { env } from "../../config/env.js";
-
-interface SnsMessage {
-  Type: "SubscriptionConfirmation" | "Notification" | "UnsubscribeConfirmation";
-  MessageId: string;
-  TopicArn: string;
-  Message: string;
-  SubscribeURL?: string;
-  Timestamp: string;
-}
+import {
+  validateSnsMessageSignature,
+  type SnsMessage,
+} from "../../services/sns.service.js";
 
 export async function handleSnsNotification(
   request: FastifyRequest,
@@ -19,6 +14,11 @@ export async function handleSnsNotification(
 
   if (!body?.Type) {
     return reply.status(400).send({ error: "Invalid SNS message" });
+  }
+
+  const isValidSignature = await validateSnsMessageSignature(body);
+  if (!isValidSignature) {
+    return reply.status(403).send({ error: "Invalid SNS signature" });
   }
 
   // Validate topic ARN if configured

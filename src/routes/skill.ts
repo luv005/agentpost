@@ -197,7 +197,7 @@ AGENTSEND_API_KEY=your-key agentsend-mcp</pre></div>
         </div>
         <div class="tool-card">
           <div class="tool-name">register_webhook</div>
-          <div class="tool-desc">Register a URL for real-time notifications when emails arrive. HMAC-signed for security.</div>
+          <div class="tool-desc">Register a URL for real-time notifications when emails are received, sent, delivered, bounced, or complained. HMAC-signed for security.</div>
         </div>
       </div>
     </div>
@@ -235,20 +235,22 @@ a hello email to test@example.com. The message is queued for delivery."</span></
           <div class="price-name">Free</div>
           <div class="price-amount">$0 <span>/mo</span></div>
           <ul class="price-features">
-            <li>5 inboxes</li>
-            <li>100 emails/month</li>
-            <li>@agentsend.io addresses</li>
-            <li>Email threading</li>
+            <li>3 inboxes</li>
+            <li>3,000 emails/month</li>
+            <li>100 emails/day</li>
+            <li>Webhooks</li>
+            <li>Threading</li>
           </ul>
         </div>
         <div class="price-card featured">
           <div class="price-name">Pro</div>
-          <div class="price-amount">$29 <span>/mo</span></div>
+          <div class="price-amount">$9 <span>/mo</span></div>
           <ul class="price-features">
-            <li>50 inboxes</li>
+            <li>5 inboxes</li>
             <li>5,000 emails/month</li>
+            <li>Unlimited emails/day</li>
             <li>Custom domains</li>
-            <li>Webhooks</li>
+            <li>Attachments up to 10MB</li>
             <li>Priority support</li>
           </ul>
         </div>
@@ -256,11 +258,12 @@ a hello email to test@example.com. The message is queued for delivery."</span></
           <div class="price-name">Enterprise</div>
           <div class="price-amount">$99 <span>/mo</span></div>
           <ul class="price-features">
-            <li>Unlimited inboxes</li>
-            <li>50,000 emails/month</li>
-            <li>Custom domains</li>
-            <li>Dedicated IP</li>
-            <li>SLA + support</li>
+            <li>100 inboxes</li>
+            <li>100,000 emails/month</li>
+            <li>Unlimited emails/day</li>
+            <li>100 custom domains</li>
+            <li>7 webhook endpoints</li>
+            <li>Priority support</li>
           </ul>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { SMTPServer } from "smtp-server";
-import { eq } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { env } from "../config/env.js";
 import { getDb } from "../db/client.js";
 import { inboxes } from "../db/schema.js";
@@ -19,7 +19,13 @@ export function createSmtpServer(): SMTPServer {
 
       db.select({ id: inboxes.id })
         .from(inboxes)
-        .where(eq(inboxes.address, recipientAddress))
+        .where(
+          and(
+            eq(inboxes.address, recipientAddress),
+            eq(inboxes.status, "active"),
+            isNull(inboxes.deletedAt),
+          ),
+        )
         .limit(1)
         .then((rows) => {
           if (rows.length === 0) {

@@ -3,7 +3,11 @@ import { getDb } from "../db/client.js";
 import { messages } from "../db/schema.js";
 import { getActiveInbox } from "./inbox.service.js";
 import { enqueueEmail } from "../queue/email.queue.js";
-import { resolveThread, updateThreadOnNewMessage } from "./thread.service.js";
+import {
+  getThread,
+  resolveThread,
+  updateThreadOnNewMessage,
+} from "./thread.service.js";
 import { generateMessageId } from "../lib/message-id.js";
 import { getAttachmentsByIds } from "./attachment.service.js";
 import { RateLimitError, NotFoundError, AppError } from "../lib/errors.js";
@@ -47,13 +51,24 @@ export async function sendMessage(input: SendMessageInput) {
   let referencesHeaders: string[] = [];
 
   // Resolve or create thread
-  const threadId = input.threadId
-    ? input.threadId
-    : await resolveThread(
-        inbox.id,
-        input.accountId,
-        input.subject,
+  let threadId: string;
+  if (input.threadId) {
+    const thread = await getThread(input.threadId, input.accountId);
+    if (thread.inboxId !== inbox.id) {
+      throw new AppError(
+        "THREAD_INBOX_MISMATCH",
+        "Thread does not belong to this inbox",
+        400,
       );
+    }
+    threadId = thread.id;
+  } else {
+    threadId = await resolveThread(
+      inbox.id,
+      input.accountId,
+      input.subject,
+    );
+  }
 
   // If replying to existing thread, build reply headers from last message
   if (input.threadId) {
@@ -63,7 +78,12 @@ export async function sendMessage(input: SendMessageInput) {
         referencesHeaders: messages.referencesHeaders,
       })
       .from(messages)
-      .where(eq(messages.threadId, input.threadId))
+      .where(
+        and(
+          eq(messages.threadId, input.threadId),
+          eq(messages.accountId, input.accountId),
+        ),
+      )
       .orderBy(desc(messages.createdAt))
       .limit(1);
 

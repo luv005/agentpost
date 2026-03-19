@@ -44,6 +44,8 @@ export async function processSesEvent(event: SesNotification): Promise<void> {
 
   switch (event.notificationType) {
     case "Delivery": {
+      if (message.status === "delivered") return;
+
       // Only update if currently "sent"
       if (message.status === "sent") {
         await db
@@ -61,6 +63,8 @@ export async function processSesEvent(event: SesNotification): Promise<void> {
     }
 
     case "Bounce": {
+      if (message.status === "bounced") return;
+
       await db
         .update(messages)
         .set({ status: "bounced" })
@@ -90,6 +94,8 @@ export async function processSesEvent(event: SesNotification): Promise<void> {
     }
 
     case "Complaint": {
+      if (message.status === "complained") return;
+
       await db
         .update(messages)
         .set({ status: "complained" })

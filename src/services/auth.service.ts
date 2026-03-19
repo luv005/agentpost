@@ -7,6 +7,7 @@ import { accounts, magicLinks } from "../db/schema.js";
 import { createApiKey } from "./api-key.service.js";
 import { sendEmail } from "./ses.service.js";
 import { env } from "../config/env.js";
+import { AppError } from "../lib/errors.js";
 
 // ── JWT ─────────────────────────────────────────────────────────────────────
 
@@ -41,12 +42,13 @@ export async function findOrCreateAccount(data: {
   avatarUrl?: string;
 }) {
   const db = getDb();
+  const normalizedEmail = data.email.toLowerCase();
 
   // Try to find existing account by email
   const [existing] = await db
     .select()
     .from(accounts)
-    .where(eq(accounts.email, data.email.toLowerCase()))
+    .where(eq(accounts.email, normalizedEmail))
     .limit(1);
 
   if (existing) {
@@ -69,7 +71,7 @@ export async function findOrCreateAccount(data: {
     .insert(accounts)
     .values({
       name: data.name,
-      email: data.email.toLowerCase(),
+      email: normalizedEmail,
       googleId: data.googleId ?? null,
       avatarUrl: data.avatarUrl ?? null,
     })
@@ -152,6 +154,22 @@ export async function verifyCodeAndSignup(email: string, code: string) {
 
 // Keep old publicSignup for auto-provision (agents don't need email verification)
 export async function publicSignup(email: string, name: string) {
+  const db = getDb();
+  const normalizedEmail = email.toLowerCase();
+  const [existing] = await db
+    .select({ id: accounts.id })
+    .from(accounts)
+    .where(eq(accounts.email, normalizedEmail))
+    .limit(1);
+
+  if (existing) {
+    throw new AppError(
+      "ACCOUNT_EXISTS",
+      "Account already exists. Use the verification code or magic link flow to sign in.",
+      409,
+    );
+  }
+
   const account = await findOrCreateAccount({ email, name });
   const apiKey = await createApiKey(account.id, "Default API Key");
   const token = signJwt(account.id, account.email);

@@ -188,7 +188,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             type: "array",
             items: { type: "string" },
             description:
-              "Events to subscribe to: message.received, message.sent, message.bounced (default: message.received)",
+              "Events to subscribe to: message.received, message.sent, message.delivered, message.bounced, message.complained (default: message.received)",
           },
         },
         required: ["url"],

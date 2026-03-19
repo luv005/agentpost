@@ -128,7 +128,7 @@ export async function getThreadMessages(
   const rows = await db
     .select()
     .from(messages)
-    .where(eq(messages.threadId, threadId))
+    .where(and(eq(messages.threadId, threadId), eq(messages.accountId, accountId)))
     .orderBy(messages.createdAt)
     .limit(limit)
     .offset(offset);
@@ -136,7 +136,7 @@ export async function getThreadMessages(
   const [countResult] = await db
     .select({ count: sql<number>`count(*)::int` })
     .from(messages)
-    .where(eq(messages.threadId, threadId));
+    .where(and(eq(messages.threadId, threadId), eq(messages.accountId, accountId)));
 
   return { data: rows, total: countResult.count };
 }
