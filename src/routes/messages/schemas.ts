@@ -7,6 +7,7 @@ export const sendMessageBody = z.object({
   subject: z.string().min(1).max(998),
   bodyText: z.string().max(256000).optional(),
   bodyHtml: z.string().max(256000).optional(),
+  threadId: z.string().uuid().optional(),
 });
 
 export const sendMessageParams = z.object({

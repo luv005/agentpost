@@ -37,6 +37,14 @@ const envSchema = z.object({
   EMAIL_QUEUE_CONCURRENCY: z.coerce.number().default(5),
   EMAIL_QUEUE_MAX_RETRIES: z.coerce.number().default(3),
   EMAIL_QUEUE_RETRY_DELAY_MS: z.coerce.number().default(30000),
+
+  SMTP_PORT: z.coerce.number().default(2525),
+  SMTP_HOST: z.string().default("0.0.0.0"),
+  SMTP_MAX_SIZE: z.coerce.number().default(26214400),
+
+  WEBHOOK_MAX_RETRIES: z.coerce.number().default(5),
+  WEBHOOK_RETRY_DELAY_MS: z.coerce.number().default(10000),
+  WEBHOOK_TIMEOUT_MS: z.coerce.number().default(30000),
 });
 
 export type Env = z.infer<typeof envSchema>;

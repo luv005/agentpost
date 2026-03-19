@@ -3,6 +3,9 @@ import { getRedisConnection } from "./connection.js";
 
 export interface EmailJobData {
   messageId: string;
+  messageIdHeader?: string;
+  inReplyTo?: string;
+  references?: string[];
   from: string;
   to: string[];
   cc?: string[];

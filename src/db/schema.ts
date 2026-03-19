@@ -80,6 +80,62 @@ export const inboxes = pgTable(
   ],
 );
 
+// ── Threads ─────────────────────────────────────────────────────────────────
+
+export const threads = pgTable(
+  "threads",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    inboxId: uuid("inbox_id")
+      .notNull()
+      .references(() => inboxes.id, { onDelete: "cascade" }),
+    accountId: uuid("account_id")
+      .notNull()
+      .references(() => accounts.id),
+    subject: text("subject").notNull(),
+    lastMessageAt: timestamp("last_message_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    messageCount: integer("message_count").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    index("threads_inbox_last_msg_idx").on(
+      table.inboxId,
+      table.lastMessageAt,
+    ),
+    index("threads_account_last_msg_idx").on(
+      table.accountId,
+      table.lastMessageAt,
+    ),
+  ],
+);
+
+// ── Webhooks ────────────────────────────────────────────────────────────────
+
+export const webhooks = pgTable(
+  "webhooks",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    accountId: uuid("account_id")
+      .notNull()
+      .references(() => accounts.id, { onDelete: "cascade" }),
+    url: varchar("url", { length: 2048 }).notNull(),
+    events: jsonb("events").$type<string[]>().default(["message.received"]),
+    secret: varchar("secret", { length: 255 }).notNull(),
+    isActive: boolean("is_active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [index("webhooks_account_id_idx").on(table.accountId)],
+);
+
 // ── Messages ────────────────────────────────────────────────────────────────
 
 export type MessageAttachment = {
@@ -99,6 +155,7 @@ export const messages = pgTable(
     accountId: uuid("account_id")
       .notNull()
       .references(() => accounts.id),
+    threadId: uuid("thread_id").references(() => threads.id),
     direction: varchar("direction", { length: 10 })
       .notNull()
       .default("outbound"),
@@ -116,6 +173,10 @@ export const messages = pgTable(
     sesMessageId: varchar("ses_message_id", { length: 255 }),
     errorMessage: text("error_message"),
     retryCount: integer("retry_count").notNull().default(0),
+    messageIdHeader: varchar("message_id_header", { length: 512 }),
+    inReplyTo: varchar("in_reply_to", { length: 512 }),
+    referencesHeaders: jsonb("references_headers").$type<string[]>().default([]),
+    rawHeaders: jsonb("raw_headers"),
     sentAt: timestamp("sent_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
@@ -128,5 +189,7 @@ export const messages = pgTable(
       table.createdAt,
     ),
     index("messages_status_idx").on(table.status),
+    index("messages_thread_created_idx").on(table.threadId, table.createdAt),
+    index("messages_message_id_header_idx").on(table.messageIdHeader),
   ],
 );

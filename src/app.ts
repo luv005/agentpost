@@ -8,6 +8,8 @@ import { rateLimitPlugin } from "./plugins/rate-limit.js";
 import { healthRoutes } from "./routes/health.js";
 import { inboxRoutes } from "./routes/inboxes/index.js";
 import { messageRoutes, inboxMessageRoutes } from "./routes/messages/index.js";
+import { threadRoutes, inboxThreadRoutes } from "./routes/threads/index.js";
+import { webhookRoutes } from "./routes/webhooks/index.js";
 
 export async function buildApp() {
   const config = env();
@@ -29,7 +31,10 @@ export async function buildApp() {
   await app.register(healthRoutes);
   await app.register(inboxRoutes, { prefix: "/inboxes" });
   await app.register(inboxMessageRoutes, { prefix: "/inboxes" });
+  await app.register(inboxThreadRoutes, { prefix: "/inboxes" });
   await app.register(messageRoutes, { prefix: "/messages" });
+  await app.register(threadRoutes, { prefix: "/threads" });
+  await app.register(webhookRoutes, { prefix: "/webhooks" });
 
   return app;
 }

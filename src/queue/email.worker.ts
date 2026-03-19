@@ -9,8 +9,10 @@ import type { EmailJobData } from "./email.queue.js";
 
 async function processEmailJob(job: Job<EmailJobData>) {
   const db = getDb();
-  const { messageId, from, to, cc, bcc, subject, bodyText, bodyHtml, inboxId } =
-    job.data;
+  const {
+    messageId, messageIdHeader, inReplyTo, references,
+    from, to, cc, bcc, subject, bodyText, bodyHtml, inboxId,
+  } = job.data;
 
   // Update status to sending
   await db
@@ -27,6 +29,9 @@ async function processEmailJob(job: Job<EmailJobData>) {
       subject,
       bodyText,
       bodyHtml,
+      messageIdHeader,
+      inReplyTo,
+      references,
     });
 
     // Update message to sent

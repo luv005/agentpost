@@ -3,6 +3,8 @@ import { getDb } from "../db/client.js";
 import { messages } from "../db/schema.js";
 import { getActiveInbox } from "./inbox.service.js";
 import { enqueueEmail } from "../queue/email.queue.js";
+import { resolveThread, updateThreadOnNewMessage } from "./thread.service.js";
+import { generateMessageId } from "../lib/message-id.js";
 import { RateLimitError, NotFoundError } from "../lib/errors.js";
 
 export interface SendMessageInput {
@@ -14,6 +16,7 @@ export interface SendMessageInput {
   subject: string;
   bodyText?: string;
   bodyHtml?: string;
+  threadId?: string;
 }
 
 export async function sendMessage(input: SendMessageInput) {
@@ -33,16 +36,54 @@ export async function sendMessage(input: SendMessageInput) {
     );
   }
 
+  // Generate RFC 5322 Message-ID
+  const messageIdHeader = generateMessageId();
+
+  // Build In-Reply-To and References if this is a thread reply
+  let inReplyTo: string | null = null;
+  let referencesHeaders: string[] = [];
+
+  // Resolve or create thread
+  const threadId = input.threadId
+    ? input.threadId
+    : await resolveThread(
+        inbox.id,
+        input.accountId,
+        input.subject,
+      );
+
+  // If replying to existing thread, build reply headers from last message
+  if (input.threadId) {
+    const [lastMsg] = await db
+      .select({
+        messageIdHeader: messages.messageIdHeader,
+        referencesHeaders: messages.referencesHeaders,
+      })
+      .from(messages)
+      .where(eq(messages.threadId, input.threadId))
+      .orderBy(desc(messages.createdAt))
+      .limit(1);
+
+    if (lastMsg?.messageIdHeader) {
+      inReplyTo = lastMsg.messageIdHeader;
+      const prevRefs = (lastMsg.referencesHeaders as string[]) ?? [];
+      referencesHeaders = [...prevRefs, lastMsg.messageIdHeader];
+    }
+  }
+
+  const fromAddress = inbox.displayName
+    ? `${inbox.displayName} <${inbox.address}>`
+    : inbox.address;
+
   // Insert message with status 'queued'
   const [message] = await db
     .insert(messages)
     .values({
       inboxId: inbox.id,
       accountId: input.accountId,
+      threadId,
       direction: "outbound",
-      fromAddress: inbox.displayName
-        ? `${inbox.displayName} <${inbox.address}>`
-        : inbox.address,
+      fromAddress,
       toAddresses: input.to,
       ccAddresses: input.cc ?? [],
       bccAddresses: input.bcc ?? [],
@@ -50,15 +91,22 @@ export async function sendMessage(input: SendMessageInput) {
       bodyText: input.bodyText ?? null,
       bodyHtml: input.bodyHtml ?? null,
       status: "queued",
+      messageIdHeader,
+      inReplyTo,
+      referencesHeaders,
     })
     .returning();
+
+  // Update thread
+  await updateThreadOnNewMessage(threadId);
 
   // Enqueue for async sending
   await enqueueEmail({
     messageId: message.id,
-    from: inbox.displayName
-      ? `${inbox.displayName} <${inbox.address}>`
-      : inbox.address,
+    messageIdHeader,
+    inReplyTo: inReplyTo ?? undefined,
+    references: referencesHeaders.length > 0 ? referencesHeaders : undefined,
+    from: fromAddress,
     to: input.to,
     cc: input.cc,
     bcc: input.bcc,
