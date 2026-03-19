@@ -1,5 +1,6 @@
 #!/bin/sh
+set -e
 echo "Running database migrations..."
-node dist/db/migrate.js 2>&1
-echo "Starting application..."
+node dist/db/migrate.js
+echo "Migrations complete. Starting application..."
 exec node dist/index.js
