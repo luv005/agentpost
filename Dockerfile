@@ -16,13 +16,16 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev && npm install drizzle-kit
 
 COPY --from=build /app/dist ./dist
+COPY src/db/migrations ./src/db/migrations
+COPY drizzle.config.ts ./
 COPY public/ ./public/
 COPY docs/ ./docs/
+COPY start.sh ./
 
 EXPOSE 3000
 EXPOSE 2525
 
-CMD ["node", "dist/index.js"]
+CMD ["sh", "start.sh"]
