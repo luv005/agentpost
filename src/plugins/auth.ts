@@ -68,8 +68,8 @@ export async function authPlugin(app: FastifyInstance) {
     const rawKey = extractKey(request);
     if (!rawKey) throw new UnauthorizedError();
 
-    // Try API key first (starts with "as_")
-    if (rawKey.startsWith("as_")) {
+    // Try API key first (starts with "ask_")
+    if (rawKey.startsWith("ask_")) {
       const account = await validateApiKey(rawKey);
       if (!account) throw new UnauthorizedError();
       request.account = account;
