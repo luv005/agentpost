@@ -6,6 +6,8 @@ import {
   getGoogleAuthUrl,
   handleGoogleCallback,
   autoProvision,
+  sendVerificationCode,
+  verifyCodeAndSignup,
 } from "../../services/auth.service.js";
 import {
   signupBody,
@@ -13,6 +15,8 @@ import {
   verifyQuery,
   googleCallbackQuery,
   autoProvisionBody,
+  sendCodeBody,
+  verifyCodeBody,
 } from "./schemas.js";
 import { env } from "../../config/env.js";
 
@@ -45,6 +49,27 @@ export async function autoProvisionHandler(
   return reply.status(result.isNew ? 201 : 200).send(result);
 }
 
+/**
+ * POST /auth/send-code — Send 6-digit verification code to email
+ */
+export async function sendCode(request: FastifyRequest, reply: FastifyReply) {
+  const body = sendCodeBody.parse(request.body);
+  const result = await sendVerificationCode(body.email, body.name);
+  return reply.send(result);
+}
+
+/**
+ * POST /auth/verify-code — Verify code and create account + API key
+ */
+export async function verifyCode(request: FastifyRequest, reply: FastifyReply) {
+  const body = verifyCodeBody.parse(request.body);
+  const result = await verifyCodeAndSignup(body.email, body.code);
+  if ("error" in result) {
+    return reply.status(400).send({ error: result.error });
+  }
+  return reply.status(201).send(result);
+}
+
 const SIGNUP_PAGE = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +85,7 @@ const SIGNUP_PAGE = `<!DOCTYPE html>
     .logo { text-align: center; font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 8px; letter-spacing: -0.5px; }
     .logo span { background: linear-gradient(135deg, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .subtitle { text-align: center; color: #52525b; font-size: 14px; margin-bottom: 32px; }
-    .google-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; background: #fff; color: #111; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+    .google-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; background: #fff; color: #111; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; text-decoration: none; }
     .google-btn:hover { background: #f0f0f0; transform: translateY(-1px); }
     .google-btn svg { width: 18px; height: 18px; }
     .divider { display: flex; align-items: center; gap: 16px; margin: 24px 0; color: #3f3f46; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
@@ -73,47 +98,68 @@ const SIGNUP_PAGE = `<!DOCTYPE html>
     .submit-btn { width: 100%; padding: 12px; background: #818cf8; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; margin-top: 8px; }
     .submit-btn:hover { background: #6366f1; transform: translateY(-1px); box-shadow: 0 0 32px rgba(129,140,248,0.3); }
     .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-    .result { display: none; margin-top: 24px; background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.2); border-radius: 12px; padding: 20px; }
+    .hidden { display: none; }
+    .code-input { text-align: center; font-size: 28px; font-weight: 700; letter-spacing: 12px; font-family: 'JetBrains Mono', monospace; }
+    .code-sent { text-align: center; color: #a1a1aa; font-size: 13px; margin-bottom: 20px; }
+    .code-sent strong { color: #e4e4e7; }
+    .result { margin-top: 24px; background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.2); border-radius: 12px; padding: 20px; }
     .result h3 { color: #34d399; font-size: 15px; margin-bottom: 12px; }
     .result .key-box { background: #09090b; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #34d399; word-break: break-all; margin-bottom: 8px; cursor: pointer; }
     .result .key-box:hover { border-color: rgba(52,211,153,0.3); }
     .result .hint { color: #52525b; font-size: 12px; }
-    .error { display: none; margin-top: 16px; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 10px; padding: 12px; color: #ef4444; font-size: 13px; }
+    .error { margin-top: 16px; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 10px; padding: 12px; color: #ef4444; font-size: 13px; }
     .footer { text-align: center; margin-top: 24px; font-size: 13px; color: #3f3f46; }
     .footer a { color: #818cf8; }
+    .back-link { color: #818cf8; cursor: pointer; font-size: 13px; }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="logo">Agent<span>Send</span></div>
-    <p class="subtitle">Get your API key in 5 seconds</p>
+    <p class="subtitle" id="subtitle">Get your API key in seconds</p>
 
-    <a href="/auth/google"><button type="button" class="google-btn">
-      <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      Continue with Google
-    </button></a>
-
-    <div class="divider">or</div>
-
-    <form id="signup-form" onsubmit="handleSignup(event)">
-      <div class="field">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" placeholder="Your name" required>
-      </div>
-      <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="you@example.com" required>
-      </div>
-      <button type="submit" class="submit-btn" id="submit-btn">Get API Key</button>
-    </form>
-
-    <div class="error" id="error"></div>
-
-    <div class="result" id="result">
-      <h3>Your API Key</h3>
-      <div class="key-box" id="api-key" onclick="navigator.clipboard.writeText(this.textContent);this.style.borderColor='#34d399'"></div>
-      <p class="hint">Click to copy. Store it safely — it won't be shown again.</p>
+    <!-- Step 1: Email + Name -->
+    <div id="step1">
+      <a href="/auth/google" class="google-btn">
+        <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google
+      </a>
+      <div class="divider">or</div>
+      <form onsubmit="handleSendCode(event)">
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" id="name" placeholder="Your name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@example.com" required>
+        </div>
+        <button type="submit" class="submit-btn" id="send-btn">Send Verification Code</button>
+      </form>
     </div>
+
+    <!-- Step 2: Enter Code -->
+    <div id="step2" class="hidden">
+      <p class="code-sent">We sent a 6-digit code to <strong id="sent-email"></strong></p>
+      <form onsubmit="handleVerifyCode(event)">
+        <div class="field">
+          <input type="text" id="code" class="code-input" placeholder="000000" maxlength="6" pattern="[0-9]{6}" required autocomplete="one-time-code">
+        </div>
+        <button type="submit" class="submit-btn" id="verify-btn">Verify &amp; Get API Key</button>
+      </form>
+      <p style="text-align:center;margin-top:12px;"><span class="back-link" onclick="showStep1()">Back</span></p>
+    </div>
+
+    <!-- Step 3: Result -->
+    <div id="step3" class="hidden">
+      <div class="result">
+        <h3>Your API Key</h3>
+        <div class="key-box" id="api-key" onclick="navigator.clipboard.writeText(this.textContent);this.style.borderColor='#34d399'"></div>
+        <p class="hint">Click to copy. Store it safely — it won't be shown again.</p>
+      </div>
+    </div>
+
+    <div id="error" class="error hidden"></div>
 
     <div class="footer">
       Already have a key? <a href="/docs">Go to docs</a>
@@ -121,18 +167,28 @@ const SIGNUP_PAGE = `<!DOCTYPE html>
   </div>
 
   <script>
-    async function handleSignup(e) {
-      e.preventDefault();
-      const btn = document.getElementById('submit-btn');
-      const errEl = document.getElementById('error');
-      const resultEl = document.getElementById('result');
-      btn.disabled = true;
-      btn.textContent = 'Creating...';
-      errEl.style.display = 'none';
-      resultEl.style.display = 'none';
+    let userEmail = '';
+    function showError(msg) {
+      const el = document.getElementById('error');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+    function hideError() { document.getElementById('error').classList.add('hidden'); }
+    function showStep1() {
+      document.getElementById('step1').classList.remove('hidden');
+      document.getElementById('step2').classList.add('hidden');
+      document.getElementById('step3').classList.add('hidden');
+      document.getElementById('subtitle').textContent = 'Get your API key in seconds';
+      hideError();
+    }
 
+    async function handleSendCode(e) {
+      e.preventDefault();
+      hideError();
+      const btn = document.getElementById('send-btn');
+      btn.disabled = true; btn.textContent = 'Sending...';
       try {
-        const res = await fetch('/auth/signup', {
+        const res = await fetch('/auth/send-code', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -141,15 +197,43 @@ const SIGNUP_PAGE = `<!DOCTYPE html>
           }),
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || data.message || 'Signup failed');
-        document.getElementById('api-key').textContent = data.apiKey;
-        resultEl.style.display = 'block';
-        btn.textContent = 'Done!';
+        if (!res.ok) throw new Error(data.error || 'Failed to send code');
+        userEmail = document.getElementById('email').value;
+        document.getElementById('sent-email').textContent = userEmail;
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step2').classList.remove('hidden');
+        document.getElementById('subtitle').textContent = 'Check your email';
+        document.getElementById('code').focus();
       } catch (err) {
-        errEl.textContent = err.message;
-        errEl.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Get API Key';
+        showError(err.message);
+      } finally {
+        btn.disabled = false; btn.textContent = 'Send Verification Code';
+      }
+    }
+
+    async function handleVerifyCode(e) {
+      e.preventDefault();
+      hideError();
+      const btn = document.getElementById('verify-btn');
+      btn.disabled = true; btn.textContent = 'Verifying...';
+      try {
+        const res = await fetch('/auth/verify-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: userEmail,
+            code: document.getElementById('code').value,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Verification failed');
+        document.getElementById('api-key').textContent = data.apiKey;
+        document.getElementById('step2').classList.add('hidden');
+        document.getElementById('step3').classList.remove('hidden');
+        document.getElementById('subtitle').textContent = 'You\\u2019re in!';
+      } catch (err) {
+        showError(err.message);
+        btn.disabled = false; btn.textContent = 'Verify & Get API Key';
       }
     }
   </script>

@@ -78,8 +78,79 @@ export async function findOrCreateAccount(data: {
   return account;
 }
 
-// ── Public Signup ────────────────────────────────────────────────────────────
+// ── Verification Code Signup ─────────────────────────────────────────────────
 
+// In-memory store for verification codes (use Redis in production at scale)
+const verificationCodes = new Map<
+  string,
+  { code: string; name: string; email: string; expiresAt: number }
+>();
+
+export function generateVerificationCode(): string {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+export async function sendVerificationCode(email: string, name: string) {
+  const config = env();
+  const code = generateVerificationCode();
+
+  // Store code with 10 min expiry
+  verificationCodes.set(email.toLowerCase(), {
+    code,
+    name,
+    email: email.toLowerCase(),
+    expiresAt: Date.now() + 10 * 60 * 1000,
+  });
+
+  // Send via SES
+  await sendEmail({
+    from: `AgentSend <noreply@${config.SES_FROM_DOMAIN}>`,
+    to: [email],
+    subject: `${code} — Your AgentSend verification code`,
+    bodyText: `Your verification code is: ${code}\n\nThis code expires in 10 minutes.\n\nIf you didn't request this, ignore this email.`,
+    bodyHtml: `
+      <div style="font-family: -apple-system, sans-serif; max-width: 400px; margin: 0 auto; padding: 40px 20px; text-align: center;">
+        <h2 style="color: #111; margin-bottom: 8px;">Your verification code</h2>
+        <div style="font-size: 36px; font-weight: 800; letter-spacing: 8px; color: #111; background: #f4f4f5; padding: 20px; border-radius: 12px; margin: 20px 0;">${code}</div>
+        <p style="color: #888; font-size: 14px;">Expires in 10 minutes</p>
+      </div>
+    `,
+  });
+
+  return { sent: true };
+}
+
+export async function verifyCodeAndSignup(email: string, code: string) {
+  const entry = verificationCodes.get(email.toLowerCase());
+
+  if (!entry) return { error: "No verification code found. Request a new one." };
+  if (entry.expiresAt < Date.now()) {
+    verificationCodes.delete(email.toLowerCase());
+    return { error: "Code expired. Request a new one." };
+  }
+  if (entry.code !== code) return { error: "Invalid code." };
+
+  // Code is valid — clean up
+  verificationCodes.delete(email.toLowerCase());
+
+  // Create account + API key
+  const account = await findOrCreateAccount({ email: entry.email, name: entry.name });
+  const apiKey = await createApiKey(account.id, "Default API Key");
+  const token = signJwt(account.id, account.email);
+
+  return {
+    account: {
+      id: account.id,
+      name: account.name,
+      email: account.email,
+      plan: account.plan,
+    },
+    apiKey: apiKey.key,
+    token,
+  };
+}
+
+// Keep old publicSignup for auto-provision (agents don't need email verification)
 export async function publicSignup(email: string, name: string) {
   const account = await findOrCreateAccount({ email, name });
   const apiKey = await createApiKey(account.id, "Default API Key");

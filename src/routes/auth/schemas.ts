@@ -20,3 +20,13 @@ export const googleCallbackQuery = z.object({
 export const autoProvisionBody = z.object({
   deviceId: z.string().min(8).max(128),
 });
+
+export const sendCodeBody = z.object({
+  email: z.string().email(),
+  name: z.string().min(1).max(255),
+});
+
+export const verifyCodeBody = z.object({
+  email: z.string().email(),
+  code: z.string().length(6),
+});
