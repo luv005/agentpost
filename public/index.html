@@ -185,47 +185,20 @@
         <button class="code-tab" onclick="showTab('py')">Python</button>
         <button class="code-tab" onclick="showTab('curl')">cURL</button>
       </div>
-      <pre class="code-block" data-lang="TypeScript" id="code-ts"><span class="kw">import</span> { <span class="cn">AgentSend</span> } <span class="kw">from</span> <span class="st">"@agentsend/sdk"</span><span class="op">;</span>
+      <pre class="code-block" data-lang="TypeScript" id="code-ts"><span class="kw">import</span> { <span class="cn">AgentSend</span> } <span class="kw">from</span> <span class="st">"@agentsend/sdk"</span>
 
-<span class="kw">const</span> client <span class="op">=</span> <span class="kw">new</span> <span class="fn">AgentSend</span>({ <span class="cn">apiKey</span>: process.env.<span class="cn">AGENTSEND_KEY</span> })<span class="op">;</span>
+<span class="kw">const</span> client <span class="op">=</span> <span class="kw">new</span> <span class="fn">AgentSend</span>()
 
-<span class="cm">// Create an inbox for your agent</span>
 <span class="kw">const</span> inbox <span class="op">=</span> <span class="kw">await</span> client.inboxes.<span class="fn">create</span>({
   <span class="cn">displayName</span>: <span class="st">"Support Agent"</span>
-})<span class="op">;</span>
+})</pre>
 
-<span class="cm">// Send an email</span>
-<span class="kw">await</span> client.messages.<span class="fn">send</span>(inbox.id, {
-  <span class="cn">to</span>: [<span class="st">"user@example.com"</span>],
-  <span class="cn">subject</span>: <span class="st">"Your order has shipped"</span>,
-  <span class="cn">bodyText</span>: <span class="st">"Hi! Your order #1234 is on the way."</span>
-})<span class="op">;</span>
+      <pre class="code-block code-hidden" data-lang="Python" id="code-py"><span class="kw">from</span> agentsend <span class="kw">import</span> <span class="cn">AgentSend</span>
 
-<span class="cm">// When they reply, get the conversation</span>
-<span class="kw">const</span> threads <span class="op">=</span> <span class="kw">await</span> client.threads.<span class="fn">list</span>(inbox.id)<span class="op">;</span></pre>
+client <span class="op">=</span> <span class="fn">AgentSend</span>()
 
-      <pre class="code-block code-hidden" data-lang="Python" id="code-py"><span class="kw">import</span> requests
-
-<span class="cn">API_KEY</span> <span class="op">=</span> <span class="st">"ask_..."</span>
-<span class="cn">BASE</span> <span class="op">=</span> <span class="st">"https://agentsend.io"</span>
-<span class="cn">headers</span> <span class="op">=</span> { <span class="st">"x-api-key"</span>: <span class="cn">API_KEY</span> }
-
-<span class="cm"># Create an inbox</span>
-inbox <span class="op">=</span> requests.<span class="fn">post</span>(
-  <span class="st">f"{BASE}/inboxes"</span>,
-  json<span class="op">=</span>{<span class="st">"displayName"</span>: <span class="st">"Support Agent"</span>},
-  headers<span class="op">=</span><span class="cn">headers</span>
-).<span class="fn">json</span>()
-
-<span class="cm"># Send an email</span>
-requests.<span class="fn">post</span>(
-  <span class="st">f"{BASE}/inboxes/{inbox['id']}/messages"</span>,
-  json<span class="op">=</span>{
-    <span class="st">"to"</span>: [<span class="st">"user@example.com"</span>],
-    <span class="st">"subject"</span>: <span class="st">"Your order has shipped"</span>,
-    <span class="st">"bodyText"</span>: <span class="st">"Hi! Order #1234 is on the way."</span>
-  },
-  headers<span class="op">=</span><span class="cn">headers</span>
+inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
+  display_name<span class="op">=</span><span class="st">"Support Agent"</span>
 )</pre>
 
       <pre class="code-block code-hidden" data-lang="cURL" id="code-curl"><span class="cm"># Create an inbox</span>
