@@ -3,14 +3,56 @@ import { getDb } from "../db/client.js";
 import { inboxes, domains } from "../db/schema.js";
 import { generateEmailAddress, generateEmailLocal } from "../lib/email-address.js";
 import { NotFoundError, InboxSuspendedError, AppError } from "../lib/errors.js";
+import { env } from "../config/env.js";
+
+const INBOX_LOCAL_PART_REGEX = /^[a-z0-9](?:[a-z0-9._-]{0,62}[a-z0-9])?$/;
+
+export function normalizeInboxAddress(
+  requestedAddress: string,
+  expectedDomain: string,
+): string {
+  const normalizedAddress = requestedAddress.trim().toLowerCase();
+  const parts = normalizedAddress.split("@");
+
+  if (parts.length !== 2 || !parts[0] || !parts[1]) {
+    throw new AppError(
+      "INVALID_INBOX_ADDRESS",
+      "Inbox address must be a valid email address",
+      400,
+    );
+  }
+
+  const [localPart, domain] = parts;
+  const normalizedDomain = expectedDomain.trim().toLowerCase();
+
+  if (domain !== normalizedDomain) {
+    throw new AppError(
+      "INVALID_INBOX_DOMAIN",
+      `Inbox address must use @${normalizedDomain}`,
+      400,
+    );
+  }
+
+  if (!INBOX_LOCAL_PART_REGEX.test(localPart)) {
+    throw new AppError(
+      "INVALID_INBOX_LOCAL_PART",
+      "Inbox username can only contain letters, numbers, dots, underscores, and hyphens.",
+      400,
+    );
+  }
+
+  return `${localPart}@${normalizedDomain}`;
+}
 
 export async function createInbox(
   accountId: string,
   displayName?: string,
   domainId?: string,
+  requestedAddress?: string,
 ) {
   const db = getDb();
   let address: string;
+  let domainName: string | undefined;
 
   if (domainId) {
     // Use custom domain
@@ -25,7 +67,16 @@ export async function createInbox(
       throw new AppError("DOMAIN_NOT_VERIFIED", "Domain is not yet verified", 400);
     }
 
-    address = `${generateEmailLocal()}@${domain.domain}`;
+    domainName = domain.domain;
+  }
+
+  if (requestedAddress) {
+    address = normalizeInboxAddress(
+      requestedAddress,
+      domainName ?? env().SES_FROM_DOMAIN,
+    );
+  } else if (domainName) {
+    address = `${generateEmailLocal()}@${domainName}`;
   } else {
     address = generateEmailAddress();
   }

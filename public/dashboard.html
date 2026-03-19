@@ -86,6 +86,7 @@
     .table tr:hover td { background: rgba(129,140,248,0.03); }
     .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
     .badge-active { background: rgba(52,211,153,0.1); color: #34d399; }
+    .badge-inactive { background: rgba(255,255,255,0.08); color: #a1a1aa; }
 
     /* Buttons */
     .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; font-family: inherit; }
@@ -340,6 +341,17 @@
 
     let allInboxes = [];
 
+    function getErrorMessage(data, fallback) {
+      return data?.message || data?.error || fallback;
+    }
+
+    function formatDnsRecords(records) {
+      if (!records?.length) return 'No DNS records returned.';
+      return records
+        .map((record) => `${record.type}  ${record.name}  ${record.value}`)
+        .join('\n');
+    }
+
     async function init() {
       try {
         const res = await fetch('/account', { headers: auth() });
@@ -348,14 +360,17 @@
         document.getElementById('user-name').textContent = a.name || a.email;
         document.getElementById('user-avatar').textContent = (a.name || a.email)[0].toUpperCase();
 
-        const [inboxRes, keysRes] = await Promise.all([
+        const [inboxRes, keysRes, domainsRes] = await Promise.all([
           fetch('/inboxes', { headers: auth() }),
           fetch('/account/api-keys', { headers: auth() }),
+          fetch('/domains', { headers: auth() }),
         ]);
         const inboxData = await inboxRes.json();
         const keysData = await keysRes.json();
+        const domainsData = await domainsRes.json();
         allInboxes = inboxData.data || [];
         const keys = keysData.data || [];
+        const domains = domainsData.data || [];
 
         // Stats
         const totalSent = allInboxes.reduce((s,i) => s + (i.totalSent||0), 0);
@@ -375,7 +390,7 @@
         document.getElementById('res-inboxes').textContent = allInboxes.length + ' / 5';
         document.getElementById('res-inbox-bar').style.width = Math.min(allInboxes.length/5*100, 100) + '%';
         document.getElementById('res-keys').textContent = keys.length;
-        document.getElementById('res-domains').textContent = '0';
+        document.getElementById('res-domains').textContent = domains.length;
 
         if (requestedPage === 'apikeys') {
           showPage('apikeys', document.querySelectorAll('.nav-item')[2]);
@@ -419,8 +434,8 @@
       const data = await res.json();
       const inboxes = data.data || [];
       if (!inboxes.length) { document.getElementById('inboxes-list').innerHTML = '<div class="empty"><div class="ico">📨</div><h3>No inboxes yet</h3><p>Create your first inbox</p><button class="btn btn-primary btn-sm" onclick="showCreateInbox()">+ Create</button></div>'; return; }
-      let h = '<table class="table"><thead><tr><th>Address</th><th>Display Name</th><th>Sent</th><th>Status</th><th>Created</th></tr></thead><tbody>';
-      for (const i of inboxes) h += '<tr><td class="mono" style="color:#818cf8;font-size:13px;">' + i.address + '</td><td>' + (i.displayName||'—') + '</td><td>' + (i.totalSent||0) + '</td><td><span class="badge badge-active">active</span></td><td>' + new Date(i.createdAt).toLocaleDateString() + '</td></tr>';
+      let h = '<table class="table"><thead><tr><th>Address</th><th>Display Name</th><th>Sent</th><th>Status</th><th>Created</th><th></th></tr></thead><tbody>';
+      for (const i of inboxes) h += '<tr><td class="mono" style="color:#818cf8;font-size:13px;">' + i.address + '</td><td>' + (i.displayName||'—') + '</td><td>' + (i.totalSent||0) + '</td><td><span class="badge ' + (i.status === 'active' ? 'badge-active' : 'badge-inactive') + '">' + i.status + '</span></td><td>' + new Date(i.createdAt).toLocaleDateString() + '</td><td><button class="btn btn-danger btn-sm" onclick="deleteInbox(\'' + i.id + '\')">Delete</button></td></tr>';
       h += '</tbody></table>';
       document.getElementById('inboxes-list').innerHTML = h;
     }
@@ -438,8 +453,29 @@
       if (d) body.displayName = d;
       if (u) body.address = u + '@agentsend.io';
       const res = await fetch('/inboxes', { method:'POST', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify(body) });
-      if (res.ok) { closeModal('create-inbox-modal'); loadInboxes(); init(); } else { const data = await res.json(); alert(data.message||'Failed'); }
+      const data = await res.json();
+      if (res.ok) {
+        document.getElementById('inbox-username').value = '';
+        document.getElementById('inbox-display').value = '';
+        closeModal('create-inbox-modal');
+        await init();
+        loadInboxes();
+      } else {
+        alert(getErrorMessage(data, 'Failed to create inbox'));
+      }
       btn.disabled = false; btn.textContent = '+ Create';
+    }
+
+    async function deleteInbox(id) {
+      if (!confirm('Delete this inbox?')) return;
+      const res = await fetch('/inboxes/' + id, { method:'DELETE', headers:auth() });
+      if (res.ok) {
+        await init();
+        loadInboxes();
+        return;
+      }
+      const data = await res.json();
+      alert(getErrorMessage(data, 'Failed to delete inbox'));
     }
 
     async function loadApiKeys() {
@@ -457,9 +493,16 @@
       const name = prompt('Key name (optional):') || undefined;
       const res = await fetch('/account/api-keys', { method:'POST', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify({name}) });
       const data = await res.json();
-      if (res.ok) { alert('Key created!\\n\\n' + data.key + '\\n\\nSave it — won\\'t be shown again.'); loadApiKeys(); }
+      if (res.ok) { alert(`Key created!\n\n${data.key}\n\nSave it — won't be shown again.`); init(); loadApiKeys(); }
+      else { alert(getErrorMessage(data, 'Failed to create API key')); }
     }
-    async function revokeKey(id) { if (!confirm('Revoke this key?')) return; await fetch('/account/api-keys/'+id,{method:'DELETE',headers:auth()}); loadApiKeys(); }
+    async function revokeKey(id) {
+      if (!confirm('Revoke this key?')) return;
+      const res = await fetch('/account/api-keys/' + id, { method:'DELETE', headers:auth() });
+      if (res.ok) { init(); loadApiKeys(); return; }
+      const data = await res.json();
+      alert(getErrorMessage(data, 'Failed to revoke API key'));
+    }
 
     // Webhooks
     async function loadWebhooks() {
@@ -469,7 +512,7 @@
         const hooks = data.data || [];
         if (!hooks.length) { document.getElementById('webhooks-list').innerHTML = '<div class="empty"><div class="ico">⚡</div><h3>No webhooks yet</h3><p>Create a webhook to receive notifications</p><button class="btn btn-primary btn-sm" onclick="createWebhook()">+ Create</button></div>'; return; }
         let h = '<table class="table"><thead><tr><th>URL</th><th>Events</th><th>Status</th><th>Created</th><th></th></tr></thead><tbody>';
-        for (const w of hooks) h += '<tr><td class="mono" style="color:#818cf8;font-size:13px;word-break:break-all;">' + w.url + '</td><td>' + (w.events||[]).join(', ') + '</td><td><span class="badge badge-active">' + (w.active?'active':'inactive') + '</span></td><td>' + new Date(w.createdAt).toLocaleDateString() + '</td><td><button class="btn btn-danger btn-sm" onclick="deleteWebhook(\''+w.id+'\')">Delete</button></td></tr>';
+        for (const w of hooks) h += '<tr><td class="mono" style="color:#818cf8;font-size:13px;word-break:break-all;">' + w.url + '</td><td>' + (w.events||[]).join(', ') + '</td><td><span class="badge ' + (w.isActive ? 'badge-active' : 'badge-inactive') + '">' + (w.isActive ? 'active' : 'inactive') + '</span></td><td>' + new Date(w.createdAt).toLocaleDateString() + '</td><td><button class="btn btn-ghost btn-sm" onclick="toggleWebhook(\'' + w.id + '\',' + w.isActive + ')">' + (w.isActive ? 'Disable' : 'Enable') + '</button> <button class="btn btn-danger btn-sm" onclick="deleteWebhook(\'' + w.id + '\')">Delete</button></td></tr>';
         h += '</tbody></table>';
         document.getElementById('webhooks-list').innerHTML = h;
       } catch { document.getElementById('webhooks-list').innerHTML = '<div class="empty"><div class="ico">⚡</div><h3>No webhooks yet</h3><p>Create a webhook to receive notifications</p><button class="btn btn-primary btn-sm" onclick="createWebhook()">+ Create</button></div>'; }
@@ -479,9 +522,27 @@
       if (!url) return;
       const events = prompt('Events (comma-separated, e.g. message.received,message.bounced):') || 'message.received';
       const res = await fetch('/webhooks', { method:'POST', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify({url, events: events.split(',').map(e=>e.trim())}) });
-      if (res.ok) { loadWebhooks(); } else { const d = await res.json(); alert(d.message||'Failed'); }
+      const data = await res.json();
+      if (res.ok) {
+        alert(`Webhook created!\n\nSigning secret:\n${data.secret}\n\nStore it securely — it won't be shown again.`);
+        loadWebhooks();
+      } else {
+        alert(getErrorMessage(data, 'Failed to create webhook'));
+      }
     }
-    async function deleteWebhook(id) { if (!confirm('Delete this webhook?')) return; await fetch('/webhooks/'+id,{method:'DELETE',headers:auth()}); loadWebhooks(); }
+    async function toggleWebhook(id, isActive) {
+      const res = await fetch('/webhooks/' + id, { method:'PUT', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify({ isActive: !isActive }) });
+      if (res.ok) { loadWebhooks(); return; }
+      const data = await res.json();
+      alert(getErrorMessage(data, 'Failed to update webhook'));
+    }
+    async function deleteWebhook(id) {
+      if (!confirm('Delete this webhook?')) return;
+      const res = await fetch('/webhooks/' + id, { method:'DELETE', headers:auth() });
+      if (res.ok) { loadWebhooks(); return; }
+      const data = await res.json();
+      alert(getErrorMessage(data, 'Failed to delete webhook'));
+    }
 
     // Domains
     async function loadDomains() {
@@ -491,7 +552,10 @@
         const domains = data.data || [];
         if (!domains.length) { document.getElementById('domains-list').innerHTML = '<div class="empty"><div class="ico">🌐</div><h3>No custom domains</h3><p>Add a domain to send from your own address</p><button class="btn btn-primary btn-sm" onclick="createDomain()">+ Add</button></div>'; return; }
         let h = '<table class="table"><thead><tr><th>Domain</th><th>Status</th><th>Verified</th><th>Created</th><th></th></tr></thead><tbody>';
-        for (const d of domains) h += '<tr><td class="mono" style="color:#818cf8;font-size:13px;">' + d.domain + '</td><td><span class="badge badge-active">' + (d.status||'pending') + '</span></td><td>' + (d.verified?'✅':'❌') + '</td><td>' + new Date(d.createdAt).toLocaleDateString() + '</td><td><button class="btn btn-danger btn-sm" onclick="deleteDomain(\''+d.id+'\')">Remove</button></td></tr>';
+        for (const d of domains) {
+          const isVerified = d.verificationStatus === 'verified';
+          h += '<tr><td class="mono" style="color:#818cf8;font-size:13px;">' + d.domain + '</td><td><span class="badge ' + (isVerified ? 'badge-active' : 'badge-inactive') + '">' + (d.verificationStatus || 'pending') + '</span></td><td>' + (d.verifiedAt ? new Date(d.verifiedAt).toLocaleDateString() : 'Pending') + '</td><td>' + new Date(d.createdAt).toLocaleDateString() + '</td><td><button class="btn btn-ghost btn-sm" onclick="showDomainDns(\'' + d.id + '\')">DNS</button> ' + (!isVerified ? '<button class="btn btn-ghost btn-sm" onclick="verifyDomain(\'' + d.id + '\')">Verify</button> ' : '') + '<button class="btn btn-danger btn-sm" onclick="deleteDomain(\'' + d.id + '\')">Remove</button></td></tr>';
+        }
         h += '</tbody></table>';
         document.getElementById('domains-list').innerHTML = h;
       } catch { document.getElementById('domains-list').innerHTML = '<div class="empty"><div class="ico">🌐</div><h3>No custom domains</h3><p>Add a domain to send from your own address</p><button class="btn btn-primary btn-sm" onclick="createDomain()">+ Add</button></div>'; }
@@ -500,9 +564,43 @@
       const domain = prompt('Enter your domain (e.g. mail.yourdomain.com):');
       if (!domain) return;
       const res = await fetch('/domains', { method:'POST', headers:{...auth(),'Content-Type':'application/json'}, body:JSON.stringify({domain}) });
-      if (res.ok) { const d = await res.json(); alert('Domain added! Set up the DNS records shown in the domain details to verify.'); loadDomains(); } else { const d = await res.json(); alert(d.message||'Failed'); }
+      const data = await res.json();
+      if (res.ok) {
+        alert(`Domain added!\n\nAdd these DNS records:\n\n${formatDnsRecords(data.dnsRecords)}\n\nAfter DNS propagates, use Verify in the Domains page.`);
+        init();
+        loadDomains();
+      } else {
+        alert(getErrorMessage(data, 'Failed to add domain'));
+      }
     }
-    async function deleteDomain(id) { if (!confirm('Remove this domain?')) return; await fetch('/domains/'+id,{method:'DELETE',headers:auth()}); loadDomains(); }
+    async function showDomainDns(id) {
+      const res = await fetch('/domains/' + id, { headers: auth() });
+      const data = await res.json();
+      if (res.ok) {
+        alert(`DNS records for ${data.domain}:\n\n${formatDnsRecords(data.dnsRecords)}`);
+        return;
+      }
+      alert(getErrorMessage(data, 'Failed to load DNS records'));
+    }
+    async function verifyDomain(id) {
+      const res = await fetch('/domains/' + id + '/verify', { method:'POST', headers: auth() });
+      const data = await res.json();
+      if (res.ok) {
+        const isVerified = data.verificationStatus === 'verified';
+        alert(isVerified ? 'Domain verified successfully.' : 'Domain is still pending. Check your DNS records and try again.');
+        init();
+        loadDomains();
+        return;
+      }
+      alert(getErrorMessage(data, 'Failed to verify domain'));
+    }
+    async function deleteDomain(id) {
+      if (!confirm('Remove this domain?')) return;
+      const res = await fetch('/domains/' + id, { method:'DELETE', headers:auth() });
+      if (res.ok) { init(); loadDomains(); return; }
+      const data = await res.json();
+      alert(getErrorMessage(data, 'Failed to remove domain'));
+    }
 
     // Wizard
     function wizardNext(s) { document.querySelectorAll('[id^="wiz-"]').forEach(el=>{if(el.id.match(/^wiz-\d$/))el.classList.add('hidden')}); document.getElementById('wiz-'+s).classList.remove('hidden'); }

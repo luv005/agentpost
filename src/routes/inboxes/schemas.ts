@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const createInboxBody = z.object({
+  address: z.string().email().max(255).optional(),
   displayName: z.string().max(255).optional(),
   domainId: z.string().uuid().optional(),
 });

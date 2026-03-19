@@ -8,6 +8,7 @@ export async function createInbox(request: FastifyRequest, reply: FastifyReply) 
     request.account.id,
     body.displayName,
     body.domainId,
+    body.address,
   );
   return reply.status(201).send(inbox);
 }
