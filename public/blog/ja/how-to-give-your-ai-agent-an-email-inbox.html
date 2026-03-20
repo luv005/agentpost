@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIエージェントに専用メールボックスを与える方法 | AgentSend</title>
+  <meta name="description" content="AIエージェントにリアルなメールアドレスをプロビジョニングするステップバイステップガイド。AgentSendを使えば5分以内にプログラムでメールの送受信が可能になります。">
+  <link rel="canonical" href="https://agentsend.io/blog/ja/how-to-give-your-ai-agent-an-email-inbox">
+  <meta property="og:title" content="AIエージェントに専用メールボックスを与える方法">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://agentsend.io/blog/ja/how-to-give-your-ai-agent-an-email-inbox">
+  <meta property="og:image" content="https://agentsend.io/public/blog/heroes/ai-agent-email-inbox.svg">
+  <link rel="alternate" hreflang="en" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox">
+  <link rel="alternate" hreflang="es" href="https://agentsend.io/blog/es/how-to-give-your-ai-agent-an-email-inbox">
+  <link rel="alternate" hreflang="fr" href="https://agentsend.io/blog/fr/how-to-give-your-ai-agent-an-email-inbox">
+  <link rel="alternate" hreflang="de" href="https://agentsend.io/blog/de/how-to-give-your-ai-agent-an-email-inbox">
+  <link rel="alternate" hreflang="ja" href="https://agentsend.io/blog/ja/how-to-give-your-ai-agent-an-email-inbox">
+  <link rel="alternate" hreflang="zh" href="https://agentsend.io/blog/zh/how-to-give-your-ai-agent-an-email-inbox">
+  <link rel="alternate" hreflang="pt" href="https://agentsend.io/blog/pt/how-to-give-your-ai-agent-an-email-inbox">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "AIエージェントに専用メールボックスを与える方法",
+    "image": "https://agentsend.io/public/blog/heroes/ai-agent-email-inbox.svg",
+    "author": { "@type": "Organization", "name": "AgentSend", "url": "https://agentsend.io" },
+    "publisher": { "@type": "Organization", "name": "AgentSend", "url": "https://agentsend.io" },
+    "datePublished": "2026-03-20",
+    "inLanguage": "ja",
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://agentsend.io/blog/ja/how-to-give-your-ai-agent-an-email-inbox" }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif; background: #09090b; color: #a1a1aa; line-height: 1.8; }
+    a { color: #818cf8; text-decoration: none; }
+    a:hover { color: #a5b4fc; text-decoration: underline; }
+    .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+    nav { padding: 16px 0; position: sticky; top: 0; z-index: 100; background: rgba(9,9,11,0.9); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.04); }
+    nav .inner { max-width: 900px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 20px; font-weight: 800; color: #fff; }
+    .logo span { background: linear-gradient(135deg, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-links a { color: #71717a; font-size: 14px; font-weight: 500; padding: 7px 14px; border-radius: 8px; }
+    .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.05); text-decoration: none; }
+    .nav-links .btn-sm { background: #818cf8; color: #fff; font-weight: 600; }
+    .article-header { padding: 56px 0 40px; }
+    .breadcrumb { font-size: 13px; color: #3f3f46; margin-bottom: 20px; }
+    .breadcrumb a { color: #52525b; }
+    .article-tag { display: inline-block; background: rgba(129,140,248,0.08); border: 1px solid rgba(129,140,248,0.2); color: #818cf8; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 12px; border-radius: 6px; margin-bottom: 16px; }
+    h1 { font-size: 32px; font-weight: 800; color: #fafafa; line-height: 1.3; margin-bottom: 20px; }
+    .article-meta { display: flex; align-items: center; gap: 16px; font-size: 13px; color: #52525b; margin-bottom: 32px; flex-wrap: wrap; }
+    .lang-switcher { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; margin-bottom: 40px; flex-wrap: wrap; }
+    .lang-switcher span { font-size: 12px; color: #52525b; font-weight: 500; }
+    .lang-link { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 5px; background: rgba(129,140,248,0.08); border: 1px solid rgba(129,140,248,0.15); color: #818cf8; }
+    .lang-link:hover { background: rgba(129,140,248,0.15); text-decoration: none; }
+    .lang-link.active { background: #818cf8; color: #fff; border-color: #818cf8; }
+    .hero-image { width: 100%; border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); margin-bottom: 48px; display: block; }
+    .article-body { padding-bottom: 80px; }
+    .article-body h2 { font-size: 22px; font-weight: 700; color: #fafafa; margin: 44px 0 14px; }
+    .article-body p { margin-bottom: 18px; color: #a1a1aa; font-size: 16px; }
+    .article-body ul { margin: 0 0 18px 24px; }
+    .article-body li { margin-bottom: 8px; font-size: 16px; color: #a1a1aa; }
+    .article-body strong { color: #e4e4e7; }
+    .article-body code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); padding: 2px 7px; border-radius: 5px; color: #c084fc; }
+    .code-block { background: #0d0d10; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; margin: 24px 0; }
+    .code-header { padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); }
+    .code-label { font-size: 12px; color: #52525b; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+    .code-body pre { padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.7; color: #e4e4e7; overflow-x: auto; }
+    .token-string { color: #34d399; }
+    .callout { background: rgba(129,140,248,0.05); border-left: 3px solid #818cf8; border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 24px 0; }
+    .callout p { margin: 0; font-size: 15px; color: #a5b4fc; }
+    .faq-section { margin-top: 56px; padding-top: 44px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .faq-item { margin-bottom: 24px; }
+    .faq-item h3 { font-size: 16px; font-weight: 600; color: #e4e4e7; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; color: #71717a; margin: 0; }
+    .cta-box { background: rgba(129,140,248,0.06); border: 1px solid rgba(129,140,248,0.2); border-radius: 16px; padding: 36px; text-align: center; margin-top: 56px; }
+    .cta-box h2 { font-size: 22px; font-weight: 700; color: #fafafa; margin-bottom: 10px; }
+    .cta-box p { font-size: 15px; color: #71717a; margin-bottom: 24px; }
+    .btn-primary { display: inline-flex; gap: 8px; padding: 13px 28px; background: #818cf8; color: #fff; border-radius: 10px; font-size: 15px; font-weight: 600; }
+    .btn-primary:hover { background: #6366f1; text-decoration: none; color: #fff; }
+    footer { padding: 32px 0; border-top: 1px solid rgba(255,255,255,0.04); text-align: center; }
+    footer p { color: #3f3f46; font-size: 13px; }
+    footer a { color: #52525b; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="inner">
+      <a href="/" class="logo">Agent<span>Send</span></a>
+      <div class="nav-links">
+        <a href="/#pricing">料金</a>
+        <a href="/docs">ドキュメント</a>
+        <a href="/blog" style="color:#a5b4fc">ブログ</a>
+        <a href="/auth/signup" class="btn-sm">無料で始める</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="article-header">
+      <div class="breadcrumb"><a href="/">ホーム</a> &rsaquo; <a href="/blog">ブログ</a> &rsaquo; <span>AIエージェントのメールボックス</span></div>
+      <span class="article-tag">ガイド</span>
+      <h1>AIエージェントに専用メールボックスを与える方法</h1>
+      <div class="article-meta">
+        <span>AgentSendチーム</span><span>&middot;</span>
+        <time datetime="2026-03-20">2026年3月20日</time><span>&middot;</span>
+        <span>約8分</span>
+      </div>
+      <div class="lang-switcher">
+        <span>他の言語で読む：</span>
+        <a href="/blog/how-to-give-your-ai-agent-an-email-inbox" class="lang-link">EN</a>
+        <a href="/blog/es/how-to-give-your-ai-agent-an-email-inbox" class="lang-link">ES</a>
+        <a href="/blog/fr/how-to-give-your-ai-agent-an-email-inbox" class="lang-link">FR</a>
+        <a href="/blog/de/how-to-give-your-ai-agent-an-email-inbox" class="lang-link">DE</a>
+        <a href="/blog/ja/how-to-give-your-ai-agent-an-email-inbox" class="lang-link active">JA</a>
+        <a href="/blog/zh/how-to-give-your-ai-agent-an-email-inbox" class="lang-link">ZH</a>
+        <a href="/blog/pt/how-to-give-your-ai-agent-an-email-inbox" class="lang-link">PT</a>
+      </div>
+    </div>
+
+    <img src="/public/blog/heroes/ai-agent-email-inbox.svg" alt="AgentSendを使ってリアルなメールボックスに接続されたAIエージェントの図" class="hero-image" width="800" height="400" loading="eager">
+
+    <div class="article-body">
+      <p>
+        AIエージェントはコードを書いたり、ウェブを閲覧したり、複雑なワークフローを実行したりできます。しかし、ほとんどのエージェントはまだシンプルなメールを受信することができません。<strong>AgentSend</strong>はこの問題を解決します。エージェント専用に設計されたメールインフラです。プログラムでリアルなメールボックスをプロビジョニングし、Webhook経由でメッセージを受信し、REST APIで返信できます。
+      </p>
+
+      <h2>ステップ1：アカウント作成とAPIキーの取得</h2>
+      <p>
+        <a href="/auth/signup">agentsend.io/auth/signup</a>にアクセスして無料アカウントを作成します。無料プランでは1日最大10通のメールが送受信できます。登録後、<strong>設定 &rarr; APIキー</strong>からAPIキーを生成してください。
+      </p>
+
+      <h2>ステップ2：メールボックス（Inbox）の作成</h2>
+      <p>Inboxはエージェントのメールアドレスのコンテナです。1回のAPI呼び出しで作成できます：</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-label">POST /inboxes</span></div>
+        <div class="code-body"><pre>curl -X POST https://agentsend.io/inboxes \
+  -H <span class="token-string">"Authorization: Bearer あなたのAPIキー"</span> \
+  -H <span class="token-string">"Content-Type: application/json"</span> \
+  -d <span class="token-string">'{
+    "name": "my-research-agent",
+    "webhookUrl": "https://your-server.com/webhooks/email"
+  }'</span></pre></div>
+      </div>
+
+      <p>エージェントには本物のメールアドレスが即時に割り当てられます：<code>my-research-agent@agentsend.io</code></p>
+
+      <h2>ステップ3：Webhook経由で受信メールを処理する</h2>
+      <p>
+        エージェントのアドレスにメールが届くと、AgentSendはあなたの<code>webhookUrl</code>にHTTP POSTを送信します。ペイロードには送信者、件名、本文、添付ファイルが含まれます。
+      </p>
+
+      <h2>ステップ4：MCPスキルを使う（Claudeエージェント）</h2>
+      <p>
+        エージェントがClaudeで動いている場合は、<strong>AgentSend MCPスキル</strong>をインストールするのが最も手軽な方法です。Claudeがメール送信、メールボックス確認、スレッド読み取りのネイティブツールを持ちます。
+      </p>
+
+      <div class="callout">
+        <p>利用可能なすべてのツールは<a href="/skill">MCPスキルドキュメント</a>を参照してください。</p>
+      </div>
+
+      <div class="faq-section">
+        <h2>よくある質問</h2>
+        <div class="faq-item">
+          <h3>AIエージェントは自分のメールアドレスを持てますか？</h3>
+          <p>はい。AgentSendを使えば、どんなAIエージェントにもプログラムで本物のメールボックスをプロビジョニングできます。人間の登録は不要です。エージェントは<code>@agentsend.io</code>の本物のアドレス（またはカスタムドメイン）を取得できます。</p>
+        </div>
+        <div class="faq-item">
+          <h3>AgentSendはどのエージェントフレームワークに対応していますか？</h3>
+          <p>HTTPリクエストを送れるか、MCPツールを使えるフレームワークであれば何でも対応しています。Claude、LangChain、CrewAI、AutoGen、OpenAI Assistantsなどが含まれます。</p>
+        </div>
+        <div class="faq-item">
+          <h3>AgentSendは無料ですか？</h3>
+          <p>無料プランがあります：メールボックスごとに1日最大10通。有料プランは月$9から、1日1,000通のメールとカスタムドメインに対応しています。</p>
+        </div>
+      </div>
+
+      <div class="cta-box">
+        <h2>エージェントにメールボックスを与える準備はできましたか？</h2>
+        <p>無料プランあり。クレジットカード不要。30秒以内にメールアドレスが使えるようになります。</p>
+        <a href="/auth/signup" class="btn-primary">無料で始める &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 AgentSend &middot; <a href="/">ホーム</a> &middot; <a href="/docs">ドキュメント</a> &middot; <a href="/blog">ブログ</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何为 AI 智能体配置专属电子邮箱 | AgentSend</title>
+  <meta name="description" content="一步步教你为 AI 智能体配置真实电子邮件地址。使用 AgentSend，5 分钟内即可通过程序发送和接收电子邮件。">
+  <link rel="canonical" href="https://agentsend.io/blog/zh/how-to-give-your-ai-agent-an-email-inbox">
+  <meta property="og:title" content="如何为 AI 智能体配置专属电子邮箱">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://agentsend.io/blog/zh/how-to-give-your-ai-agent-an-email-inbox">
+  <meta property="og:image" content="https://agentsend.io/public/blog/heroes/ai-agent-email-inbox.svg">
+  <link rel="alternate" hreflang="en" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox">
+  <link rel="alternate" hreflang="es" href="https://agentsend.io/blog/es/how-to-give-your-ai-agent-an-email-inbox">
+  <link rel="alternate" hreflang="fr" href="https://agentsend.io/blog/fr/how-to-give-your-ai-agent-an-email-inbox">
+  <link rel="alternate" hreflang="de" href="https://agentsend.io/blog/de/how-to-give-your-ai-agent-an-email-inbox">
+  <link rel="alternate" hreflang="ja" href="https://agentsend.io/blog/ja/how-to-give-your-ai-agent-an-email-inbox">
+  <link rel="alternate" hreflang="zh" href="https://agentsend.io/blog/zh/how-to-give-your-ai-agent-an-email-inbox">
+  <link rel="alternate" hreflang="pt" href="https://agentsend.io/blog/pt/how-to-give-your-ai-agent-an-email-inbox">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "如何为 AI 智能体配置专属电子邮箱",
+    "image": "https://agentsend.io/public/blog/heroes/ai-agent-email-inbox.svg",
+    "author": { "@type": "Organization", "name": "AgentSend", "url": "https://agentsend.io" },
+    "publisher": { "@type": "Organization", "name": "AgentSend", "url": "https://agentsend.io" },
+    "datePublished": "2026-03-20",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://agentsend.io/blog/zh/how-to-give-your-ai-agent-an-email-inbox" }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #09090b; color: #a1a1aa; line-height: 1.8; }
+    a { color: #818cf8; text-decoration: none; }
+    a:hover { color: #a5b4fc; text-decoration: underline; }
+    .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+    nav { padding: 16px 0; position: sticky; top: 0; z-index: 100; background: rgba(9,9,11,0.9); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.04); }
+    nav .inner { max-width: 900px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 20px; font-weight: 800; color: #fff; }
+    .logo span { background: linear-gradient(135deg, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-links a { color: #71717a; font-size: 14px; font-weight: 500; padding: 7px 14px; border-radius: 8px; }
+    .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.05); text-decoration: none; }
+    .nav-links .btn-sm { background: #818cf8; color: #fff; font-weight: 600; }
+    .article-header { padding: 56px 0 40px; }
+    .breadcrumb { font-size: 13px; color: #3f3f46; margin-bottom: 20px; }
+    .breadcrumb a { color: #52525b; }
+    .article-tag { display: inline-block; background: rgba(129,140,248,0.08); border: 1px solid rgba(129,140,248,0.2); color: #818cf8; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 12px; border-radius: 6px; margin-bottom: 16px; }
+    h1 { font-size: 32px; font-weight: 800; color: #fafafa; line-height: 1.3; margin-bottom: 20px; }
+    .article-meta { display: flex; align-items: center; gap: 16px; font-size: 13px; color: #52525b; margin-bottom: 32px; flex-wrap: wrap; }
+    .lang-switcher { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; margin-bottom: 40px; flex-wrap: wrap; }
+    .lang-switcher span { font-size: 12px; color: #52525b; font-weight: 500; }
+    .lang-link { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 5px; background: rgba(129,140,248,0.08); border: 1px solid rgba(129,140,248,0.15); color: #818cf8; }
+    .lang-link:hover { background: rgba(129,140,248,0.15); text-decoration: none; }
+    .lang-link.active { background: #818cf8; color: #fff; border-color: #818cf8; }
+    .hero-image { width: 100%; border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); margin-bottom: 48px; display: block; }
+    .article-body { padding-bottom: 80px; }
+    .article-body h2 { font-size: 22px; font-weight: 700; color: #fafafa; margin: 44px 0 14px; }
+    .article-body p { margin-bottom: 18px; color: #a1a1aa; font-size: 16px; }
+    .article-body ul { margin: 0 0 18px 24px; }
+    .article-body li { margin-bottom: 8px; font-size: 16px; color: #a1a1aa; }
+    .article-body strong { color: #e4e4e7; }
+    .article-body code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); padding: 2px 7px; border-radius: 5px; color: #c084fc; }
+    .code-block { background: #0d0d10; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; margin: 24px 0; }
+    .code-header { padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); }
+    .code-label { font-size: 12px; color: #52525b; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+    .code-body pre { padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.7; color: #e4e4e7; overflow-x: auto; }
+    .token-string { color: #34d399; }
+    .callout { background: rgba(129,140,248,0.05); border-left: 3px solid #818cf8; border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 24px 0; }
+    .callout p { margin: 0; font-size: 15px; color: #a5b4fc; }
+    .faq-section { margin-top: 56px; padding-top: 44px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .faq-item { margin-bottom: 24px; }
+    .faq-item h3 { font-size: 16px; font-weight: 600; color: #e4e4e7; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; color: #71717a; margin: 0; }
+    .cta-box { background: rgba(129,140,248,0.06); border: 1px solid rgba(129,140,248,0.2); border-radius: 16px; padding: 36px; text-align: center; margin-top: 56px; }
+    .cta-box h2 { font-size: 22px; font-weight: 700; color: #fafafa; margin-bottom: 10px; }
+    .cta-box p { font-size: 15px; color: #71717a; margin-bottom: 24px; }
+    .btn-primary { display: inline-flex; gap: 8px; padding: 13px 28px; background: #818cf8; color: #fff; border-radius: 10px; font-size: 15px; font-weight: 600; }
+    .btn-primary:hover { background: #6366f1; text-decoration: none; color: #fff; }
+    footer { padding: 32px 0; border-top: 1px solid rgba(255,255,255,0.04); text-align: center; }
+    footer p { color: #3f3f46; font-size: 13px; }
+    footer a { color: #52525b; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="inner">
+      <a href="/" class="logo">Agent<span>Send</span></a>
+      <div class="nav-links">
+        <a href="/#pricing">定价</a>
+        <a href="/docs">文档</a>
+        <a href="/blog" style="color:#a5b4fc">博客</a>
+        <a href="/auth/signup" class="btn-sm">免费开始</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="article-header">
+      <div class="breadcrumb"><a href="/">首页</a> &rsaquo; <a href="/blog">博客</a> &rsaquo; <span>AI 智能体电子邮箱</span></div>
+      <span class="article-tag">指南</span>
+      <h1>如何为 AI 智能体配置专属电子邮箱</h1>
+      <div class="article-meta">
+        <span>AgentSend 团队</span><span>&middot;</span>
+        <time datetime="2026-03-20">2026年3月20日</time><span>&middot;</span>
+        <span>约 8 分钟阅读</span>
+      </div>
+      <div class="lang-switcher">
+        <span>其他语言阅读：</span>
+        <a href="/blog/how-to-give-your-ai-agent-an-email-inbox" class="lang-link">EN</a>
+        <a href="/blog/es/how-to-give-your-ai-agent-an-email-inbox" class="lang-link">ES</a>
+        <a href="/blog/fr/how-to-give-your-ai-agent-an-email-inbox" class="lang-link">FR</a>
+        <a href="/blog/de/how-to-give-your-ai-agent-an-email-inbox" class="lang-link">DE</a>
+        <a href="/blog/ja/how-to-give-your-ai-agent-an-email-inbox" class="lang-link">JA</a>
+        <a href="/blog/zh/how-to-give-your-ai-agent-an-email-inbox" class="lang-link active">ZH</a>
+        <a href="/blog/pt/how-to-give-your-ai-agent-an-email-inbox" class="lang-link">PT</a>
+      </div>
+    </div>
+
+    <img src="/public/blog/heroes/ai-agent-email-inbox.svg" alt="AI 智能体通过 AgentSend 连接到真实电子邮箱的示意图" class="hero-image" width="800" height="400" loading="eager">
+
+    <div class="article-body">
+      <p>
+        AI 智能体可以编写代码、浏览网页并执行复杂的工作流 —— 但大多数仍然无法接收一封简单的电子邮件。<strong>AgentSend</strong> 解决了这个问题。这是专为智能体设计的电子邮件基础设施：以编程方式配置真实邮箱、通过 Webhook 接收消息、并使用 REST API 进行回复。
+      </p>
+
+      <h2>第一步：创建账户并获取 API Key</h2>
+      <p>
+        访问 <a href="/auth/signup">agentsend.io/auth/signup</a> 创建免费账户。免费套餐每天最多支持 10 封邮件。注册后，在<strong>设置 &rarr; API Keys</strong> 中生成一个 API Key。
+      </p>
+
+      <h2>第二步：创建邮箱（Inbox）</h2>
+      <p>Inbox 是智能体电子邮件地址的容器。通过一次 API 调用即可创建：</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-label">POST /inboxes</span></div>
+        <div class="code-body"><pre>curl -X POST https://agentsend.io/inboxes \
+  -H <span class="token-string">"Authorization: Bearer 你的API_KEY"</span> \
+  -H <span class="token-string">"Content-Type: application/json"</span> \
+  -d <span class="token-string">'{
+    "name": "my-research-agent",
+    "webhookUrl": "https://your-server.com/webhooks/email"
+  }'</span></pre></div>
+      </div>
+
+      <p>你的智能体现在拥有了一个真实的电子邮件地址：<code>my-research-agent@agentsend.io</code></p>
+
+      <h2>第三步：通过 Webhook 处理接收邮件</h2>
+      <p>
+        当有人给智能体发送邮件时，AgentSend 会向你的 <code>webhookUrl</code> 发送 HTTP POST 请求，包含完整的消息内容 —— 发件人、主题、正文和附件。
+      </p>
+
+      <h2>第四步：使用 MCP Skill（Claude 智能体）</h2>
+      <p>
+        如果你的智能体运行在 Claude 上，安装 <strong>AgentSend MCP Skill</strong> 是最快的方式。Claude 将获得原生工具来发送邮件、查看邮箱和阅读邮件线程 —— 无需额外的 Webhook 代码。
+      </p>
+
+      <div class="callout">
+        <p>所有可用工具请参阅 <a href="/skill">MCP Skill 文档</a>。</p>
+      </div>
+
+      <div class="faq-section">
+        <h2>常见问题</h2>
+        <div class="faq-item">
+          <h3>AI 智能体可以拥有自己的电子邮件地址吗？</h3>
+          <p>可以。AgentSend 允许你以编程方式为任何 AI 智能体配置真实的电子邮箱 —— 无需人工注册。你的智能体将获得一个真实的 <code>@agentsend.io</code> 地址（或你的自定义域名）。</p>
+        </div>
+        <div class="faq-item">
+          <h3>AgentSend 支持哪些智能体框架？</h3>
+          <p>AgentSend 适用于任何能发起 HTTP 请求或使用 MCP 工具的框架，包括 Claude、LangChain、CrewAI、AutoGen 和 OpenAI Assistants。</p>
+        </div>
+        <div class="faq-item">
+          <h3>AgentSend 是免费的吗？</h3>
+          <p>AgentSend 提供免费套餐：每个邮箱每天最多 10 封邮件。付费套餐从每月 9 美元起，支持每天 1,000 封邮件和自定义域名。</p>
+        </div>
+      </div>
+
+      <div class="cta-box">
+        <h2>准备好为你的智能体配置邮箱了吗？</h2>
+        <p>免费套餐可用。无需信用卡。30 秒内邮件地址即可上线。</p>
+        <a href="/auth/signup" class="btn-primary">免费开始 &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 AgentSend &middot; <a href="/">首页</a> &middot; <a href="/docs">文档</a> &middot; <a href="/blog">博客</a></p>
+  </footer>
+</body>
+</html>
