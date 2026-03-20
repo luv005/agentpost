@@ -20,7 +20,7 @@ export async function blogRoute(app: FastifyInstance) {
   app.get("/blog/:locale", async (request, reply) => {
     const { locale } = request.params as { locale: string };
     // Check if locale is a known language code
-    const locales = ["es", "fr", "de", "ja", "zh", "pt"];
+    const locales = ["es", "fr", "de", "ja", "zh", "pt", "ko", "el", "id", "vi", "ar", "zh-tw"];
     if (locales.includes(locale)) {
       const file = join(BLOG_DIR, locale, "index.html");
       if (existsSync(file)) {

@@ -5,6 +5,217 @@
     <loc>https://agentsend.io/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/ja"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://agentsend.io/ko"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/es"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/de"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://agentsend.io/el"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agentsend.io/id"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://agentsend.io/vi"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://agentsend.io/ar"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://agentsend.io/zh"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://agentsend.io/zh-tw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/"/>
+  </url>
+  <url>
+    <loc>https://agentsend.io/ja</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/ja"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://agentsend.io/ko"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/es"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/de"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://agentsend.io/el"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agentsend.io/id"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://agentsend.io/vi"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://agentsend.io/ar"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://agentsend.io/zh"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://agentsend.io/zh-tw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/"/>
+  </url>
+  <url>
+    <loc>https://agentsend.io/ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/ja"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://agentsend.io/ko"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/es"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/de"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://agentsend.io/el"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agentsend.io/id"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://agentsend.io/vi"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://agentsend.io/ar"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://agentsend.io/zh"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://agentsend.io/zh-tw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/"/>
+  </url>
+  <url>
+    <loc>https://agentsend.io/es</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/ja"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://agentsend.io/ko"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/es"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/de"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://agentsend.io/el"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agentsend.io/id"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://agentsend.io/vi"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://agentsend.io/ar"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://agentsend.io/zh"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://agentsend.io/zh-tw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/"/>
+  </url>
+  <url>
+    <loc>https://agentsend.io/de</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/ja"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://agentsend.io/ko"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/es"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/de"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://agentsend.io/el"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agentsend.io/id"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://agentsend.io/vi"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://agentsend.io/ar"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://agentsend.io/zh"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://agentsend.io/zh-tw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/"/>
+  </url>
+  <url>
+    <loc>https://agentsend.io/el</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/ja"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://agentsend.io/ko"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/es"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/de"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://agentsend.io/el"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agentsend.io/id"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://agentsend.io/vi"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://agentsend.io/ar"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://agentsend.io/zh"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://agentsend.io/zh-tw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/"/>
+  </url>
+  <url>
+    <loc>https://agentsend.io/id</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/ja"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://agentsend.io/ko"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/es"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/de"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://agentsend.io/el"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agentsend.io/id"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://agentsend.io/vi"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://agentsend.io/ar"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://agentsend.io/zh"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://agentsend.io/zh-tw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/"/>
+  </url>
+  <url>
+    <loc>https://agentsend.io/vi</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/ja"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://agentsend.io/ko"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/es"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/de"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://agentsend.io/el"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agentsend.io/id"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://agentsend.io/vi"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://agentsend.io/ar"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://agentsend.io/zh"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://agentsend.io/zh-tw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/"/>
+  </url>
+  <url>
+    <loc>https://agentsend.io/fr</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/ja"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://agentsend.io/ko"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/es"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/de"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://agentsend.io/el"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agentsend.io/id"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://agentsend.io/vi"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://agentsend.io/ar"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://agentsend.io/zh"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://agentsend.io/zh-tw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/"/>
+  </url>
+  <url>
+    <loc>https://agentsend.io/ar</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/ja"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://agentsend.io/ko"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/es"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/de"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://agentsend.io/el"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agentsend.io/id"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://agentsend.io/vi"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://agentsend.io/ar"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://agentsend.io/zh"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://agentsend.io/zh-tw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/"/>
+  </url>
+  <url>
+    <loc>https://agentsend.io/zh</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/ja"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://agentsend.io/ko"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/es"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/de"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://agentsend.io/el"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agentsend.io/id"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://agentsend.io/vi"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://agentsend.io/ar"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://agentsend.io/zh"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://agentsend.io/zh-tw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/"/>
+  </url>
+  <url>
+    <loc>https://agentsend.io/zh-tw</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/ja"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://agentsend.io/ko"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/es"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/de"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://agentsend.io/el"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agentsend.io/id"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://agentsend.io/vi"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://agentsend.io/ar"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://agentsend.io/zh"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://agentsend.io/zh-tw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/"/>
   </url>
   <url>
     <loc>https://agentsend.io/docs</loc>
@@ -26,8 +237,6 @@
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
-
-  <!-- Blog post: How to Give Your AI Agent Its Own Email Inbox -->
   <url>
     <loc>https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox</loc>
     <lastmod>2026-03-20</lastmod>
@@ -40,41 +249,90 @@
     <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/blog/ja/how-to-give-your-ai-agent-an-email-inbox"/>
     <xhtml:link rel="alternate" hreflang="zh" href="https://agentsend.io/blog/zh/how-to-give-your-ai-agent-an-email-inbox"/>
     <xhtml:link rel="alternate" hreflang="pt" href="https://agentsend.io/blog/pt/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox"/>
   </url>
   <url>
     <loc>https://agentsend.io/blog/es/how-to-give-your-ai-agent-an-email-inbox</loc>
     <lastmod>2026-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/blog/es/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/blog/fr/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/blog/de/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/blog/ja/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://agentsend.io/blog/zh/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://agentsend.io/blog/pt/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox"/>
   </url>
   <url>
     <loc>https://agentsend.io/blog/fr/how-to-give-your-ai-agent-an-email-inbox</loc>
     <lastmod>2026-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/blog/es/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/blog/fr/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/blog/de/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/blog/ja/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://agentsend.io/blog/zh/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://agentsend.io/blog/pt/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox"/>
   </url>
   <url>
     <loc>https://agentsend.io/blog/de/how-to-give-your-ai-agent-an-email-inbox</loc>
     <lastmod>2026-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/blog/es/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/blog/fr/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/blog/de/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/blog/ja/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://agentsend.io/blog/zh/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://agentsend.io/blog/pt/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox"/>
   </url>
   <url>
     <loc>https://agentsend.io/blog/ja/how-to-give-your-ai-agent-an-email-inbox</loc>
     <lastmod>2026-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/blog/es/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/blog/fr/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/blog/de/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/blog/ja/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://agentsend.io/blog/zh/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://agentsend.io/blog/pt/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox"/>
   </url>
   <url>
     <loc>https://agentsend.io/blog/zh/how-to-give-your-ai-agent-an-email-inbox</loc>
     <lastmod>2026-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/blog/es/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/blog/fr/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/blog/de/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/blog/ja/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://agentsend.io/blog/zh/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://agentsend.io/blog/pt/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox"/>
   </url>
   <url>
     <loc>https://agentsend.io/blog/pt/how-to-give-your-ai-agent-an-email-inbox</loc>
     <lastmod>2026-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentsend.io/blog/es/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://agentsend.io/blog/fr/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://agentsend.io/blog/de/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://agentsend.io/blog/ja/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://agentsend.io/blog/zh/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://agentsend.io/blog/pt/how-to-give-your-ai-agent-an-email-inbox"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentsend.io/blog/how-to-give-your-ai-agent-an-email-inbox"/>
   </url>
 </urlset>

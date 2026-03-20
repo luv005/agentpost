@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgentSend — Email Inboxes for AI Agents</title>
-  <meta name="description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically. Like Gmail, but for agents.">
-  <meta property="og:title" content="AgentSend — Email Inboxes for AI Agents">
-  <meta property="og:description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically.">
+  <title>AgentSend — Hộp Thư Email cho AI Agent</title>
+  <meta name="description" content="Cung cấp cho AI agent của bạn hộp thư email riêng. Gửi, nhận và quản lý hội thoại bằng code. Giống Gmail, nhưng dành cho agent.">
+  <meta property="og:title" content="AgentSend — Hộp Thư Email cho AI Agent">
+  <meta property="og:description" content="Cung cấp cho AI agent của bạn hộp thư email riêng. Gửi, nhận và quản lý hội thoại bằng code.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://agentsend.io">
+  <meta property="og:url" content="https://agentsend.io/vi">
   <meta property="og:image" content="https://agentsend.io/public/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AgentSend — Email Inboxes for AI Agents">
-  <meta name="twitter:description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically.">
+  <meta name="twitter:title" content="AgentSend — Hộp Thư Email cho AI Agent">
+  <meta name="twitter:description" content="Cung cấp cho AI agent của bạn hộp thư email riêng. Gửi, nhận và quản lý hội thoại bằng code.">
   <meta name="twitter:image" content="https://agentsend.io/public/og-image.png">
-  <link rel="canonical" href="https://agentsend.io">
+  <link rel="canonical" href="https://agentsend.io/vi">
   <link rel="alternate" hreflang="en" href="https://agentsend.io">
   <link rel="alternate" hreflang="ja" href="https://agentsend.io/ja">
   <link rel="alternate" hreflang="ko" href="https://agentsend.io/ko">
@@ -33,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "AgentSend",
-    "description": "Email infrastructure for AI agents. Programmatic inboxes, send and receive email, realtime webhooks, and custom domains.",
+    "description": "Hạ tầng email cho AI agent. Hộp thư lập trình, gửi và nhận email, webhook thời gian thực, và tên miền tùy chỉnh.",
     "url": "https://agentsend.io",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
@@ -216,7 +216,7 @@
     .price-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 16px; padding: 32px; position: relative; transition: all 0.3s; }
     .price-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.3); }
     .price-card.popular { border-color: rgba(129,140,248,0.4); box-shadow: 0 0 48px rgba(129,140,248,0.08); }
-    .price-card.popular::after { content: "Most Popular"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #818cf8, #c084fc); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .price-card.popular::after { content: "Phổ Biến Nhất"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #818cf8, #c084fc); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
     .price-name { font-size: 16px; font-weight: 700; color: #e4e4e7; margin-bottom: 4px; }
     .price-amount { font-size: 40px; font-weight: 900; color: #fafafa; margin-bottom: 4px; }
     .price-amount span { font-size: 16px; font-weight: 500; color: #52525b; }
@@ -275,15 +275,15 @@
     <div class="container">
       <div class="logo">Agent<span>Send</span></div>
       <div class="nav-links">
-        <a href="#pricing">Pricing</a>
-        <a href="/docs">Docs</a>
+        <a href="#pricing">Bảng giá</a>
+        <a href="/docs">Tài liệu</a>
         <a href="/blog">Blog</a>
         <a href="https://github.com/luv005/agentpost">GitHub</a>
         <a href="/skill" style="color:#a5b4fc;font-weight:600;">MCP Skill</a>
-        <a href="/auth/signup" class="btn-sm">Start for Free</a>
+        <a href="/auth/signup" class="btn-sm">Dùng Miễn Phí</a>
         <div class="lang-switcher">
           <select onchange="if(this.value)window.location.href=this.value">
-            <option value="" selected>EN</option>
+            <option value="/">EN</option>
             <option value="/ja">JA</option>
             <option value="/ko">KO</option>
             <option value="/es">ES</option>
@@ -291,7 +291,7 @@
             <option value="/de">DE</option>
             <option value="/el">EL</option>
             <option value="/id">ID</option>
-            <option value="/vi">VI</option>
+            <option value="/vi" selected>VI</option>
             <option value="/ar">AR</option>
             <option value="/zh">ZH</option>
             <option value="/zh-tw">ZH-TW</option>
@@ -306,31 +306,31 @@
     <div class="container">
       <div class="hero-grid">
         <div class="hero-left">
-          <div class="badge fade-up"><span class="badge-dot"></span> Now in public beta</div>
-          <h1 class="fade-up delay-1">Instant email for<br><span class="gradient">your agent.</span></h1>
-          <p class="fade-up delay-2">No API keys. No human signup. Your agent gets its own email inbox in seconds.</p>
+          <div class="badge fade-up"><span class="badge-dot"></span> Đang trong giai đoạn public beta</div>
+          <h1 class="fade-up delay-1">Email tức thì cho<br><span class="gradient">agent của bạn.</span></h1>
+          <p class="fade-up delay-2">Không cần API key. Không cần đăng ký thủ công. Agent của bạn có hộp thư email riêng chỉ trong vài giây.</p>
           <div class="hero-ctas fade-up delay-3">
-            <a href="/auth/signup" class="btn btn-primary">Start for Free &rarr;</a>
+            <a href="/auth/signup" class="btn btn-primary">Dùng Miễn Phí &rarr;</a>
             <a href="/skill" class="btn btn-ghost">MCP Skill</a>
           </div>
-          <p class="hero-note fade-up delay-4">No credit card required &middot; Free tier included</p>
+          <p class="hero-note fade-up delay-4">Không cần thẻ tín dụng &middot; Có gói miễn phí</p>
         </div>
         <div class="chat-demo fade-up delay-3">
           <div class="chat-msg">
             <div><div class="chat-avatar agent">🤖</div><div class="chat-label">Agent</div></div>
-            <div class="chat-bubble">I need an email address to continue, but I don't have one.</div>
+            <div class="chat-bubble">Tôi cần một địa chỉ email để tiếp tục, nhưng tôi không có.</div>
           </div>
           <div class="chat-msg right">
-            <div><div class="chat-avatar user">👤</div><div class="chat-label">You</div></div>
-            <div class="chat-bubble">Here, use ⚡ AgentSend:</div>
+            <div><div class="chat-avatar user">👤</div><div class="chat-label">Bạn</div></div>
+            <div class="chat-bubble">Đây, dùng ⚡ AgentSend nhé:</div>
           </div>
           <div class="chat-skill">
             <span class="chat-skill-url">agentsend.io/skill</span>
-            <button class="chat-skill-btn" onclick="navigator.clipboard.writeText('agentsend.io/skill');this.textContent='Copied!'">📋 Copy</button>
+            <button class="chat-skill-btn" onclick="navigator.clipboard.writeText('agentsend.io/skill');this.textContent='Đã sao chép!'">📋 Sao chép</button>
           </div>
           <div class="chat-msg">
             <div><div class="chat-avatar agent">🤖</div><div class="chat-label">Agent</div></div>
-            <div class="chat-bubble">Done. I'm now at <span class="chat-email">support-k7x2@agentsend.io</span></div>
+            <div class="chat-bubble">Xong. Tôi đã có email tại <span class="chat-email">support-k7x2@agentsend.io</span></div>
           </div>
         </div>
       </div>
@@ -384,24 +384,24 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="how">
     <div class="container">
       <div class="section-header">
-        <h2>Up and running in 60 seconds</h2>
-        <p>Three steps. No config. No SMTP setup.</p>
+        <h2>Sẵn sàng trong 60 giây</h2>
+        <p>Ba bước. Không cần cấu hình. Không cần thiết lập SMTP.</p>
       </div>
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
-          <h3>Get an API key</h3>
-          <p>Sign up and grab your key. No credit card, no email verification, no waiting.</p>
+          <h3>Lấy API key</h3>
+          <p>Đăng ký và nhận key của bạn. Không cần thẻ tín dụng, không cần xác minh email, không cần chờ đợi.</p>
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <h3>Create an inbox</h3>
-          <p>One API call creates a fully functional email inbox for your agent with a unique address.</p>
+          <h3>Tạo hộp thư</h3>
+          <p>Một lệnh gọi API tạo ra hộp thư email hoàn chỉnh cho agent của bạn với địa chỉ riêng biệt.</p>
         </div>
         <div class="step">
           <div class="step-num">3</div>
-          <h3>Send &amp; receive</h3>
-          <p>Your agent sends emails, gets replies via webhooks, and tracks full conversation threads.</p>
+          <h3>Gửi &amp; nhận</h3>
+          <p>Agent của bạn gửi email, nhận phản hồi qua webhook, và theo dõi toàn bộ chuỗi hội thoại.</p>
         </div>
       </div>
     </div>
@@ -413,54 +413,54 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="features">
     <div class="container">
       <div class="section-header">
-        <h2>Everything your agent needs</h2>
-        <p>It's not AI for your email. It's email for your AI.</p>
+        <h2>Mọi thứ agent của bạn cần</h2>
+        <p>Đây không phải AI cho email của bạn. Đây là email cho AI của bạn.</p>
       </div>
       <div class="feature-grid">
         <div class="feature">
           <span class="feature-icon">📨</span>
-          <h3>Send &amp; Receive</h3>
-          <p>Full two-way email. AWS SES for outbound delivery, built-in SMTP server for inbound. Queue-based async processing.</p>
+          <h3>Gửi &amp; Nhận</h3>
+          <p>Email hai chiều đầy đủ. AWS SES cho gửi đi, server SMTP tích hợp cho nhận vào. Xử lý bất đồng bộ dựa trên hàng đợi.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">💬</span>
-          <h3>Auto-Threading</h3>
-          <p>RFC 5322 compliant conversation threading. Messages auto-grouped via Message-ID, In-Reply-To, and References.</p>
+          <h3>Tự Động Nhóm Hội Thoại</h3>
+          <p>Nhóm hội thoại tuân thủ RFC 5322. Tin nhắn tự động nhóm qua Message-ID, In-Reply-To và References.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">⚡</span>
-          <h3>Realtime Webhooks</h3>
-          <p>Instant notifications when emails arrive. HMAC-SHA256 signed payloads with automatic retry and backoff.</p>
+          <h3>Webhook Thời Gian Thực</h3>
+          <p>Thông báo tức thì khi có email đến. Payload ký bằng HMAC-SHA256 với tự động thử lại và backoff.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🌐</span>
-          <h3>Custom Domains</h3>
-          <p>Use your own domain with automated DKIM and SPF verification. Your agent sends from your-brand.com.</p>
+          <h3>Tên Miền Tùy Chỉnh</h3>
+          <p>Sử dụng tên miền của riêng bạn với xác minh DKIM và SPF tự động. Agent của bạn gửi từ your-brand.com.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">📎</span>
-          <h3>Attachments</h3>
-          <p>Upload and attach files up to 10MB. S3-backed storage with presigned download URLs.</p>
+          <h3>Tệp Đính Kèm</h3>
+          <p>Tải lên và đính kèm tệp lên đến 10MB. Lưu trữ trên S3 với URL tải xuống presigned.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🛡️</span>
-          <h3>Bounce Tracking</h3>
-          <p>Automatic SES event processing for bounces, complaints, and delivery confirmations.</p>
+          <h3>Theo Dõi Bounce</h3>
+          <p>Tự động xử lý event SES cho bounce, khiếu nại và xác nhận gửi thành công.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🔑</span>
-          <h3>API Key Auth</h3>
-          <p>Simple bearer token auth. SHA-256 hashed storage with per-account and per-inbox rate limiting.</p>
+          <h3>Xác Thực API Key</h3>
+          <p>Xác thực bearer token đơn giản. Lưu trữ hash SHA-256 với giới hạn tốc độ theo tài khoản và theo inbox.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🧩</span>
           <h3>MCP Skill</h3>
-          <p>Drop-in MCP server for Claude, Cursor, and any MCP-compatible AI agent. npx @agentsend/mcp.</p>
+          <p>Server MCP sẵn dùng cho Claude, Cursor và mọi AI agent tương thích MCP. npx @agentsend/mcp.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">📖</span>
-          <h3>OpenAPI Docs</h3>
-          <p>Interactive Swagger UI with complete API documentation. Try endpoints directly at /docs.</p>
+          <h3>Tài Liệu OpenAPI</h3>
+          <p>Swagger UI tương tác với tài liệu API đầy đủ. Thử endpoint trực tiếp tại /docs.</p>
         </div>
       </div>
     </div>
@@ -472,8 +472,8 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="comparison">
     <div class="container">
       <div class="section-header">
-        <h2>Why not just use Gmail?</h2>
-        <p>Email services built for humans don't work for agents.</p>
+        <h2>Sao không dùng Gmail thôi?</h2>
+        <p>Dịch vụ email được xây dựng cho con người không phù hợp với agent.</p>
       </div>
       <div class="comp-table">
         <div class="comp-row comp-header">
@@ -481,13 +481,13 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
           <span style="text-align:center">AgentSend</span>
           <span style="text-align:center">Gmail API</span>
         </div>
-        <div class="comp-row"><span class="label">Programmatic inbox creation</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">No human signup required</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">Conversation threading API</span><span class="yes">✓</span><span class="partial">Partial</span></div>
-        <div class="comp-row"><span class="label">Realtime webhooks</span><span class="yes">✓</span><span class="partial">Push only</span></div>
-        <div class="comp-row"><span class="label">Custom domains</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">No OAuth dance</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">Built for AI agents</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">Tạo inbox bằng code</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">Không cần đăng ký thủ công</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">API nhóm hội thoại</span><span class="yes">✓</span><span class="partial">Một phần</span></div>
+        <div class="comp-row"><span class="label">Webhook thời gian thực</span><span class="yes">✓</span><span class="partial">Chỉ Push</span></div>
+        <div class="comp-row"><span class="label">Tên miền tùy chỉnh</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">Không cần OAuth</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">Được xây dựng cho AI agent</span><span class="yes">✓</span><span class="no">✗</span></div>
       </div>
     </div>
   </section>
@@ -495,14 +495,14 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <!-- Framework Compatibility -->
   <section class="frameworks">
     <div class="container">
-      <h3>Works with your agent framework</h3>
+      <h3>Tương thích với framework agent của bạn</h3>
       <div class="framework-logos">
         <span>LangChain</span>
         <span>CrewAI</span>
         <span>AutoGen</span>
         <span>OpenAI Agents</span>
         <span>Claude MCP</span>
-        <span>Any HTTP client</span>
+        <span>Bất kỳ HTTP client nào</span>
       </div>
     </div>
   </section>
@@ -513,50 +513,50 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="pricing" id="pricing">
     <div class="container">
       <div class="section-header">
-        <h2>Simple, transparent pricing</h2>
-        <p>Start free. Scale when you need to.</p>
+        <h2>Bảng giá đơn giản, minh bạch</h2>
+        <p>Bắt đầu miễn phí. Nâng cấp khi cần.</p>
       </div>
       <div class="pricing-grid">
         <div class="price-card">
           <div class="price-name">Free</div>
-          <div class="price-amount">$0<span>/mo</span></div>
-          <div class="price-desc">Perfect for prototyping</div>
+          <div class="price-amount">$0<span>/tháng</span></div>
+          <div class="price-desc">Hoàn hảo để thử nghiệm</div>
           <ul class="price-features">
-            <li>3 inboxes</li>
-            <li>3,000 emails/month</li>
-            <li>100 emails/day</li>
-            <li>Webhooks</li>
+            <li>3 hộp thư</li>
+            <li>3.000 email/tháng</li>
+            <li>100 email/ngày</li>
+            <li>Webhook</li>
             <li>Threading</li>
           </ul>
-          <a href="/auth/signup" class="price-btn price-btn-ghost">Get Started</a>
+          <a href="/auth/signup" class="price-btn price-btn-ghost">Bắt Đầu</a>
         </div>
         <div class="price-card popular">
           <div class="price-name">Pro</div>
-          <div class="price-amount">$9<span>/mo</span></div>
-          <div class="price-desc">For production agents</div>
+          <div class="price-amount">$9<span>/tháng</span></div>
+          <div class="price-desc">Cho agent trong production</div>
           <ul class="price-features">
-            <li>5 inboxes</li>
-            <li>5,000 emails/month</li>
-            <li>Unlimited emails/day</li>
-            <li>Custom domains</li>
-            <li>Attachments up to 10MB</li>
-            <li>Priority support</li>
+            <li>5 hộp thư</li>
+            <li>5.000 email/tháng</li>
+            <li>Email không giới hạn/ngày</li>
+            <li>Tên miền tùy chỉnh</li>
+            <li>Đính kèm đến 10MB</li>
+            <li>Hỗ trợ ưu tiên</li>
           </ul>
-          <a href="/auth/signup" class="price-btn price-btn-primary">Start Free Trial</a>
+          <a href="/auth/signup" class="price-btn price-btn-primary">Dùng Thử Miễn Phí</a>
         </div>
         <div class="price-card">
           <div class="price-name">Enterprise</div>
-          <div class="price-amount">$99<span>/mo</span></div>
-          <div class="price-desc">For high-volume teams</div>
+          <div class="price-amount">$99<span>/tháng</span></div>
+          <div class="price-desc">Cho đội nhóm khối lượng lớn</div>
           <ul class="price-features">
-            <li>100 inboxes</li>
-            <li>100,000 emails/month</li>
-            <li>Unlimited emails/day</li>
-            <li>100 custom domains</li>
-            <li>7 webhook endpoints</li>
-            <li>Priority support</li>
+            <li>100 hộp thư</li>
+            <li>100.000 email/tháng</li>
+            <li>Email không giới hạn/ngày</li>
+            <li>100 tên miền tùy chỉnh</li>
+            <li>7 webhook endpoint</li>
+            <li>Hỗ trợ ưu tiên</li>
           </ul>
-          <a href="/auth/signup" class="price-btn price-btn-primary">Get Started</a>
+          <a href="/auth/signup" class="price-btn price-btn-primary">Bắt Đầu</a>
         </div>
       </div>
     </div>
@@ -565,21 +565,21 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <!-- Final CTA -->
   <section class="cta">
     <div class="container">
-      <h2>Give your agent an email inbox</h2>
-      <p>Free to start. No credit card required. Takes 60 seconds.</p>
-      <a href="/auth/signup" class="btn btn-primary">Start Building &rarr;</a>
+      <h2>Trao cho agent của bạn một hộp thư email</h2>
+      <p>Miễn phí để bắt đầu. Không cần thẻ tín dụng. Chỉ mất 60 giây.</p>
+      <a href="/auth/signup" class="btn btn-primary">Bắt Đầu Xây Dựng &rarr;</a>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
     <div class="container">
-      <span class="copy">&copy; 2026 AgentSend. Email infrastructure for AI agents.</span>
+      <span class="copy">&copy; 2026 AgentSend. Hạ tầng email cho AI agent.</span>
       <div class="links">
-        <a href="/docs">Docs</a>
+        <a href="/docs">Tài liệu</a>
         <a href="/skill">MCP Skill</a>
         <a href="https://github.com/luv005/agentpost">GitHub</a>
-        <a href="mailto:hello@agentsend.io">Contact</a>
+        <a href="mailto:hello@agentsend.io">Liên hệ</a>
       </div>
     </div>
   </footer>

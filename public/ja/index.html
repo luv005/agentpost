@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgentSend — Email Inboxes for AI Agents</title>
-  <meta name="description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically. Like Gmail, but for agents.">
-  <meta property="og:title" content="AgentSend — Email Inboxes for AI Agents">
-  <meta property="og:description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically.">
+  <title>AgentSend — AIエージェント専用メールボックス</title>
+  <meta name="description" content="AIエージェントに専用のメール受信箱を。プログラムでメールの送受信・会話管理が可能。Gmailのように、でもエージェントのために。">
+  <meta property="og:title" content="AgentSend — AIエージェント専用メールボックス">
+  <meta property="og:description" content="AIエージェントに専用のメール受信箱を。プログラムでメールの送受信・会話管理が可能。">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://agentsend.io">
+  <meta property="og:url" content="https://agentsend.io/ja">
   <meta property="og:image" content="https://agentsend.io/public/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AgentSend — Email Inboxes for AI Agents">
-  <meta name="twitter:description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically.">
+  <meta name="twitter:title" content="AgentSend — AIエージェント専用メールボックス">
+  <meta name="twitter:description" content="AIエージェントに専用のメール受信箱を。プログラムでメールの送受信・会話管理が可能。">
   <meta name="twitter:image" content="https://agentsend.io/public/og-image.png">
-  <link rel="canonical" href="https://agentsend.io">
+  <link rel="canonical" href="https://agentsend.io/ja">
   <link rel="alternate" hreflang="en" href="https://agentsend.io">
   <link rel="alternate" hreflang="ja" href="https://agentsend.io/ja">
   <link rel="alternate" hreflang="ko" href="https://agentsend.io/ko">
@@ -33,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "AgentSend",
-    "description": "Email infrastructure for AI agents. Programmatic inboxes, send and receive email, realtime webhooks, and custom domains.",
+    "description": "AIエージェント向けメールインフラ。プログラムで受信箱を作成、メールの送受信、リアルタイムWebhook、カスタムドメインに対応。",
     "url": "https://agentsend.io",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
@@ -216,7 +216,7 @@
     .price-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 16px; padding: 32px; position: relative; transition: all 0.3s; }
     .price-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.3); }
     .price-card.popular { border-color: rgba(129,140,248,0.4); box-shadow: 0 0 48px rgba(129,140,248,0.08); }
-    .price-card.popular::after { content: "Most Popular"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #818cf8, #c084fc); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .price-card.popular::after { content: "一番人気"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #818cf8, #c084fc); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
     .price-name { font-size: 16px; font-weight: 700; color: #e4e4e7; margin-bottom: 4px; }
     .price-amount { font-size: 40px; font-weight: 900; color: #fafafa; margin-bottom: 4px; }
     .price-amount span { font-size: 16px; font-weight: 500; color: #52525b; }
@@ -275,16 +275,16 @@
     <div class="container">
       <div class="logo">Agent<span>Send</span></div>
       <div class="nav-links">
-        <a href="#pricing">Pricing</a>
-        <a href="/docs">Docs</a>
-        <a href="/blog">Blog</a>
+        <a href="#pricing">料金</a>
+        <a href="/docs">ドキュメント</a>
+        <a href="/blog">ブログ</a>
         <a href="https://github.com/luv005/agentpost">GitHub</a>
         <a href="/skill" style="color:#a5b4fc;font-weight:600;">MCP Skill</a>
-        <a href="/auth/signup" class="btn-sm">Start for Free</a>
+        <a href="/auth/signup" class="btn-sm">無料で始める</a>
         <div class="lang-switcher">
           <select onchange="if(this.value)window.location.href=this.value">
-            <option value="" selected>EN</option>
-            <option value="/ja">JA</option>
+            <option value="/">EN</option>
+            <option value="/ja" selected>JA</option>
             <option value="/ko">KO</option>
             <option value="/es">ES</option>
             <option value="/fr">FR</option>
@@ -306,31 +306,31 @@
     <div class="container">
       <div class="hero-grid">
         <div class="hero-left">
-          <div class="badge fade-up"><span class="badge-dot"></span> Now in public beta</div>
-          <h1 class="fade-up delay-1">Instant email for<br><span class="gradient">your agent.</span></h1>
-          <p class="fade-up delay-2">No API keys. No human signup. Your agent gets its own email inbox in seconds.</p>
+          <div class="badge fade-up"><span class="badge-dot"></span> パブリックベータ公開中</div>
+          <h1 class="fade-up delay-1">エージェントに<br><span class="gradient">即座にメールを。</span></h1>
+          <p class="fade-up delay-2">APIキー不要。人間の登録不要。あなたのエージェントが数秒で専用メールボックスを取得。</p>
           <div class="hero-ctas fade-up delay-3">
-            <a href="/auth/signup" class="btn btn-primary">Start for Free &rarr;</a>
+            <a href="/auth/signup" class="btn btn-primary">無料で始める &rarr;</a>
             <a href="/skill" class="btn btn-ghost">MCP Skill</a>
           </div>
-          <p class="hero-note fade-up delay-4">No credit card required &middot; Free tier included</p>
+          <p class="hero-note fade-up delay-4">クレジットカード不要 &middot; 無料プランあり</p>
         </div>
         <div class="chat-demo fade-up delay-3">
           <div class="chat-msg">
             <div><div class="chat-avatar agent">🤖</div><div class="chat-label">Agent</div></div>
-            <div class="chat-bubble">I need an email address to continue, but I don't have one.</div>
+            <div class="chat-bubble">続行するにはメールアドレスが必要ですが、持っていません。</div>
           </div>
           <div class="chat-msg right">
             <div><div class="chat-avatar user">👤</div><div class="chat-label">You</div></div>
-            <div class="chat-bubble">Here, use ⚡ AgentSend:</div>
+            <div class="chat-bubble">⚡ AgentSend を使って:</div>
           </div>
           <div class="chat-skill">
             <span class="chat-skill-url">agentsend.io/skill</span>
-            <button class="chat-skill-btn" onclick="navigator.clipboard.writeText('agentsend.io/skill');this.textContent='Copied!'">📋 Copy</button>
+            <button class="chat-skill-btn" onclick="navigator.clipboard.writeText('agentsend.io/skill');this.textContent='コピー済み!'">📋 コピー</button>
           </div>
           <div class="chat-msg">
             <div><div class="chat-avatar agent">🤖</div><div class="chat-label">Agent</div></div>
-            <div class="chat-bubble">Done. I'm now at <span class="chat-email">support-k7x2@agentsend.io</span></div>
+            <div class="chat-bubble">完了しました。<span class="chat-email">support-k7x2@agentsend.io</span> で利用可能です</div>
           </div>
         </div>
       </div>
@@ -384,24 +384,24 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="how">
     <div class="container">
       <div class="section-header">
-        <h2>Up and running in 60 seconds</h2>
-        <p>Three steps. No config. No SMTP setup.</p>
+        <h2>60秒で運用開始</h2>
+        <p>3ステップ。設定不要。SMTPセットアップ不要。</p>
       </div>
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
-          <h3>Get an API key</h3>
-          <p>Sign up and grab your key. No credit card, no email verification, no waiting.</p>
+          <h3>APIキーを取得</h3>
+          <p>サインアップしてキーを取得。クレジットカード不要、メール認証不要、待ち時間なし。</p>
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <h3>Create an inbox</h3>
-          <p>One API call creates a fully functional email inbox for your agent with a unique address.</p>
+          <h3>受信箱を作成</h3>
+          <p>1回のAPIコールで、エージェント専用の完全なメール受信箱を独自アドレス付きで作成。</p>
         </div>
         <div class="step">
           <div class="step-num">3</div>
-          <h3>Send &amp; receive</h3>
-          <p>Your agent sends emails, gets replies via webhooks, and tracks full conversation threads.</p>
+          <h3>送信 &amp; 受信</h3>
+          <p>エージェントがメールを送信し、Webhookで返信を受け取り、会話スレッドを一元管理。</p>
         </div>
       </div>
     </div>
@@ -413,54 +413,54 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="features">
     <div class="container">
       <div class="section-header">
-        <h2>Everything your agent needs</h2>
-        <p>It's not AI for your email. It's email for your AI.</p>
+        <h2>エージェントに必要なすべてを</h2>
+        <p>メールにAIを使うのではなく、AIにメールを使わせる。</p>
       </div>
       <div class="feature-grid">
         <div class="feature">
           <span class="feature-icon">📨</span>
-          <h3>Send &amp; Receive</h3>
-          <p>Full two-way email. AWS SES for outbound delivery, built-in SMTP server for inbound. Queue-based async processing.</p>
+          <h3>送信 &amp; 受信</h3>
+          <p>完全な双方向メール。送信はAWS SES、受信は内蔵SMTPサーバー。キューベースの非同期処理。</p>
         </div>
         <div class="feature">
           <span class="feature-icon">💬</span>
-          <h3>Auto-Threading</h3>
-          <p>RFC 5322 compliant conversation threading. Messages auto-grouped via Message-ID, In-Reply-To, and References.</p>
+          <h3>自動スレッディング</h3>
+          <p>RFC 5322準拠の会話スレッド機能。Message-ID、In-Reply-To、Referencesによるメッセージの自動グループ化。</p>
         </div>
         <div class="feature">
           <span class="feature-icon">⚡</span>
-          <h3>Realtime Webhooks</h3>
-          <p>Instant notifications when emails arrive. HMAC-SHA256 signed payloads with automatic retry and backoff.</p>
+          <h3>リアルタイムWebhook</h3>
+          <p>メール着信時に即座に通知。HMAC-SHA256署名ペイロードと自動リトライ・バックオフ機能付き。</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🌐</span>
-          <h3>Custom Domains</h3>
-          <p>Use your own domain with automated DKIM and SPF verification. Your agent sends from your-brand.com.</p>
+          <h3>カスタムドメイン</h3>
+          <p>DKIMとSPFの自動検証で独自ドメインを利用可能。エージェントがyour-brand.comから送信。</p>
         </div>
         <div class="feature">
           <span class="feature-icon">📎</span>
-          <h3>Attachments</h3>
-          <p>Upload and attach files up to 10MB. S3-backed storage with presigned download URLs.</p>
+          <h3>添付ファイル</h3>
+          <p>最大10MBのファイルをアップロード・添付。S3バックエンドストレージと署名付きダウンロードURL。</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🛡️</span>
-          <h3>Bounce Tracking</h3>
-          <p>Automatic SES event processing for bounces, complaints, and delivery confirmations.</p>
+          <h3>バウンス追跡</h3>
+          <p>バウンス、苦情、配信確認のSESイベントを自動処理。</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🔑</span>
-          <h3>API Key Auth</h3>
-          <p>Simple bearer token auth. SHA-256 hashed storage with per-account and per-inbox rate limiting.</p>
+          <h3>APIキー認証</h3>
+          <p>シンプルなBearerトークン認証。SHA-256ハッシュ保存、アカウント・受信箱単位のレート制限。</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🧩</span>
           <h3>MCP Skill</h3>
-          <p>Drop-in MCP server for Claude, Cursor, and any MCP-compatible AI agent. npx @agentsend/mcp.</p>
+          <p>Claude、Cursor、MCP対応AIエージェント向けのドロップインMCPサーバー。npx @agentsend/mcp。</p>
         </div>
         <div class="feature">
           <span class="feature-icon">📖</span>
-          <h3>OpenAPI Docs</h3>
-          <p>Interactive Swagger UI with complete API documentation. Try endpoints directly at /docs.</p>
+          <h3>OpenAPI ドキュメント</h3>
+          <p>完全なAPIドキュメント付きのインタラクティブなSwagger UI。/docsでエンドポイントを直接テスト。</p>
         </div>
       </div>
     </div>
@@ -472,8 +472,8 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="comparison">
     <div class="container">
       <div class="section-header">
-        <h2>Why not just use Gmail?</h2>
-        <p>Email services built for humans don't work for agents.</p>
+        <h2>なぜGmailではダメなのか？</h2>
+        <p>人間向けのメールサービスは、エージェントには向いていません。</p>
       </div>
       <div class="comp-table">
         <div class="comp-row comp-header">
@@ -481,13 +481,13 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
           <span style="text-align:center">AgentSend</span>
           <span style="text-align:center">Gmail API</span>
         </div>
-        <div class="comp-row"><span class="label">Programmatic inbox creation</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">No human signup required</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">Conversation threading API</span><span class="yes">✓</span><span class="partial">Partial</span></div>
-        <div class="comp-row"><span class="label">Realtime webhooks</span><span class="yes">✓</span><span class="partial">Push only</span></div>
-        <div class="comp-row"><span class="label">Custom domains</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">No OAuth dance</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">Built for AI agents</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">プログラムによる受信箱作成</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">人間の登録不要</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">会話スレッドAPI</span><span class="yes">✓</span><span class="partial">部分的</span></div>
+        <div class="comp-row"><span class="label">リアルタイムWebhook</span><span class="yes">✓</span><span class="partial">Pushのみ</span></div>
+        <div class="comp-row"><span class="label">カスタムドメイン</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">OAuth認証不要</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">AIエージェント向け設計</span><span class="yes">✓</span><span class="no">✗</span></div>
       </div>
     </div>
   </section>
@@ -495,14 +495,14 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <!-- Framework Compatibility -->
   <section class="frameworks">
     <div class="container">
-      <h3>Works with your agent framework</h3>
+      <h3>お使いのエージェントフレームワークに対応</h3>
       <div class="framework-logos">
         <span>LangChain</span>
         <span>CrewAI</span>
         <span>AutoGen</span>
         <span>OpenAI Agents</span>
         <span>Claude MCP</span>
-        <span>Any HTTP client</span>
+        <span>あらゆるHTTPクライアント</span>
       </div>
     </div>
   </section>
@@ -513,50 +513,50 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="pricing" id="pricing">
     <div class="container">
       <div class="section-header">
-        <h2>Simple, transparent pricing</h2>
-        <p>Start free. Scale when you need to.</p>
+        <h2>シンプルで明瞭な料金体系</h2>
+        <p>無料で始めて、必要に応じてスケール。</p>
       </div>
       <div class="pricing-grid">
         <div class="price-card">
           <div class="price-name">Free</div>
-          <div class="price-amount">$0<span>/mo</span></div>
-          <div class="price-desc">Perfect for prototyping</div>
+          <div class="price-amount">$0<span>/月</span></div>
+          <div class="price-desc">プロトタイプに最適</div>
           <ul class="price-features">
-            <li>3 inboxes</li>
-            <li>3,000 emails/month</li>
-            <li>100 emails/day</li>
-            <li>Webhooks</li>
-            <li>Threading</li>
+            <li>受信箱 3個</li>
+            <li>月間 3,000通</li>
+            <li>1日 100通</li>
+            <li>Webhook</li>
+            <li>スレッディング</li>
           </ul>
-          <a href="/auth/signup" class="price-btn price-btn-ghost">Get Started</a>
+          <a href="/auth/signup" class="price-btn price-btn-ghost">始める</a>
         </div>
         <div class="price-card popular">
           <div class="price-name">Pro</div>
-          <div class="price-amount">$9<span>/mo</span></div>
-          <div class="price-desc">For production agents</div>
+          <div class="price-amount">$9<span>/月</span></div>
+          <div class="price-desc">本番環境のエージェント向け</div>
           <ul class="price-features">
-            <li>5 inboxes</li>
-            <li>5,000 emails/month</li>
-            <li>Unlimited emails/day</li>
-            <li>Custom domains</li>
-            <li>Attachments up to 10MB</li>
-            <li>Priority support</li>
+            <li>受信箱 5個</li>
+            <li>月間 5,000通</li>
+            <li>1日あたり無制限</li>
+            <li>カスタムドメイン</li>
+            <li>添付ファイル 最大10MB</li>
+            <li>優先サポート</li>
           </ul>
-          <a href="/auth/signup" class="price-btn price-btn-primary">Start Free Trial</a>
+          <a href="/auth/signup" class="price-btn price-btn-primary">無料トライアルを開始</a>
         </div>
         <div class="price-card">
           <div class="price-name">Enterprise</div>
-          <div class="price-amount">$99<span>/mo</span></div>
-          <div class="price-desc">For high-volume teams</div>
+          <div class="price-amount">$99<span>/月</span></div>
+          <div class="price-desc">大規模チーム向け</div>
           <ul class="price-features">
-            <li>100 inboxes</li>
-            <li>100,000 emails/month</li>
-            <li>Unlimited emails/day</li>
-            <li>100 custom domains</li>
-            <li>7 webhook endpoints</li>
-            <li>Priority support</li>
+            <li>受信箱 100個</li>
+            <li>月間 100,000通</li>
+            <li>1日あたり無制限</li>
+            <li>カスタムドメイン 100個</li>
+            <li>Webhookエンドポイント 7個</li>
+            <li>優先サポート</li>
           </ul>
-          <a href="/auth/signup" class="price-btn price-btn-primary">Get Started</a>
+          <a href="/auth/signup" class="price-btn price-btn-primary">始める</a>
         </div>
       </div>
     </div>
@@ -565,21 +565,21 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <!-- Final CTA -->
   <section class="cta">
     <div class="container">
-      <h2>Give your agent an email inbox</h2>
-      <p>Free to start. No credit card required. Takes 60 seconds.</p>
-      <a href="/auth/signup" class="btn btn-primary">Start Building &rarr;</a>
+      <h2>エージェントにメール受信箱を</h2>
+      <p>無料で開始。クレジットカード不要。わずか60秒。</p>
+      <a href="/auth/signup" class="btn btn-primary">構築を始める &rarr;</a>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
     <div class="container">
-      <span class="copy">&copy; 2026 AgentSend. Email infrastructure for AI agents.</span>
+      <span class="copy">&copy; 2026 AgentSend. AIエージェント向けメールインフラ。</span>
       <div class="links">
-        <a href="/docs">Docs</a>
+        <a href="/docs">ドキュメント</a>
         <a href="/skill">MCP Skill</a>
         <a href="https://github.com/luv005/agentpost">GitHub</a>
-        <a href="mailto:hello@agentsend.io">Contact</a>
+        <a href="mailto:hello@agentsend.io">お問い合わせ</a>
       </div>
     </div>
   </footer>

@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgentSend — Email Inboxes for AI Agents</title>
-  <meta name="description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically. Like Gmail, but for agents.">
-  <meta property="og:title" content="AgentSend — Email Inboxes for AI Agents">
-  <meta property="og:description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically.">
+  <title>AgentSend — E-Mail-Postfaecher fuer KI-Agenten</title>
+  <meta name="description" content="Geben Sie Ihrem KI-Agenten ein eigenes E-Mail-Postfach. Senden, empfangen und verwalten Sie Konversationen programmatisch. Wie Gmail, aber fuer Agenten.">
+  <meta property="og:title" content="AgentSend — E-Mail-Postfaecher fuer KI-Agenten">
+  <meta property="og:description" content="Geben Sie Ihrem KI-Agenten ein eigenes E-Mail-Postfach. Senden, empfangen und verwalten Sie Konversationen programmatisch.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://agentsend.io">
+  <meta property="og:url" content="https://agentsend.io/de">
   <meta property="og:image" content="https://agentsend.io/public/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AgentSend — Email Inboxes for AI Agents">
-  <meta name="twitter:description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically.">
+  <meta name="twitter:title" content="AgentSend — E-Mail-Postfaecher fuer KI-Agenten">
+  <meta name="twitter:description" content="Geben Sie Ihrem KI-Agenten ein eigenes E-Mail-Postfach. Senden, empfangen und verwalten Sie Konversationen programmatisch.">
   <meta name="twitter:image" content="https://agentsend.io/public/og-image.png">
-  <link rel="canonical" href="https://agentsend.io">
+  <link rel="canonical" href="https://agentsend.io/de">
   <link rel="alternate" hreflang="en" href="https://agentsend.io">
   <link rel="alternate" hreflang="ja" href="https://agentsend.io/ja">
   <link rel="alternate" hreflang="ko" href="https://agentsend.io/ko">
@@ -33,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "AgentSend",
-    "description": "Email infrastructure for AI agents. Programmatic inboxes, send and receive email, realtime webhooks, and custom domains.",
+    "description": "E-Mail-Infrastruktur fuer KI-Agenten. Programmatische Postfaecher, E-Mails senden und empfangen, Echtzeit-Webhooks und eigene Domains.",
     "url": "https://agentsend.io",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
@@ -216,7 +216,7 @@
     .price-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 16px; padding: 32px; position: relative; transition: all 0.3s; }
     .price-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.3); }
     .price-card.popular { border-color: rgba(129,140,248,0.4); box-shadow: 0 0 48px rgba(129,140,248,0.08); }
-    .price-card.popular::after { content: "Most Popular"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #818cf8, #c084fc); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .price-card.popular::after { content: "Beliebteste Wahl"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #818cf8, #c084fc); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
     .price-name { font-size: 16px; font-weight: 700; color: #e4e4e7; margin-bottom: 4px; }
     .price-amount { font-size: 40px; font-weight: 900; color: #fafafa; margin-bottom: 4px; }
     .price-amount span { font-size: 16px; font-weight: 500; color: #52525b; }
@@ -275,20 +275,20 @@
     <div class="container">
       <div class="logo">Agent<span>Send</span></div>
       <div class="nav-links">
-        <a href="#pricing">Pricing</a>
+        <a href="#pricing">Preise</a>
         <a href="/docs">Docs</a>
         <a href="/blog">Blog</a>
         <a href="https://github.com/luv005/agentpost">GitHub</a>
         <a href="/skill" style="color:#a5b4fc;font-weight:600;">MCP Skill</a>
-        <a href="/auth/signup" class="btn-sm">Start for Free</a>
+        <a href="/auth/signup" class="btn-sm">Kostenlos starten</a>
         <div class="lang-switcher">
           <select onchange="if(this.value)window.location.href=this.value">
-            <option value="" selected>EN</option>
+            <option value="/">EN</option>
             <option value="/ja">JA</option>
             <option value="/ko">KO</option>
             <option value="/es">ES</option>
             <option value="/fr">FR</option>
-            <option value="/de">DE</option>
+            <option value="/de" selected>DE</option>
             <option value="/el">EL</option>
             <option value="/id">ID</option>
             <option value="/vi">VI</option>
@@ -306,31 +306,31 @@
     <div class="container">
       <div class="hero-grid">
         <div class="hero-left">
-          <div class="badge fade-up"><span class="badge-dot"></span> Now in public beta</div>
-          <h1 class="fade-up delay-1">Instant email for<br><span class="gradient">your agent.</span></h1>
-          <p class="fade-up delay-2">No API keys. No human signup. Your agent gets its own email inbox in seconds.</p>
+          <div class="badge fade-up"><span class="badge-dot"></span> Jetzt in der oeffentlichen Beta</div>
+          <h1 class="fade-up delay-1">Sofortige E-Mail fuer<br><span class="gradient">deinen Agenten.</span></h1>
+          <p class="fade-up delay-2">Keine API-Schluessel. Keine menschliche Anmeldung. Dein Agent bekommt in Sekunden ein eigenes E-Mail-Postfach.</p>
           <div class="hero-ctas fade-up delay-3">
-            <a href="/auth/signup" class="btn btn-primary">Start for Free &rarr;</a>
+            <a href="/auth/signup" class="btn btn-primary">Kostenlos starten &rarr;</a>
             <a href="/skill" class="btn btn-ghost">MCP Skill</a>
           </div>
-          <p class="hero-note fade-up delay-4">No credit card required &middot; Free tier included</p>
+          <p class="hero-note fade-up delay-4">Keine Kreditkarte erforderlich &middot; Kostenloser Tarif inklusive</p>
         </div>
         <div class="chat-demo fade-up delay-3">
           <div class="chat-msg">
             <div><div class="chat-avatar agent">🤖</div><div class="chat-label">Agent</div></div>
-            <div class="chat-bubble">I need an email address to continue, but I don't have one.</div>
+            <div class="chat-bubble">Ich brauche eine E-Mail-Adresse, um fortzufahren, aber ich habe keine.</div>
           </div>
           <div class="chat-msg right">
-            <div><div class="chat-avatar user">👤</div><div class="chat-label">You</div></div>
-            <div class="chat-bubble">Here, use ⚡ AgentSend:</div>
+            <div><div class="chat-avatar user">👤</div><div class="chat-label">Du</div></div>
+            <div class="chat-bubble">Hier, nutze ⚡ AgentSend:</div>
           </div>
           <div class="chat-skill">
             <span class="chat-skill-url">agentsend.io/skill</span>
-            <button class="chat-skill-btn" onclick="navigator.clipboard.writeText('agentsend.io/skill');this.textContent='Copied!'">📋 Copy</button>
+            <button class="chat-skill-btn" onclick="navigator.clipboard.writeText('agentsend.io/skill');this.textContent='Kopiert!'">📋 Kopieren</button>
           </div>
           <div class="chat-msg">
             <div><div class="chat-avatar agent">🤖</div><div class="chat-label">Agent</div></div>
-            <div class="chat-bubble">Done. I'm now at <span class="chat-email">support-k7x2@agentsend.io</span></div>
+            <div class="chat-bubble">Erledigt. Ich bin jetzt unter <span class="chat-email">support-k7x2@agentsend.io</span> erreichbar.</div>
           </div>
         </div>
       </div>
@@ -384,24 +384,24 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="how">
     <div class="container">
       <div class="section-header">
-        <h2>Up and running in 60 seconds</h2>
-        <p>Three steps. No config. No SMTP setup.</p>
+        <h2>In 60 Sekunden einsatzbereit</h2>
+        <p>Drei Schritte. Keine Konfiguration. Kein SMTP-Setup.</p>
       </div>
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
-          <h3>Get an API key</h3>
-          <p>Sign up and grab your key. No credit card, no email verification, no waiting.</p>
+          <h3>API-Schluessel holen</h3>
+          <p>Registriere dich und hol dir deinen Schluessel. Keine Kreditkarte, keine E-Mail-Verifizierung, kein Warten.</p>
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <h3>Create an inbox</h3>
-          <p>One API call creates a fully functional email inbox for your agent with a unique address.</p>
+          <h3>Postfach erstellen</h3>
+          <p>Ein einziger API-Aufruf erstellt ein voll funktionsfaehiges E-Mail-Postfach fuer deinen Agenten mit einer eigenen Adresse.</p>
         </div>
         <div class="step">
           <div class="step-num">3</div>
-          <h3>Send &amp; receive</h3>
-          <p>Your agent sends emails, gets replies via webhooks, and tracks full conversation threads.</p>
+          <h3>Senden &amp; empfangen</h3>
+          <p>Dein Agent sendet E-Mails, empfaengt Antworten ueber Webhooks und verfolgt komplette Konversationsverlaeufe.</p>
         </div>
       </div>
     </div>
@@ -413,54 +413,54 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="features">
     <div class="container">
       <div class="section-header">
-        <h2>Everything your agent needs</h2>
-        <p>It's not AI for your email. It's email for your AI.</p>
+        <h2>Alles, was dein Agent braucht</h2>
+        <p>Keine KI fuer deine E-Mail. Sondern E-Mail fuer deine KI.</p>
       </div>
       <div class="feature-grid">
         <div class="feature">
           <span class="feature-icon">📨</span>
-          <h3>Send &amp; Receive</h3>
-          <p>Full two-way email. AWS SES for outbound delivery, built-in SMTP server for inbound. Queue-based async processing.</p>
+          <h3>Senden &amp; Empfangen</h3>
+          <p>Vollstaendiger bidirektionaler E-Mail-Verkehr. AWS SES fuer den Versand, integrierter SMTP-Server fuer den Empfang. Warteschlangenbasierte asynchrone Verarbeitung.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">💬</span>
           <h3>Auto-Threading</h3>
-          <p>RFC 5322 compliant conversation threading. Messages auto-grouped via Message-ID, In-Reply-To, and References.</p>
+          <p>RFC 5322-konforme Konversationsgruppierung. Nachrichten automatisch gruppiert ueber Message-ID, In-Reply-To und References.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">⚡</span>
-          <h3>Realtime Webhooks</h3>
-          <p>Instant notifications when emails arrive. HMAC-SHA256 signed payloads with automatic retry and backoff.</p>
+          <h3>Echtzeit-Webhooks</h3>
+          <p>Sofortige Benachrichtigungen bei eingehenden E-Mails. HMAC-SHA256-signierte Payloads mit automatischen Wiederholungsversuchen und Backoff.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🌐</span>
-          <h3>Custom Domains</h3>
-          <p>Use your own domain with automated DKIM and SPF verification. Your agent sends from your-brand.com.</p>
+          <h3>Eigene Domains</h3>
+          <p>Verwende deine eigene Domain mit automatischer DKIM- und SPF-Verifizierung. Dein Agent sendet von deine-marke.com.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">📎</span>
-          <h3>Attachments</h3>
-          <p>Upload and attach files up to 10MB. S3-backed storage with presigned download URLs.</p>
+          <h3>Anhaenge</h3>
+          <p>Lade Dateien bis zu 10 MB hoch und haenge sie an. S3-gestuetzter Speicher mit vorsignierten Download-URLs.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🛡️</span>
-          <h3>Bounce Tracking</h3>
-          <p>Automatic SES event processing for bounces, complaints, and delivery confirmations.</p>
+          <h3>Bounce-Tracking</h3>
+          <p>Automatische SES-Ereignisverarbeitung fuer Bounces, Beschwerden und Zustellbestaetigungen.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🔑</span>
-          <h3>API Key Auth</h3>
-          <p>Simple bearer token auth. SHA-256 hashed storage with per-account and per-inbox rate limiting.</p>
+          <h3>API-Schluessel-Auth</h3>
+          <p>Einfache Bearer-Token-Authentifizierung. SHA-256-gehashte Speicherung mit Rate-Limiting pro Konto und pro Postfach.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🧩</span>
           <h3>MCP Skill</h3>
-          <p>Drop-in MCP server for Claude, Cursor, and any MCP-compatible AI agent. npx @agentsend/mcp.</p>
+          <p>Sofort einsatzbereiter MCP-Server fuer Claude, Cursor und jeden MCP-kompatiblen KI-Agenten. npx @agentsend/mcp.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">📖</span>
-          <h3>OpenAPI Docs</h3>
-          <p>Interactive Swagger UI with complete API documentation. Try endpoints directly at /docs.</p>
+          <h3>OpenAPI-Dokumentation</h3>
+          <p>Interaktive Swagger-UI mit vollstaendiger API-Dokumentation. Endpunkte direkt unter /docs testen.</p>
         </div>
       </div>
     </div>
@@ -472,8 +472,8 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="comparison">
     <div class="container">
       <div class="section-header">
-        <h2>Why not just use Gmail?</h2>
-        <p>Email services built for humans don't work for agents.</p>
+        <h2>Warum nicht einfach Gmail?</h2>
+        <p>E-Mail-Dienste fuer Menschen funktionieren nicht fuer Agenten.</p>
       </div>
       <div class="comp-table">
         <div class="comp-row comp-header">
@@ -481,13 +481,13 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
           <span style="text-align:center">AgentSend</span>
           <span style="text-align:center">Gmail API</span>
         </div>
-        <div class="comp-row"><span class="label">Programmatic inbox creation</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">No human signup required</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">Conversation threading API</span><span class="yes">✓</span><span class="partial">Partial</span></div>
-        <div class="comp-row"><span class="label">Realtime webhooks</span><span class="yes">✓</span><span class="partial">Push only</span></div>
-        <div class="comp-row"><span class="label">Custom domains</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">No OAuth dance</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">Built for AI agents</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">Programmatische Postfacherstellung</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">Keine menschliche Anmeldung noetig</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">Konversations-Threading-API</span><span class="yes">✓</span><span class="partial">Teilweise</span></div>
+        <div class="comp-row"><span class="label">Echtzeit-Webhooks</span><span class="yes">✓</span><span class="partial">Nur Push</span></div>
+        <div class="comp-row"><span class="label">Eigene Domains</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">Kein OAuth-Tanz</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">Fuer KI-Agenten gebaut</span><span class="yes">✓</span><span class="no">✗</span></div>
       </div>
     </div>
   </section>
@@ -495,14 +495,14 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <!-- Framework Compatibility -->
   <section class="frameworks">
     <div class="container">
-      <h3>Works with your agent framework</h3>
+      <h3>Kompatibel mit deinem Agenten-Framework</h3>
       <div class="framework-logos">
         <span>LangChain</span>
         <span>CrewAI</span>
         <span>AutoGen</span>
         <span>OpenAI Agents</span>
         <span>Claude MCP</span>
-        <span>Any HTTP client</span>
+        <span>Jeder HTTP-Client</span>
       </div>
     </div>
   </section>
@@ -513,50 +513,50 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="pricing" id="pricing">
     <div class="container">
       <div class="section-header">
-        <h2>Simple, transparent pricing</h2>
-        <p>Start free. Scale when you need to.</p>
+        <h2>Einfache, transparente Preise</h2>
+        <p>Starte kostenlos. Skaliere bei Bedarf.</p>
       </div>
       <div class="pricing-grid">
         <div class="price-card">
           <div class="price-name">Free</div>
-          <div class="price-amount">$0<span>/mo</span></div>
-          <div class="price-desc">Perfect for prototyping</div>
+          <div class="price-amount">$0<span>/Monat</span></div>
+          <div class="price-desc">Perfekt zum Prototypen</div>
           <ul class="price-features">
-            <li>3 inboxes</li>
-            <li>3,000 emails/month</li>
-            <li>100 emails/day</li>
+            <li>3 Postfaecher</li>
+            <li>3.000 E-Mails/Monat</li>
+            <li>100 E-Mails/Tag</li>
             <li>Webhooks</li>
             <li>Threading</li>
           </ul>
-          <a href="/auth/signup" class="price-btn price-btn-ghost">Get Started</a>
+          <a href="/auth/signup" class="price-btn price-btn-ghost">Loslegen</a>
         </div>
         <div class="price-card popular">
           <div class="price-name">Pro</div>
-          <div class="price-amount">$9<span>/mo</span></div>
-          <div class="price-desc">For production agents</div>
+          <div class="price-amount">$9<span>/Monat</span></div>
+          <div class="price-desc">Fuer Agenten in Produktion</div>
           <ul class="price-features">
-            <li>5 inboxes</li>
-            <li>5,000 emails/month</li>
-            <li>Unlimited emails/day</li>
-            <li>Custom domains</li>
-            <li>Attachments up to 10MB</li>
-            <li>Priority support</li>
+            <li>5 Postfaecher</li>
+            <li>5.000 E-Mails/Monat</li>
+            <li>Unbegrenzte E-Mails/Tag</li>
+            <li>Eigene Domains</li>
+            <li>Anhaenge bis zu 10 MB</li>
+            <li>Bevorzugter Support</li>
           </ul>
-          <a href="/auth/signup" class="price-btn price-btn-primary">Start Free Trial</a>
+          <a href="/auth/signup" class="price-btn price-btn-primary">Kostenlos testen</a>
         </div>
         <div class="price-card">
           <div class="price-name">Enterprise</div>
-          <div class="price-amount">$99<span>/mo</span></div>
-          <div class="price-desc">For high-volume teams</div>
+          <div class="price-amount">$99<span>/Monat</span></div>
+          <div class="price-desc">Fuer Teams mit hohem Volumen</div>
           <ul class="price-features">
-            <li>100 inboxes</li>
-            <li>100,000 emails/month</li>
-            <li>Unlimited emails/day</li>
-            <li>100 custom domains</li>
-            <li>7 webhook endpoints</li>
-            <li>Priority support</li>
+            <li>100 Postfaecher</li>
+            <li>100.000 E-Mails/Monat</li>
+            <li>Unbegrenzte E-Mails/Tag</li>
+            <li>100 eigene Domains</li>
+            <li>7 Webhook-Endpunkte</li>
+            <li>Bevorzugter Support</li>
           </ul>
-          <a href="/auth/signup" class="price-btn price-btn-primary">Get Started</a>
+          <a href="/auth/signup" class="price-btn price-btn-primary">Loslegen</a>
         </div>
       </div>
     </div>
@@ -565,21 +565,21 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <!-- Final CTA -->
   <section class="cta">
     <div class="container">
-      <h2>Give your agent an email inbox</h2>
-      <p>Free to start. No credit card required. Takes 60 seconds.</p>
-      <a href="/auth/signup" class="btn btn-primary">Start Building &rarr;</a>
+      <h2>Gib deinem Agenten ein E-Mail-Postfach</h2>
+      <p>Kostenlos starten. Keine Kreditkarte. In 60 Sekunden.</p>
+      <a href="/auth/signup" class="btn btn-primary">Jetzt loslegen &rarr;</a>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
     <div class="container">
-      <span class="copy">&copy; 2026 AgentSend. Email infrastructure for AI agents.</span>
+      <span class="copy">&copy; 2026 AgentSend. E-Mail-Infrastruktur fuer KI-Agenten.</span>
       <div class="links">
         <a href="/docs">Docs</a>
         <a href="/skill">MCP Skill</a>
         <a href="https://github.com/luv005/agentpost">GitHub</a>
-        <a href="mailto:hello@agentsend.io">Contact</a>
+        <a href="mailto:hello@agentsend.io">Kontakt</a>
       </div>
     </div>
   </footer>

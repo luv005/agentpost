@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgentSend — Email Inboxes for AI Agents</title>
-  <meta name="description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically. Like Gmail, but for agents.">
-  <meta property="og:title" content="AgentSend — Email Inboxes for AI Agents">
-  <meta property="og:description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically.">
+  <title>AgentSend — AI 에이전트를 위한 이메일 인박스</title>
+  <meta name="description" content="AI 에이전트에게 전용 이메일 인박스를 제공하세요. 프로그래밍 방식으로 이메일을 보내고, 받고, 대화를 관리하세요. Gmail처럼, 하지만 에이전트를 위해.">
+  <meta property="og:title" content="AgentSend — AI 에이전트를 위한 이메일 인박스">
+  <meta property="og:description" content="AI 에이전트에게 전용 이메일 인박스를 제공하세요. 프로그래밍 방식으로 이메일을 보내고, 받고, 대화를 관리하세요.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://agentsend.io">
+  <meta property="og:url" content="https://agentsend.io/ko">
   <meta property="og:image" content="https://agentsend.io/public/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AgentSend — Email Inboxes for AI Agents">
-  <meta name="twitter:description" content="Give your AI agent its own email inbox. Send, receive, and manage conversations programmatically.">
+  <meta name="twitter:title" content="AgentSend — AI 에이전트를 위한 이메일 인박스">
+  <meta name="twitter:description" content="AI 에이전트에게 전용 이메일 인박스를 제공하세요. 프로그래밍 방식으로 이메일을 보내고, 받고, 대화를 관리하세요.">
   <meta name="twitter:image" content="https://agentsend.io/public/og-image.png">
-  <link rel="canonical" href="https://agentsend.io">
+  <link rel="canonical" href="https://agentsend.io/ko">
   <link rel="alternate" hreflang="en" href="https://agentsend.io">
   <link rel="alternate" hreflang="ja" href="https://agentsend.io/ja">
   <link rel="alternate" hreflang="ko" href="https://agentsend.io/ko">
@@ -33,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "AgentSend",
-    "description": "Email infrastructure for AI agents. Programmatic inboxes, send and receive email, realtime webhooks, and custom domains.",
+    "description": "AI 에이전트를 위한 이메일 인프라. 프로그래밍 방식의 인박스 생성, 이메일 송수신, 실시간 웹훅, 커스텀 도메인 지원.",
     "url": "https://agentsend.io",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
@@ -216,7 +216,7 @@
     .price-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 16px; padding: 32px; position: relative; transition: all 0.3s; }
     .price-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.3); }
     .price-card.popular { border-color: rgba(129,140,248,0.4); box-shadow: 0 0 48px rgba(129,140,248,0.08); }
-    .price-card.popular::after { content: "Most Popular"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #818cf8, #c084fc); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .price-card.popular::after { content: "가장 인기"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #818cf8, #c084fc); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
     .price-name { font-size: 16px; font-weight: 700; color: #e4e4e7; margin-bottom: 4px; }
     .price-amount { font-size: 40px; font-weight: 900; color: #fafafa; margin-bottom: 4px; }
     .price-amount span { font-size: 16px; font-weight: 500; color: #52525b; }
@@ -275,17 +275,17 @@
     <div class="container">
       <div class="logo">Agent<span>Send</span></div>
       <div class="nav-links">
-        <a href="#pricing">Pricing</a>
-        <a href="/docs">Docs</a>
-        <a href="/blog">Blog</a>
+        <a href="#pricing">요금제</a>
+        <a href="/docs">문서</a>
+        <a href="/blog">블로그</a>
         <a href="https://github.com/luv005/agentpost">GitHub</a>
         <a href="/skill" style="color:#a5b4fc;font-weight:600;">MCP Skill</a>
-        <a href="/auth/signup" class="btn-sm">Start for Free</a>
+        <a href="/auth/signup" class="btn-sm">무료로 시작</a>
         <div class="lang-switcher">
           <select onchange="if(this.value)window.location.href=this.value">
-            <option value="" selected>EN</option>
+            <option value="/">EN</option>
             <option value="/ja">JA</option>
-            <option value="/ko">KO</option>
+            <option value="/ko" selected>KO</option>
             <option value="/es">ES</option>
             <option value="/fr">FR</option>
             <option value="/de">DE</option>
@@ -306,31 +306,31 @@
     <div class="container">
       <div class="hero-grid">
         <div class="hero-left">
-          <div class="badge fade-up"><span class="badge-dot"></span> Now in public beta</div>
-          <h1 class="fade-up delay-1">Instant email for<br><span class="gradient">your agent.</span></h1>
-          <p class="fade-up delay-2">No API keys. No human signup. Your agent gets its own email inbox in seconds.</p>
+          <div class="badge fade-up"><span class="badge-dot"></span> 퍼블릭 베타 운영 중</div>
+          <h1 class="fade-up delay-1">에이전트를 위한<br><span class="gradient">즉석 이메일.</span></h1>
+          <p class="fade-up delay-2">API 키 불필요. 사람이 가입할 필요 없음. 에이전트가 몇 초 만에 전용 이메일 인박스를 생성합니다.</p>
           <div class="hero-ctas fade-up delay-3">
-            <a href="/auth/signup" class="btn btn-primary">Start for Free &rarr;</a>
+            <a href="/auth/signup" class="btn btn-primary">무료로 시작 &rarr;</a>
             <a href="/skill" class="btn btn-ghost">MCP Skill</a>
           </div>
-          <p class="hero-note fade-up delay-4">No credit card required &middot; Free tier included</p>
+          <p class="hero-note fade-up delay-4">신용카드 불필요 &middot; 무료 플랜 포함</p>
         </div>
         <div class="chat-demo fade-up delay-3">
           <div class="chat-msg">
             <div><div class="chat-avatar agent">🤖</div><div class="chat-label">Agent</div></div>
-            <div class="chat-bubble">I need an email address to continue, but I don't have one.</div>
+            <div class="chat-bubble">계속 진행하려면 이메일 주소가 필요한데, 가지고 있지 않습니다.</div>
           </div>
           <div class="chat-msg right">
             <div><div class="chat-avatar user">👤</div><div class="chat-label">You</div></div>
-            <div class="chat-bubble">Here, use ⚡ AgentSend:</div>
+            <div class="chat-bubble">⚡ AgentSend를 사용해:</div>
           </div>
           <div class="chat-skill">
             <span class="chat-skill-url">agentsend.io/skill</span>
-            <button class="chat-skill-btn" onclick="navigator.clipboard.writeText('agentsend.io/skill');this.textContent='Copied!'">📋 Copy</button>
+            <button class="chat-skill-btn" onclick="navigator.clipboard.writeText('agentsend.io/skill');this.textContent='복사됨!'">📋 복사</button>
           </div>
           <div class="chat-msg">
             <div><div class="chat-avatar agent">🤖</div><div class="chat-label">Agent</div></div>
-            <div class="chat-bubble">Done. I'm now at <span class="chat-email">support-k7x2@agentsend.io</span></div>
+            <div class="chat-bubble">완료되었습니다. <span class="chat-email">support-k7x2@agentsend.io</span>로 사용 가능합니다</div>
           </div>
         </div>
       </div>
@@ -384,24 +384,24 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="how">
     <div class="container">
       <div class="section-header">
-        <h2>Up and running in 60 seconds</h2>
-        <p>Three steps. No config. No SMTP setup.</p>
+        <h2>60초 만에 시작하세요</h2>
+        <p>3단계. 설정 불필요. SMTP 세팅 불필요.</p>
       </div>
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
-          <h3>Get an API key</h3>
-          <p>Sign up and grab your key. No credit card, no email verification, no waiting.</p>
+          <h3>API 키 발급</h3>
+          <p>가입하고 키를 받으세요. 신용카드 불필요, 이메일 인증 불필요, 대기 시간 없음.</p>
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <h3>Create an inbox</h3>
-          <p>One API call creates a fully functional email inbox for your agent with a unique address.</p>
+          <h3>인박스 생성</h3>
+          <p>API 한 번의 호출로 고유 주소가 포함된 에이전트 전용 이메일 인박스를 생성합니다.</p>
         </div>
         <div class="step">
           <div class="step-num">3</div>
-          <h3>Send &amp; receive</h3>
-          <p>Your agent sends emails, gets replies via webhooks, and tracks full conversation threads.</p>
+          <h3>송신 &amp; 수신</h3>
+          <p>에이전트가 이메일을 보내고, 웹훅으로 답장을 받고, 전체 대화 스레드를 추적합니다.</p>
         </div>
       </div>
     </div>
@@ -413,54 +413,54 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="features">
     <div class="container">
       <div class="section-header">
-        <h2>Everything your agent needs</h2>
-        <p>It's not AI for your email. It's email for your AI.</p>
+        <h2>에이전트에게 필요한 모든 것</h2>
+        <p>이메일에 AI를 쓰는 게 아닙니다. AI에 이메일을 쓰는 겁니다.</p>
       </div>
       <div class="feature-grid">
         <div class="feature">
           <span class="feature-icon">📨</span>
-          <h3>Send &amp; Receive</h3>
-          <p>Full two-way email. AWS SES for outbound delivery, built-in SMTP server for inbound. Queue-based async processing.</p>
+          <h3>송신 &amp; 수신</h3>
+          <p>완전한 양방향 이메일. 발신은 AWS SES, 수신은 내장 SMTP 서버. 큐 기반 비동기 처리.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">💬</span>
-          <h3>Auto-Threading</h3>
-          <p>RFC 5322 compliant conversation threading. Messages auto-grouped via Message-ID, In-Reply-To, and References.</p>
+          <h3>자동 스레딩</h3>
+          <p>RFC 5322 준수 대화 스레딩. Message-ID, In-Reply-To, References를 통한 메시지 자동 그룹화.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">⚡</span>
-          <h3>Realtime Webhooks</h3>
-          <p>Instant notifications when emails arrive. HMAC-SHA256 signed payloads with automatic retry and backoff.</p>
+          <h3>실시간 웹훅</h3>
+          <p>이메일 수신 시 즉시 알림. HMAC-SHA256 서명 페이로드와 자동 재시도 및 백오프.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🌐</span>
-          <h3>Custom Domains</h3>
-          <p>Use your own domain with automated DKIM and SPF verification. Your agent sends from your-brand.com.</p>
+          <h3>커스텀 도메인</h3>
+          <p>자동 DKIM 및 SPF 인증으로 자체 도메인을 사용하세요. 에이전트가 your-brand.com에서 발송합니다.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">📎</span>
-          <h3>Attachments</h3>
-          <p>Upload and attach files up to 10MB. S3-backed storage with presigned download URLs.</p>
+          <h3>첨부 파일</h3>
+          <p>최대 10MB 파일 업로드 및 첨부. S3 기반 스토리지와 사전 서명된 다운로드 URL.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🛡️</span>
-          <h3>Bounce Tracking</h3>
-          <p>Automatic SES event processing for bounces, complaints, and delivery confirmations.</p>
+          <h3>반송 추적</h3>
+          <p>반송, 불만, 배달 확인에 대한 SES 이벤트 자동 처리.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🔑</span>
-          <h3>API Key Auth</h3>
-          <p>Simple bearer token auth. SHA-256 hashed storage with per-account and per-inbox rate limiting.</p>
+          <h3>API 키 인증</h3>
+          <p>간편한 Bearer 토큰 인증. SHA-256 해시 저장, 계정 및 인박스별 속도 제한.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">🧩</span>
           <h3>MCP Skill</h3>
-          <p>Drop-in MCP server for Claude, Cursor, and any MCP-compatible AI agent. npx @agentsend/mcp.</p>
+          <p>Claude, Cursor 및 MCP 호환 AI 에이전트를 위한 드롭인 MCP 서버. npx @agentsend/mcp.</p>
         </div>
         <div class="feature">
           <span class="feature-icon">📖</span>
-          <h3>OpenAPI Docs</h3>
-          <p>Interactive Swagger UI with complete API documentation. Try endpoints directly at /docs.</p>
+          <h3>OpenAPI 문서</h3>
+          <p>완전한 API 문서가 포함된 인터랙티브 Swagger UI. /docs에서 엔드포인트를 직접 테스트.</p>
         </div>
       </div>
     </div>
@@ -472,8 +472,8 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="comparison">
     <div class="container">
       <div class="section-header">
-        <h2>Why not just use Gmail?</h2>
-        <p>Email services built for humans don't work for agents.</p>
+        <h2>왜 Gmail로는 안 될까요?</h2>
+        <p>사람을 위해 만들어진 이메일 서비스는 에이전트에게 맞지 않습니다.</p>
       </div>
       <div class="comp-table">
         <div class="comp-row comp-header">
@@ -481,13 +481,13 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
           <span style="text-align:center">AgentSend</span>
           <span style="text-align:center">Gmail API</span>
         </div>
-        <div class="comp-row"><span class="label">Programmatic inbox creation</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">No human signup required</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">Conversation threading API</span><span class="yes">✓</span><span class="partial">Partial</span></div>
-        <div class="comp-row"><span class="label">Realtime webhooks</span><span class="yes">✓</span><span class="partial">Push only</span></div>
-        <div class="comp-row"><span class="label">Custom domains</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">No OAuth dance</span><span class="yes">✓</span><span class="no">✗</span></div>
-        <div class="comp-row"><span class="label">Built for AI agents</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">프로그래밍 방식 인박스 생성</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">사람 가입 불필요</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">대화 스레딩 API</span><span class="yes">✓</span><span class="partial">부분적</span></div>
+        <div class="comp-row"><span class="label">실시간 웹훅</span><span class="yes">✓</span><span class="partial">Push만</span></div>
+        <div class="comp-row"><span class="label">커스텀 도메인</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">OAuth 인증 불필요</span><span class="yes">✓</span><span class="no">✗</span></div>
+        <div class="comp-row"><span class="label">AI 에이전트 전용 설계</span><span class="yes">✓</span><span class="no">✗</span></div>
       </div>
     </div>
   </section>
@@ -495,14 +495,14 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <!-- Framework Compatibility -->
   <section class="frameworks">
     <div class="container">
-      <h3>Works with your agent framework</h3>
+      <h3>사용 중인 에이전트 프레임워크와 호환</h3>
       <div class="framework-logos">
         <span>LangChain</span>
         <span>CrewAI</span>
         <span>AutoGen</span>
         <span>OpenAI Agents</span>
         <span>Claude MCP</span>
-        <span>Any HTTP client</span>
+        <span>모든 HTTP 클라이언트</span>
       </div>
     </div>
   </section>
@@ -513,50 +513,50 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <section class="pricing" id="pricing">
     <div class="container">
       <div class="section-header">
-        <h2>Simple, transparent pricing</h2>
-        <p>Start free. Scale when you need to.</p>
+        <h2>심플하고 투명한 요금제</h2>
+        <p>무료로 시작하고 필요할 때 확장하세요.</p>
       </div>
       <div class="pricing-grid">
         <div class="price-card">
           <div class="price-name">Free</div>
-          <div class="price-amount">$0<span>/mo</span></div>
-          <div class="price-desc">Perfect for prototyping</div>
+          <div class="price-amount">$0<span>/월</span></div>
+          <div class="price-desc">프로토타이핑에 적합</div>
           <ul class="price-features">
-            <li>3 inboxes</li>
-            <li>3,000 emails/month</li>
-            <li>100 emails/day</li>
-            <li>Webhooks</li>
-            <li>Threading</li>
+            <li>인박스 3개</li>
+            <li>월 3,000통</li>
+            <li>일 100통</li>
+            <li>웹훅</li>
+            <li>스레딩</li>
           </ul>
-          <a href="/auth/signup" class="price-btn price-btn-ghost">Get Started</a>
+          <a href="/auth/signup" class="price-btn price-btn-ghost">시작하기</a>
         </div>
         <div class="price-card popular">
           <div class="price-name">Pro</div>
-          <div class="price-amount">$9<span>/mo</span></div>
-          <div class="price-desc">For production agents</div>
+          <div class="price-amount">$9<span>/월</span></div>
+          <div class="price-desc">프로덕션 에이전트용</div>
           <ul class="price-features">
-            <li>5 inboxes</li>
-            <li>5,000 emails/month</li>
-            <li>Unlimited emails/day</li>
-            <li>Custom domains</li>
-            <li>Attachments up to 10MB</li>
-            <li>Priority support</li>
+            <li>인박스 5개</li>
+            <li>월 5,000통</li>
+            <li>일일 무제한</li>
+            <li>커스텀 도메인</li>
+            <li>첨부 파일 최대 10MB</li>
+            <li>우선 지원</li>
           </ul>
-          <a href="/auth/signup" class="price-btn price-btn-primary">Start Free Trial</a>
+          <a href="/auth/signup" class="price-btn price-btn-primary">무료 체험 시작</a>
         </div>
         <div class="price-card">
           <div class="price-name">Enterprise</div>
-          <div class="price-amount">$99<span>/mo</span></div>
-          <div class="price-desc">For high-volume teams</div>
+          <div class="price-amount">$99<span>/월</span></div>
+          <div class="price-desc">대량 처리 팀용</div>
           <ul class="price-features">
-            <li>100 inboxes</li>
-            <li>100,000 emails/month</li>
-            <li>Unlimited emails/day</li>
-            <li>100 custom domains</li>
-            <li>7 webhook endpoints</li>
-            <li>Priority support</li>
+            <li>인박스 100개</li>
+            <li>월 100,000통</li>
+            <li>일일 무제한</li>
+            <li>커스텀 도메인 100개</li>
+            <li>웹훅 엔드포인트 7개</li>
+            <li>우선 지원</li>
           </ul>
-          <a href="/auth/signup" class="price-btn price-btn-primary">Get Started</a>
+          <a href="/auth/signup" class="price-btn price-btn-primary">시작하기</a>
         </div>
       </div>
     </div>
@@ -565,21 +565,21 @@ inbox <span class="op">=</span> client.inboxes.<span class="fn">create</span>(
   <!-- Final CTA -->
   <section class="cta">
     <div class="container">
-      <h2>Give your agent an email inbox</h2>
-      <p>Free to start. No credit card required. Takes 60 seconds.</p>
-      <a href="/auth/signup" class="btn btn-primary">Start Building &rarr;</a>
+      <h2>에이전트에게 이메일 인박스를</h2>
+      <p>무료로 시작. 신용카드 불필요. 60초면 완료.</p>
+      <a href="/auth/signup" class="btn btn-primary">구축 시작하기 &rarr;</a>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
     <div class="container">
-      <span class="copy">&copy; 2026 AgentSend. Email infrastructure for AI agents.</span>
+      <span class="copy">&copy; 2026 AgentSend. AI 에이전트를 위한 이메일 인프라.</span>
       <div class="links">
-        <a href="/docs">Docs</a>
+        <a href="/docs">문서</a>
         <a href="/skill">MCP Skill</a>
         <a href="https://github.com/luv005/agentpost">GitHub</a>
-        <a href="mailto:hello@agentsend.io">Contact</a>
+        <a href="mailto:hello@agentsend.io">문의</a>
       </div>
     </div>
   </footer>
