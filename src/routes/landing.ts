@@ -13,4 +13,20 @@ export async function landingRoute(app: FastifyInstance) {
     );
     return reply.type("text/html").send(html);
   });
+
+  app.get("/robots.txt", async (_request, reply) => {
+    const content = readFileSync(
+      join(__dirname, "..", "..", "public", "robots.txt"),
+      "utf8",
+    );
+    return reply.type("text/plain").send(content);
+  });
+
+  app.get("/sitemap.xml", async (_request, reply) => {
+    const content = readFileSync(
+      join(__dirname, "..", "..", "public", "sitemap.xml"),
+      "utf8",
+    );
+    return reply.type("application/xml").send(content);
+  });
 }

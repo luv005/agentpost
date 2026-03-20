@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /auth/
+Disallow: /dashboard
+Disallow: /account/
+Disallow: /inboxes/
+Disallow: /messages/
+Disallow: /threads/
+Disallow: /webhooks/
+Disallow: /attachments/
+Disallow: /domains/
+
+Sitemap: https://agentsend.io/sitemap.xml
