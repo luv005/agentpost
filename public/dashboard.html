@@ -1682,7 +1682,7 @@
       <header class="topbar">
         <div>
           <div class="topbar-path">Dashboard <span>/</span> <strong id="page-title">Overview</strong></div>
-          <div class="topbar-caption" id="page-subtitle">Monitor delivery, inboxes, and account health from one clean workspace.</div>
+          <div class="topbar-caption" id="page-subtitle">Monitor delivery, inboxes, and account health.</div>
         </div>
         <div class="topbar-actions">
           <div class="status-pill" id="health-pill">Healthy workspace</div>
@@ -1699,7 +1699,7 @@
               <span class="eyebrow">Control tower</span>
               <h1 class="page-title">Overview</h1>
               <p class="page-description">
-                Keep an eye on message flow, delivery quality, and account footprint across your inboxes without leaving this screen.
+                Track message flow, delivery quality, and account health in one place.
               </p>
             </div>
           </div>
@@ -1710,7 +1710,7 @@
                 <div class="panel-title">Email activity</div>
                 <h2>Message volume at a glance</h2>
                 <p>
-                  Workspace totals stay pinned at the top, while the chart tracks the most recent 24 hours of inbox activity so spikes are obvious immediately.
+                  Workspace totals stay pinned up top while the chart shows the last 24 hours.
                 </p>
               </div>
               <div class="activity-side">
@@ -1735,22 +1735,22 @@
               <div class="metric-card">
                 <div class="metric-head"><span class="metric-dot" style="background: var(--accent);"></span> Sent</div>
                 <div class="metric-value" id="s-sent">0</div>
-                <div class="metric-copy">Workspace total delivered from all inboxes</div>
+                <div class="metric-copy">Total sent across inboxes</div>
               </div>
               <div class="metric-card">
                 <div class="metric-head"><span class="metric-dot" style="background: var(--success);"></span> Received</div>
                 <div class="metric-value" id="s-received">0</div>
-                <div class="metric-copy">Inbound messages accepted by active inboxes</div>
+                <div class="metric-copy">Inbound mail across active inboxes</div>
               </div>
               <div class="metric-card">
                 <div class="metric-head"><span class="metric-dot" style="background: var(--warning);"></span> Complaints</div>
                 <div class="metric-value" id="s-complaints">0</div>
-                <div class="metric-copy">Complaint events recorded across the workspace</div>
+                <div class="metric-copy">Workspace complaint events</div>
               </div>
               <div class="metric-card">
                 <div class="metric-head"><span class="metric-dot" style="background: var(--danger);"></span> Bounced</div>
                 <div class="metric-value" id="s-bounced">0</div>
-                <div class="metric-copy">Bounce events that may need follow-up</div>
+                <div class="metric-copy">Bounce events to review</div>
               </div>
             </div>
 
@@ -1767,7 +1767,7 @@
                 <div class="list-copy">
                   <span class="panel-title">Unified inbox</span>
                   <h3>Latest conversations</h3>
-                  <p>Recent inbound and outbound activity from your inboxes, sorted into one cleaner stream.</p>
+                  <p>Recent inbox activity in one stream.</p>
                 </div>
                 <a class="inline-link" href="#" onclick="showPage('inboxes', document.querySelector('.nav-item[data-page=&quot;inboxes&quot;]')); return false;">View all</a>
               </div>
@@ -1788,7 +1788,7 @@
                       </div>
                       <div class="resource-label">
                         <strong>Inbox capacity</strong>
-                        <span>Free plan includes up to 5 inboxes</span>
+                        <span>Free plan limit</span>
                       </div>
                     </div>
                     <div class="resource-value">
@@ -1812,7 +1812,7 @@
                       </div>
                       <div class="resource-label">
                         <strong>API keys</strong>
-                        <span>Server access and automation credentials</span>
+                        <span>Active workspace secrets</span>
                       </div>
                     </div>
                     <div class="resource-value">
@@ -1834,7 +1834,7 @@
                       </div>
                       <div class="resource-label">
                         <strong>Verified domains</strong>
-                        <span>Custom sending domains connected to this account</span>
+                        <span>Connected sending domains</span>
                       </div>
                     </div>
                     <div class="resource-value">
@@ -2532,7 +2532,7 @@
     const pageMeta = {
       overview: {
         title: "Overview",
-        subtitle: "Monitor delivery, inboxes, and account health from one clean workspace.",
+        subtitle: "Monitor delivery, inboxes, and account health.",
       },
       inboxes: {
         title: "Inboxes",
