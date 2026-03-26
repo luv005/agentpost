@@ -23,6 +23,8 @@ describe("sitemap.xml", () => {
     expect(xml).toContain("<loc>https://agentsend.io/</loc>");
     expect(xml).toContain("<loc>https://agentsend.io/ja</loc>");
     expect(xml).toContain("<loc>https://agentsend.io/zh-tw</loc>");
+    expect(xml).toContain("<loc>https://agentsend.io/pt</loc>");
+    expect(xml).toContain("<loc>https://agentsend.io/th</loc>");
     expect(xml).toContain("<loc>https://agentsend.io/docs</loc>");
     expect(xml).toContain("<loc>https://agentsend.io/skill</loc>");
     expect(xml).toContain("<loc>https://agentsend.io/blog</loc>");
