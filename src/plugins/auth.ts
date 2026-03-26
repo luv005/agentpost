@@ -33,6 +33,10 @@ function extractKey(request: FastifyRequest): string | null {
   return null;
 }
 
+const LANDING_LOCALES = new Set([
+  "ja", "ko", "es", "de", "el", "id", "vi", "fr", "ar", "zh", "zh-tw", "pt", "th",
+]);
+
 function isPublicPath(url: string): boolean {
   const publicPrefixes = [
     "/health",
@@ -42,8 +46,15 @@ function isPublicPath(url: string): boolean {
     "/auth",
     "/skill",
     "/dashboard",
+    "/blog",
   ];
   if (url === "/") return true;
+  if (url === "/sitemap.xml" || url === "/robots.txt") return true;
+
+  // Locale landing pages: /ja, /ko, /pt, etc.
+  const bare = url.split("?")[0];
+  if (bare && LANDING_LOCALES.has(bare.slice(1))) return true;
+
   return publicPrefixes.some(
     (p) => url === p || url.startsWith(p + "/") || url.startsWith(p + "?"),
   );
