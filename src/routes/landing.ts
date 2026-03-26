@@ -38,14 +38,6 @@ export async function landingRoute(app: FastifyInstance) {
     return reply.type("text/plain").send(content);
   });
 
-  app.get("/sitemap.xsl", async (_request, reply) => {
-    const content = readFileSync(
-      join(__dirname, "..", "..", "public", "sitemap.xsl"),
-      "utf8",
-    );
-    return reply.type("text/xsl").send(content);
-  });
-
   app.get("/sitemap.xml", async (_request, reply) => {
     const content = generateSitemapXml({
       baseUrl: config.APP_URL,

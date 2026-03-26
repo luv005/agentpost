@@ -49,7 +49,7 @@ function isPublicPath(url: string): boolean {
     "/blog",
   ];
   if (url === "/") return true;
-  if (url === "/sitemap.xml" || url === "/sitemap.xsl" || url === "/robots.txt") return true;
+  if (url === "/sitemap.xml" || url === "/robots.txt") return true;
 
   // Locale landing pages: /ja, /ko, /pt, etc.
   const bare = url.split("?")[0];
