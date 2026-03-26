@@ -192,17 +192,14 @@ function collectBlogUrls(publicDir: string, baseUrl: string) {
 }
 
 function renderUrl(entry: SitemapUrl, baseUrl: string) {
+  const lastmod = entry.lastmod ?? new Date().toISOString().split("T")[0];
   const lines = [
     "  <url>",
     `    <loc>${escapeXml(joinUrl(baseUrl, entry.path))}</loc>`,
+    `    <lastmod>${escapeXml(lastmod)}</lastmod>`,
+    `    <changefreq>${entry.changefreq}</changefreq>`,
+    `    <priority>${entry.priority}</priority>`,
   ];
-
-  if (entry.lastmod) {
-    lines.push(`    <lastmod>${escapeXml(entry.lastmod)}</lastmod>`);
-  }
-
-  lines.push(`    <changefreq>${entry.changefreq}</changefreq>`);
-  lines.push(`    <priority>${entry.priority}</priority>`);
 
   for (const alternate of entry.alternates ?? []) {
     lines.push(
