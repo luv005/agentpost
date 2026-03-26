@@ -151,6 +151,7 @@ export async function sendEmail(params: SendEmailParams): Promise<string> {
     Source: params.from,
     Destinations: allRecipients,
     RawMessage: { Data: Buffer.from(rawMessage) },
+    ConfigurationSetName: "agentsend-default",
   });
 
   const response = await client.send(command);
