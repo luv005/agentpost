@@ -43,6 +43,6 @@ export async function landingRoute(app: FastifyInstance) {
       baseUrl: config.APP_URL,
       publicDir: join(__dirname, "..", "..", "public"),
     });
-    return reply.type("text/xml; charset=utf-8").send(content);
+    return reply.type("text/xml").send(content);
   });
 }
