@@ -20,6 +20,7 @@ describe("sitemap.xml", () => {
   it("includes public pages and excludes private dashboard routes", () => {
     const xml = readSitemapXml();
 
+    expect(xml).toContain('<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>');
     expect(xml).toContain("<loc>https://agentsend.io/</loc>");
     expect(xml).toContain("<loc>https://agentsend.io/ja</loc>");
     expect(xml).toContain("<loc>https://agentsend.io/zh-tw</loc>");
