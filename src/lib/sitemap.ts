@@ -17,7 +17,7 @@ type GenerateSitemapXmlOptions = {
   publicDir: string;
 };
 
-const LANDING_LOCALES = ["ja", "ko", "es", "de", "el", "id", "vi", "fr", "ar", "zh", "zh-tw"] as const;
+const LANDING_LOCALES = ["ja", "ko", "es", "de", "el", "id", "vi", "fr", "ar", "zh", "zh-tw", "pt", "th"] as const;
 
 const STATIC_URLS: SitemapUrl[] = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
@@ -27,7 +27,7 @@ const STATIC_URLS: SitemapUrl[] = [
   { path: "/blog", changefreq: "daily", priority: "0.9" },
 ];
 
-const LOCALE_ORDER = ["en", "es", "fr", "de", "ja", "zh", "pt", "ko", "el", "id", "vi", "ar", "zh-tw"] as const;
+const LOCALE_ORDER = ["en", "es", "fr", "de", "ja", "zh", "pt", "ko", "el", "id", "vi", "ar", "zh-tw", "th"] as const;
 
 function normalizeBaseUrl(baseUrl: string) {
   return baseUrl.replace(/\/+$/, "");

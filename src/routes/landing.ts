@@ -7,7 +7,7 @@ import { generateSitemapXml } from "../lib/sitemap.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = join(__dirname, "..", "..", "public");
-const LOCALES = ["ja", "ko", "es", "de", "el", "id", "vi", "fr", "ar", "zh", "zh-tw"];
+const LOCALES = ["ja", "ko", "es", "de", "el", "id", "vi", "fr", "ar", "zh", "zh-tw", "pt", "th"];
 
 export async function landingRoute(app: FastifyInstance) {
   const config = env();

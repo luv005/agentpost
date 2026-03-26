@@ -1,5 +1,9 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 import { processSesEvent, type SesNotification } from "../../services/ses-event.service.js";
+import {
+  processSesInbound,
+  type SesReceiptNotification,
+} from "../../services/ses-inbound.service.js";
 import { env } from "../../config/env.js";
 import {
   validateSnsMessageSignature,
@@ -21,9 +25,10 @@ export async function handleSnsNotification(
     return reply.status(403).send({ error: "Invalid SNS signature" });
   }
 
-  // Validate topic ARN if configured
+  // Validate topic ARN — allow both outbound events and inbound receipt topics
   const config = env();
-  if (config.SNS_TOPIC_ARN && body.TopicArn !== config.SNS_TOPIC_ARN) {
+  const allowedTopics = [config.SNS_TOPIC_ARN, config.SNS_INBOUND_TOPIC_ARN].filter(Boolean);
+  if (allowedTopics.length > 0 && !allowedTopics.includes(body.TopicArn)) {
     console.warn(`SNS topic ARN mismatch: ${body.TopicArn}`);
     return reply.status(403).send({ error: "Invalid topic" });
   }
@@ -47,8 +52,17 @@ export async function handleSnsNotification(
 
     case "Notification": {
       try {
-        const sesEvent: SesNotification = JSON.parse(body.Message);
-        await processSesEvent(sesEvent);
+        const parsed = JSON.parse(body.Message);
+
+        // Route based on notification type
+        if (parsed.notificationType === "Received") {
+          // Inbound email via SES receipt rules
+          await processSesInbound(parsed as SesReceiptNotification);
+        } else {
+          // Outbound event (Delivery, Bounce, Complaint)
+          await processSesEvent(parsed as SesNotification);
+        }
+
         return reply.status(200).send({ status: "processed" });
       } catch (err) {
         console.error("Failed to process SES event:", err);
